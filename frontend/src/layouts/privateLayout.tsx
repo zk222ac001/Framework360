@@ -1,23 +1,195 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
-import Navbar from "../components/navbar";
-// Layout wrapper for authenticated pages.
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import Link from "@mui/material/Link";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import ThemeToggle from "../components/ThemeToggle";
+import { useAuth } from "../context/useAuth";
+import { formatFullName, formatRole } from "../utils/formatters";
+import { useTranslation } from "react-i18next";
 
-export default function PrivateLayout() {
+const sidebarWidth = 288;
+
+function getInitials(first?: string, last?: string, email?: string) {
+  const initials = `${first?.[0] || ""}${last?.[0] || ""}`.trim();
+  return (initials || email?.slice(0, 2) || "U").toUpperCase();
+}
+
+function navIcon(label: string) {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        bgcolor: "background.default",
-        color: "text.primary",
+        width: 30,
+        height: 30,
+        borderRadius: 2,
+        display: "grid",
+        placeItems: "center",
+        bgcolor: "surface.level2",
+        color: "primary.main",
+        fontSize: 12,
+        fontWeight: 800,
       }}
     >
-      {/* Private navigation */}
-      <Navbar variant="private" />
-      {/* Protected page content */}
-      <main>
-        <Outlet />
-      </main>
+      {label}
+    </Box>
+  );
+}
+
+function SidebarLink({ to, label, icon }: { to: string; label: string; icon: string }) {
+  const location = useLocation();
+  const isActive = location.pathname === to || (to !== "/dashboard" && location.pathname.startsWith(to));
+
+  return (
+    <Link
+      component={RouterLink}
+      to={to}
+      underline="none"
+      color="text.primary"
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        gap: 1.5,
+        px: 1.25,
+        py: 1,
+        borderRadius: 3,
+        fontWeight: isActive ? 800 : 650,
+        bgcolor: isActive ? "surface.level2" : "transparent",
+        border: "1px solid",
+        borderColor: isActive ? "divider" : "transparent",
+        boxShadow: isActive ? "0 10px 30px rgba(37, 99, 235, 0.12)" : "none",
+        transition: "all 160ms ease",
+        "&:hover": {
+          bgcolor: "surface.level2",
+          transform: "translateX(2px)",
+        },
+      }}
+    >
+      {navIcon(icon)}
+      <Typography variant="body2" sx={{ fontWeight: "inherit" }}>
+        {label}
+      </Typography>
+    </Link>
+  );
+}
+
+export default function PrivateLayout() {
+  const { t } = useTranslation();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const isAdmin = user?.role === "PLATFORM_ADMIN";
+  const showOnboarding = user && !user.onboardingCompleted && !isAdmin;
+  const fullName = formatFullName(user?.firstName, user?.lastName);
+
+  async function handleLogout() {
+    await logout();
+    navigate("/login", { replace: true });
+  }
+
+  return (
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.primary", display: "flex" }}>
+      <Box
+        component="aside"
+        sx={{
+          width: sidebarWidth,
+          minHeight: "100vh",
+          position: "sticky",
+          top: 0,
+          display: { xs: "none", md: "flex" },
+          flexDirection: "column",
+          px: 2.25,
+          py: 2.5,
+          borderRight: "1px solid",
+          borderColor: "divider",
+          bgcolor: "background.paper",
+          backdropFilter: "blur(20px)",
+        }}
+      >
+        <Link component={RouterLink} to="/dashboard" underline="none" sx={{ mb: 3, display: "block" }}>
+          <Box component="img" src="/framework360-wordmark.svg" alt="Framework360" sx={{ width: 218, height: 54, objectFit: "contain", objectPosition: "left center", color: "text.primary" }} />
+        </Link>
+
+        <Chip label="Compliance workspace" color="primary" size="small" sx={{ alignSelf: "flex-start", mb: 2 }} />
+
+        <Stack spacing={0.75} sx={{ flex: 1 }}>
+          <SidebarLink to="/dashboard" label={t("navbar.dashboard")} icon="DB" />
+          <SidebarLink to="/vendors" label={t("navbar.vendors")} icon="VD" />
+          <SidebarLink to="/systems" label={t("navbar.systems")} icon="SY" />
+          <SidebarLink to="/business-processes" label={t("navbar.processes")} icon="PR" />
+          <SidebarLink to="/dependencies" label={t("navbar.dependencies")} icon="DP" />
+          <SidebarLink to="/evidence" label={t("navbar.evidence")} icon="EV" />
+          {showOnboarding && <SidebarLink to="/onboarding/select-product" label={t("navbar.continueSetup")} icon="ON" />}
+          {isAdmin && <SidebarLink to="/admin" label={t("navbar.admin")} icon="AD" />}
+        </Stack>
+
+        <Box sx={{ p: 2, borderRadius: 4, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider", mb: 2 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 0.5 }}>
+            Readiness snapshot
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Keep frameworks, evidence, vendors and dependencies connected in one place.
+          </Typography>
+        </Box>
+
+        <Divider sx={{ mb: 2 }} />
+
+        <Stack direction="row" spacing={1.25} alignItems="center">
+          <Avatar sx={{ width: 42, height: 42 }}>{getInitials(user?.firstName, user?.lastName, user?.email)}</Avatar>
+          <Box sx={{ minWidth: 0, flex: 1 }}>
+            <Typography variant="body2" sx={{ fontWeight: 800 }} noWrap>
+              {fullName}
+            </Typography>
+            <Typography variant="caption" color="text.secondary" noWrap>
+              {formatRole(user?.role)}
+            </Typography>
+          </Box>
+        </Stack>
+      </Box>
+
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Box
+          component="header"
+          sx={{
+            minHeight: 72,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            px: { xs: 2, md: 4 },
+            borderBottom: "1px solid",
+            borderColor: "divider",
+            bgcolor: "background.paper",
+            backdropFilter: "blur(20px)",
+            position: "sticky",
+            top: 0,
+            zIndex: 10,
+          }}
+        >
+          <Stack direction="row" spacing={1.5} alignItems="center">
+            <Box component="img" src="/favicon.svg" alt="Framework360" sx={{ display: { xs: "block", md: "none" }, width: 38, height: 38 }} />
+            <Box>
+              <Typography variant="subtitle1" sx={{ fontWeight: 850 }}>
+                Framework360
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                Compliance command center
+              </Typography>
+            </Box>
+          </Stack>
+
+          <Stack direction="row" spacing={1.25} alignItems="center">
+            <ThemeToggle />
+            <Button variant="soft" size="small" onClick={() => navigate("/settings")}>{t("navbar.settings")}</Button>
+            <Button variant="outlined" size="small" onClick={handleLogout}>{t("navbar.logout")}</Button>
+          </Stack>
+        </Box>
+
+        <Box component="main" sx={{ minHeight: "calc(100vh - 72px)" }}>
+          <Outlet />
+        </Box>
+      </Box>
     </Box>
   );
 }
