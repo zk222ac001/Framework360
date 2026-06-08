@@ -37,8 +37,8 @@ docker compose up --build
 The application will be available at:
 
 ```text
-Frontend: http://localhost:5173
-Backend API: http://localhost:3000
+Frontend: http://localhost:25173
+Backend API: http://localhost:23000
 ```
 
 The backend automatically runs Prisma database synchronization (`prisma db push`) when the container starts.
