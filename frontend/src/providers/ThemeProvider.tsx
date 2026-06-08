@@ -90,31 +90,34 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       ? {
           background: "#0f172a",
           foreground: "#f8fafc",
-          surface: "#111827",
-          surface2: "#1f2937",
+          surface: "rgba(17, 24, 39, 0.86)",
+          surface2: "rgba(31, 41, 55, 0.9)",
           surface3: "#273449",
-          border: "#334155",
+          border: "rgba(148, 163, 184, 0.24)",
           mutedForeground: "#cbd5e1",
           primary: "#3b82f6",
           primaryHover: "#2563eb",
           primaryActive: "#1d4ed8",
           primaryForeground: "#ffffff",
-          secondary: "#1f2937",
-          secondaryHover: "#273449",
+          secondary: "rgba(31, 41, 55, 0.82)",
+          secondaryHover: "rgba(39, 52, 73, 0.92)",
           secondaryForeground: "#f8fafc",
           link: "#93c5fd",
           linkHover: "#bfdbfe",
           success: "#10b981",
           warning: "#f59e0b",
           destructive: "#ef4444",
+          shadow: "0 24px 80px rgba(0, 0, 0, 0.34)",
+          softShadow: "0 12px 40px rgba(0, 0, 0, 0.22)",
+          focusRing: "rgba(59, 130, 246, 0.32)",
         }
       : {
           background: "#f8fafc",
           foreground: "#0f172a",
-          surface: "#ffffff",
+          surface: "rgba(255, 255, 255, 0.92)",
           surface2: "#f1f5f9",
           surface3: "#e2e8f0",
-          border: "#cbd5e1",
+          border: "rgba(100, 116, 139, 0.22)",
           mutedForeground: "#64748b",
           primary: "#2563eb",
           primaryHover: "#1d4ed8",
@@ -128,6 +131,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
           success: "#10b981",
           warning: "#f59e0b",
           destructive: "#ef4444",
+          shadow: "0 24px 80px rgba(15, 23, 42, 0.12)",
+          softShadow: "0 12px 36px rgba(15, 23, 42, 0.08)",
+          focusRing: "rgba(37, 99, 235, 0.2)",
         };
 
     return createTheme({
@@ -170,7 +176,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
         },
       },
       shape: {
-        borderRadius: 12,
+        borderRadius: 16,
       },
       typography: {
         fontFamily: [
@@ -181,6 +187,13 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
           '"Segoe UI"',
           "sans-serif",
         ].join(","),
+        h1: { fontWeight: 800, letterSpacing: "-0.04em" },
+        h2: { fontWeight: 800, letterSpacing: "-0.035em" },
+        h3: { fontWeight: 750, letterSpacing: "-0.03em" },
+        h4: { fontWeight: 750, letterSpacing: "-0.025em" },
+        h5: { fontWeight: 700, letterSpacing: "-0.02em" },
+        h6: { fontWeight: 700, letterSpacing: "-0.02em" },
+        button: { fontWeight: 700, letterSpacing: "-0.01em" },
       },
       // Global MUI component style overrides.
       components: {
@@ -188,11 +201,24 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
           styleOverrides: {
             body: {
               backgroundColor: tokens.background,
+              backgroundImage: isDark
+                ? "radial-gradient(circle at top left, rgba(37, 99, 235, 0.2), transparent 34rem), radial-gradient(circle at top right, rgba(20, 184, 166, 0.13), transparent 32rem)"
+                : "radial-gradient(circle at top left, rgba(37, 99, 235, 0.1), transparent 32rem), radial-gradient(circle at top right, rgba(20, 184, 166, 0.12), transparent 30rem)",
+              backgroundAttachment: "fixed",
               color: tokens.foreground,
+              WebkitFontSmoothing: "antialiased",
+              MozOsxFontSmoothing: "grayscale",
+            },
+            "::selection": {
+              backgroundColor: tokens.focusRing,
             },
             a: {
               color: tokens.link,
               textDecoration: "none",
+              transition: "color 160ms ease",
+            },
+            "a:hover": {
+              color: tokens.linkHover,
             },
           },
         },
@@ -203,6 +229,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
               borderBottom: `1px solid ${tokens.border}`,
               boxShadow: "none",
               backgroundImage: "none",
+              backdropFilter: "blur(18px)",
             },
           },
         },
@@ -210,6 +237,9 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
           styleOverrides: {
             root: {
               backgroundImage: "none",
+              border: `1px solid ${tokens.border}`,
+              boxShadow: tokens.softShadow,
+              backdropFilter: "blur(16px)",
             },
           },
         },
@@ -218,7 +248,17 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
             root: {
               border: `1px solid ${tokens.border}`,
               backgroundColor: tokens.surface,
-              boxShadow: "none",
+              boxShadow: tokens.softShadow,
+              borderRadius: 20,
+              transition:
+                "transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease",
+              "&:hover": {
+                transform: "translateY(-2px)",
+                boxShadow: tokens.shadow,
+                borderColor: isDark
+                  ? "rgba(147, 197, 253, 0.34)"
+                  : "rgba(37, 99, 235, 0.24)",
+              },
             },
           },
         },
@@ -228,9 +268,40 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
           },
           styleOverrides: {
             root: {
-              borderRadius: 10,
+              borderRadius: 12,
               textTransform: "none",
-              fontWeight: 600,
+              fontWeight: 700,
+              minHeight: 40,
+              transition:
+                "transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease, border-color 160ms ease",
+              "&:hover": {
+                transform: "translateY(-1px)",
+              },
+              "&:focus-visible": {
+                boxShadow: `0 0 0 4px ${tokens.focusRing}`,
+              },
+            },
+            containedPrimary: {
+              background: `linear-gradient(135deg, ${tokens.primary}, #14b8a6)`,
+              boxShadow: isDark
+                ? "0 12px 30px rgba(37, 99, 235, 0.22)"
+                : "0 12px 30px rgba(37, 99, 235, 0.18)",
+              "&:hover": {
+                background: `linear-gradient(135deg, ${tokens.primaryHover}, #0d9488)`,
+                boxShadow: isDark
+                  ? "0 16px 38px rgba(37, 99, 235, 0.28)"
+                  : "0 16px 38px rgba(37, 99, 235, 0.24)",
+              },
+            },
+            outlined: {
+              borderColor: tokens.border,
+              backgroundColor: isDark
+                ? "rgba(15, 23, 42, 0.26)"
+                : "rgba(255, 255, 255, 0.66)",
+              "&:hover": {
+                borderColor: tokens.primary,
+                backgroundColor: tokens.secondaryHover,
+              },
             },
           },
           variants: [
@@ -243,7 +314,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
                 boxShadow: "none",
                 "&:hover": {
                   backgroundColor: tokens.secondaryHover,
-                  boxShadow: "none",
+                  boxShadow: tokens.softShadow,
                 },
               },
             },
@@ -252,16 +323,66 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
         MuiOutlinedInput: {
           styleOverrides: {
             root: {
-              backgroundColor: isDark ? "#111827" : "#ffffff",
+              borderRadius: 14,
+              backgroundColor: isDark
+                ? "rgba(15, 23, 42, 0.58)"
+                : "rgba(255, 255, 255, 0.86)",
+              transition:
+                "box-shadow 160ms ease, background-color 160ms ease, border-color 160ms ease",
               "& .MuiOutlinedInput-notchedOutline": {
                 borderColor: tokens.border,
               },
               "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: tokens.border,
+                borderColor: isDark
+                  ? "rgba(147, 197, 253, 0.4)"
+                  : "rgba(37, 99, 235, 0.32)",
+              },
+              "&.Mui-focused": {
+                boxShadow: `0 0 0 4px ${tokens.focusRing}`,
               },
               "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                 borderColor: tokens.primary,
               },
+            },
+          },
+        },
+        MuiMenu: {
+          styleOverrides: {
+            paper: {
+              borderRadius: 16,
+              boxShadow: tokens.shadow,
+            },
+          },
+        },
+        MuiMenuItem: {
+          styleOverrides: {
+            root: {
+              borderRadius: 10,
+              margin: "4px 8px",
+            },
+          },
+        },
+        MuiChip: {
+          styleOverrides: {
+            root: {
+              borderRadius: 999,
+              fontWeight: 700,
+            },
+          },
+        },
+        MuiAvatar: {
+          styleOverrides: {
+            root: {
+              background: `linear-gradient(135deg, ${tokens.primary}, #14b8a6)`,
+              color: tokens.primaryForeground,
+              fontWeight: 800,
+            },
+          },
+        },
+        MuiDivider: {
+          styleOverrides: {
+            root: {
+              borderColor: tokens.border,
             },
           },
         },
