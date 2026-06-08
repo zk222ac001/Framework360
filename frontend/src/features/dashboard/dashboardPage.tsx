@@ -1,13 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline.js";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward.js";
-import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome.js";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline.js";
-import FactCheckOutlinedIcon from "@mui/icons-material/FactCheckOutlined.js";
-import InsightsOutlinedIcon from "@mui/icons-material/InsightsOutlined.js";
-import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined.js";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp.js";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -50,7 +42,7 @@ type ScoreCardProps = {
   title: string;
   description: string;
   score: number;
-  icon: React.ReactNode;
+  icon: string;
 };
 
 function ScoreCard({ title, description, score, icon }: ScoreCardProps) {
@@ -64,7 +56,7 @@ function ScoreCard({ title, description, score, icon }: ScoreCardProps) {
             <Typography variant="h3" sx={{ mt: 1, mb: 0.5 }}>{score}%</Typography>
             <Chip label={getScoreLabel(score)} size="small" color="primary" />
           </Box>
-          <Box sx={{ width: 52, height: 52, borderRadius: 4, display: "grid", placeItems: "center", color: "primary.contrastText", background: "linear-gradient(135deg, #2563eb, #14b8a6)" }}>{icon}</Box>
+          <Box sx={{ width: 52, height: 52, borderRadius: 4, display: "grid", placeItems: "center", color: "primary.contrastText", background: "linear-gradient(135deg, #2563eb, #14b8a6)", fontSize: 26 }}>{icon}</Box>
         </Stack>
         <LinearProgress variant="determinate" value={score} sx={{ height: 12, borderRadius: 999, my: 2.5 }} />
         <Typography variant="body2" color="text.secondary">{description}</Typography>
@@ -73,13 +65,13 @@ function ScoreCard({ title, description, score, icon }: ScoreCardProps) {
   );
 }
 
-type MetricCardProps = { label: string; value: string | number; helper: string; icon: React.ReactNode };
+type MetricCardProps = { label: string; value: string | number; helper: string; icon: string };
 
 function MetricCard({ label, value, helper, icon }: MetricCardProps) {
   return (
     <Paper sx={{ p: 2.5, borderRadius: 4, minWidth: 220, flex: 1 }}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Box sx={{ width: 44, height: 44, borderRadius: 3, display: "grid", placeItems: "center", bgcolor: "surface.level2", color: "primary.main" }}>{icon}</Box>
+        <Box sx={{ width: 44, height: 44, borderRadius: 3, display: "grid", placeItems: "center", bgcolor: "surface.level2", color: "primary.main", fontSize: 22 }}>{icon}</Box>
         <Box>
           <Typography variant="h5">{value}</Typography>
           <Typography variant="body2" color="text.secondary">{label}</Typography>
@@ -133,35 +125,35 @@ export default function DashboardPage() {
         <Box sx={{ position: "absolute", inset: 0, background: "radial-gradient(circle at top left, rgba(37, 99, 235, 0.22), transparent 22rem), radial-gradient(circle at bottom right, rgba(20, 184, 166, 0.2), transparent 20rem)", pointerEvents: "none" }} />
         <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", md: "center" }} spacing={3} sx={{ position: "relative" }}>
           <Box sx={{ maxWidth: 760 }}>
-            <Chip icon={<AutoAwesomeIcon />} label="Framework360 Command Center" color="primary" sx={{ mb: 2 }} />
+            <Chip label="Framework360 Command Center" color="primary" sx={{ mb: 2 }} />
             <Typography variant="h3" sx={{ mb: 1 }}>Your compliance overview, simplified.</Typography>
             <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 680 }}>Track active frameworks, monitor readiness, and keep evidence-driven progress visible across your organization.</Typography>
           </Box>
           <Stack direction="row" spacing={1.5}>
-            <Button variant="soft" startIcon={<InsightsOutlinedIcon />} onClick={() => navigate("/evidence")}>Evidence</Button>
-            <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={() => navigate("/frameworks/add")}>{t("dashboard.addFramework")}</Button>
+            <Button variant="soft" onClick={() => navigate("/evidence")}>Evidence</Button>
+            <Button variant="contained" onClick={() => navigate("/frameworks/add")}>+ {t("dashboard.addFramework")}</Button>
           </Stack>
         </Stack>
       </Paper>
       <Stack direction={{ xs: "column", md: "row" }} spacing={3} sx={{ mb: 3 }}>
-        <ScoreCard title={t("dashboard.euLawScore")} description={t("dashboard.euLawScoreDescription")} score={lawScore} icon={<SecurityOutlinedIcon />} />
-        <ScoreCard title={t("dashboard.certificateScore")} description={t("dashboard.certificateScoreDescription")} score={certificateScore} icon={<FactCheckOutlinedIcon />} />
+        <ScoreCard title={t("dashboard.euLawScore")} description={t("dashboard.euLawScoreDescription")} score={lawScore} icon="SH" />
+        <ScoreCard title={t("dashboard.certificateScore")} description={t("dashboard.certificateScoreDescription")} score={certificateScore} icon="OK" />
       </Stack>
       <Stack direction={{ xs: "column", md: "row" }} spacing={2.5} sx={{ mb: 4 }}>
-        <MetricCard label="Active frameworks" value={frameworks.length} helper="Frameworks currently tracked in your workspace." icon={<FactCheckOutlinedIcon />} />
-        <MetricCard label="Completed" value={completedFrameworks.length} helper="Frameworks with a complete assessment score." icon={<CheckCircleOutlineIcon />} />
-        <MetricCard label="Average readiness" value={`${averageOverallScore}%`} helper="Average maturity across all selected frameworks." icon={<TrendingUpIcon />} />
+        <MetricCard label="Active frameworks" value={frameworks.length} helper="Frameworks currently tracked in your workspace." icon="FW" />
+        <MetricCard label="Completed" value={completedFrameworks.length} helper="Frameworks with a complete assessment score." icon="OK" />
+        <MetricCard label="Average readiness" value={`${averageOverallScore}%`} helper="Average maturity across all selected frameworks." icon="UP" />
       </Stack>
       <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", md: "center" }} spacing={2} sx={{ mb: 2.5 }}>
         <Box>
           <Typography variant="h5">{t("dashboard.frameworks")}</Typography>
           <Typography variant="body2" color="text.secondary">Continue assessments, review readiness, or add another compliance framework.</Typography>
         </Box>
-        <Button variant="contained" startIcon={<AddCircleOutlineIcon />} onClick={() => navigate("/frameworks/add")}>{t("dashboard.addFramework")}</Button>
+        <Button variant="contained" onClick={() => navigate("/frameworks/add")}>+ {t("dashboard.addFramework")}</Button>
       </Stack>
       {!dashboard || dashboard.frameworks.length === 0 ? (
         <Paper sx={{ p: { xs: 4, md: 6 }, borderRadius: 6, borderStyle: "dashed", textAlign: "center" }}>
-          <Box sx={{ width: 72, height: 72, mx: "auto", mb: 2, borderRadius: 5, display: "grid", placeItems: "center", background: "linear-gradient(135deg, #2563eb, #14b8a6)", color: "primary.contrastText" }}><AddCircleOutlineIcon fontSize="large" /></Box>
+          <Box sx={{ width: 72, height: 72, mx: "auto", mb: 2, borderRadius: 5, display: "grid", placeItems: "center", background: "linear-gradient(135deg, #2563eb, #14b8a6)", color: "primary.contrastText", fontSize: 34 }}>+</Box>
           <Typography variant="h5" gutterBottom>{t("dashboard.noFrameworks")}</Typography>
           <Typography color="text.secondary" sx={{ mb: 3, maxWidth: 520, mx: "auto" }}>{t("dashboard.noFrameworksDescription")}</Typography>
           <Button variant="contained" size="large" onClick={() => navigate("/frameworks/add")}>{t("dashboard.addFirstFramework")}</Button>
@@ -187,15 +179,15 @@ export default function DashboardPage() {
                   </Stack>
                   <LinearProgress variant="determinate" value={score} sx={{ height: 10, borderRadius: 999 }} />
                 </Box>
-                <Button variant="outlined" endIcon={<ArrowForwardIcon />} onClick={(event) => { event.stopPropagation(); navigate(`/frameworks/${framework.code}`); }} sx={{ alignSelf: "flex-start", mt: 3 }}>
-                  {isCompleted ? t("dashboard.view") : t("dashboard.continue")}
+                <Button variant="outlined" onClick={(event) => { event.stopPropagation(); navigate(`/frameworks/${framework.code}`); }} sx={{ alignSelf: "flex-start", mt: 3 }}>
+                  {isCompleted ? t("dashboard.view") : t("dashboard.continue")} →
                 </Button>
               </Paper>
             );
           })}
           <Paper onClick={() => navigate("/frameworks/add")} sx={{ p: 3, borderRadius: 5, minHeight: 230, display: "grid", placeItems: "center", borderStyle: "dashed", cursor: "pointer", textAlign: "center" }}>
             <Box>
-              <AddCircleOutlineIcon color="primary" fontSize="large" />
+              <Typography variant="h3" color="primary">+</Typography>
               <Typography variant="h6" sx={{ mt: 1 }}>{t("dashboard.addNewFramework")}</Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>Expand your compliance coverage.</Typography>
             </Box>
