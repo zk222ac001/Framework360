@@ -38,12 +38,7 @@ function getScoreLabel(score: number) {
   return "Not started";
 }
 
-type ScoreCardProps = {
-  title: string;
-  description: string;
-  score: number;
-  icon: string;
-};
+type ScoreCardProps = { title: string; description: string; score: number; icon: string };
 
 function ScoreCard({ title, description, score, icon }: ScoreCardProps) {
   return (
@@ -82,6 +77,36 @@ function MetricCard({ label, value, helper, icon }: MetricCardProps) {
   );
 }
 
+function DonutChart({ score }: { score: number }) {
+  const value = clampScore(score);
+  return (
+    <Box sx={{ width: 190, height: 190, borderRadius: "50%", display: "grid", placeItems: "center", background: `conic-gradient(#14b8a6 ${value * 3.6}deg, rgba(148, 163, 184, 0.18) 0deg)`, mx: "auto", position: "relative" }}>
+      <Box sx={{ width: 138, height: 138, borderRadius: "50%", bgcolor: "background.paper", display: "grid", placeItems: "center", border: "1px solid", borderColor: "divider" }}>
+        <Box sx={{ textAlign: "center" }}>
+          <Typography variant="h3">{value}%</Typography>
+          <Typography variant="caption" color="text.secondary">overall</Typography>
+        </Box>
+      </Box>
+    </Box>
+  );
+}
+
+function InsightPanel({ averageScoreValue, frameworksCount, completedCount }: { averageScoreValue: number; frameworksCount: number; completedCount: number }) {
+  const openCount = Math.max(0, frameworksCount - completedCount);
+  return (
+    <Paper sx={{ p: 3, borderRadius: 5, height: "100%" }}>
+      <Typography variant="h6" gutterBottom>Compliance maturity</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>A quick visual read of your total readiness across selected frameworks.</Typography>
+      <DonutChart score={averageScoreValue} />
+      <Stack spacing={1.5} sx={{ mt: 3 }}>
+        <Stack direction="row" justifyContent="space-between"><Typography variant="body2" color="text.secondary">Completed</Typography><Typography variant="body2" sx={{ fontWeight: 800 }}>{completedCount}</Typography></Stack>
+        <Stack direction="row" justifyContent="space-between"><Typography variant="body2" color="text.secondary">In progress</Typography><Typography variant="body2" sx={{ fontWeight: 800 }}>{openCount}</Typography></Stack>
+        <Stack direction="row" justifyContent="space-between"><Typography variant="body2" color="text.secondary">Coverage</Typography><Typography variant="body2" sx={{ fontWeight: 800 }}>{frameworksCount} frameworks</Typography></Stack>
+      </Stack>
+    </Paper>
+  );
+}
+
 export default function DashboardPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -91,19 +116,8 @@ export default function DashboardPage() {
 
   useEffect(() => {
     let isMounted = true;
-    getDashboard()
-      .then((data) => {
-        if (isMounted) setDashboard(data);
-      })
-      .catch((err) => {
-        if (isMounted) setError(getErrorMessage(err));
-      })
-      .finally(() => {
-        if (isMounted) setIsLoading(false);
-      });
-    return () => {
-      isMounted = false;
-    };
+    getDashboard().then((data) => { if (isMounted) setDashboard(data); }).catch((err) => { if (isMounted) setError(getErrorMessage(err)); }).finally(() => { if (isMounted) setIsLoading(false); });
+    return () => { isMounted = false; };
   }, [t]);
 
   const euLawFrameworks = dashboard?.frameworks.filter((framework) => isEuLawFramework(framework.category)) || [];
@@ -114,9 +128,7 @@ export default function DashboardPage() {
   const lawScore = averageScore(euLawFrameworks.map((framework) => framework.score));
   const certificateScore = averageScore(voluntaryFrameworks.map((framework) => framework.score));
 
-  if (isLoading) {
-    return <Box sx={{ display: "flex", justifyContent: "center", py: 10 }}><CircularProgress /></Box>;
-  }
+  if (isLoading) return <Box sx={{ display: "flex", justifyContent: "center", py: 10 }}><CircularProgress /></Box>;
 
   return (
     <Box sx={{ width: "100%", minHeight: "100vh", p: { xs: 2, md: 4 } }}>
@@ -129,69 +141,35 @@ export default function DashboardPage() {
             <Typography variant="h3" sx={{ mb: 1 }}>Your compliance overview, simplified.</Typography>
             <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 680 }}>Track active frameworks, monitor readiness, and keep evidence-driven progress visible across your organization.</Typography>
           </Box>
-          <Stack direction="row" spacing={1.5}>
-            <Button variant="soft" onClick={() => navigate("/evidence")}>Evidence</Button>
-            <Button variant="contained" onClick={() => navigate("/frameworks/add")}>+ {t("dashboard.addFramework")}</Button>
-          </Stack>
+          <Stack direction="row" spacing={1.5}><Button variant="soft" onClick={() => navigate("/evidence")}>Evidence</Button><Button variant="contained" onClick={() => navigate("/frameworks/add")}>+ {t("dashboard.addFramework")}</Button></Stack>
         </Stack>
       </Paper>
-      <Stack direction={{ xs: "column", md: "row" }} spacing={3} sx={{ mb: 3 }}>
-        <ScoreCard title={t("dashboard.euLawScore")} description={t("dashboard.euLawScoreDescription")} score={lawScore} icon="SH" />
-        <ScoreCard title={t("dashboard.certificateScore")} description={t("dashboard.certificateScoreDescription")} score={certificateScore} icon="OK" />
-      </Stack>
-      <Stack direction={{ xs: "column", md: "row" }} spacing={2.5} sx={{ mb: 4 }}>
-        <MetricCard label="Active frameworks" value={frameworks.length} helper="Frameworks currently tracked in your workspace." icon="FW" />
-        <MetricCard label="Completed" value={completedFrameworks.length} helper="Frameworks with a complete assessment score." icon="OK" />
-        <MetricCard label="Average readiness" value={`${averageOverallScore}%`} helper="Average maturity across all selected frameworks." icon="UP" />
-      </Stack>
-      <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", md: "center" }} spacing={2} sx={{ mb: 2.5 }}>
-        <Box>
-          <Typography variant="h5">{t("dashboard.frameworks")}</Typography>
-          <Typography variant="body2" color="text.secondary">Continue assessments, review readiness, or add another compliance framework.</Typography>
+
+      <Stack direction={{ xs: "column", lg: "row" }} spacing={3} sx={{ mb: 3 }}>
+        <Box sx={{ flex: 2 }}>
+          <Stack direction={{ xs: "column", md: "row" }} spacing={3} sx={{ mb: 3 }}>
+            <ScoreCard title={t("dashboard.euLawScore")} description={t("dashboard.euLawScoreDescription")} score={lawScore} icon="SH" />
+            <ScoreCard title={t("dashboard.certificateScore")} description={t("dashboard.certificateScoreDescription")} score={certificateScore} icon="OK" />
+          </Stack>
+          <Stack direction={{ xs: "column", md: "row" }} spacing={2.5}>
+            <MetricCard label="Active frameworks" value={frameworks.length} helper="Frameworks currently tracked in your workspace." icon="FW" />
+            <MetricCard label="Completed" value={completedFrameworks.length} helper="Frameworks with a complete assessment score." icon="OK" />
+            <MetricCard label="Average readiness" value={`${averageOverallScore}%`} helper="Average maturity across all selected frameworks." icon="UP" />
+          </Stack>
         </Box>
+        <Box sx={{ flex: 1, minWidth: 320 }}><InsightPanel averageScoreValue={averageOverallScore} frameworksCount={frameworks.length} completedCount={completedFrameworks.length} /></Box>
+      </Stack>
+
+      <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", md: "center" }} spacing={2} sx={{ mb: 2.5 }}>
+        <Box><Typography variant="h5">{t("dashboard.frameworks")}</Typography><Typography variant="body2" color="text.secondary">Continue assessments, review readiness, or add another compliance framework.</Typography></Box>
         <Button variant="contained" onClick={() => navigate("/frameworks/add")}>+ {t("dashboard.addFramework")}</Button>
       </Stack>
       {!dashboard || dashboard.frameworks.length === 0 ? (
-        <Paper sx={{ p: { xs: 4, md: 6 }, borderRadius: 6, borderStyle: "dashed", textAlign: "center" }}>
-          <Box sx={{ width: 72, height: 72, mx: "auto", mb: 2, borderRadius: 5, display: "grid", placeItems: "center", background: "linear-gradient(135deg, #2563eb, #14b8a6)", color: "primary.contrastText", fontSize: 34 }}>+</Box>
-          <Typography variant="h5" gutterBottom>{t("dashboard.noFrameworks")}</Typography>
-          <Typography color="text.secondary" sx={{ mb: 3, maxWidth: 520, mx: "auto" }}>{t("dashboard.noFrameworksDescription")}</Typography>
-          <Button variant="contained" size="large" onClick={() => navigate("/frameworks/add")}>{t("dashboard.addFirstFramework")}</Button>
-        </Paper>
+        <Paper sx={{ p: { xs: 4, md: 6 }, borderRadius: 6, borderStyle: "dashed", textAlign: "center" }}><Box sx={{ width: 72, height: 72, mx: "auto", mb: 2, borderRadius: 5, display: "grid", placeItems: "center", background: "linear-gradient(135deg, #2563eb, #14b8a6)", color: "primary.contrastText", fontSize: 34 }}>+</Box><Typography variant="h5" gutterBottom>{t("dashboard.noFrameworks")}</Typography><Typography color="text.secondary" sx={{ mb: 3, maxWidth: 520, mx: "auto" }}>{t("dashboard.noFrameworksDescription")}</Typography><Button variant="contained" size="large" onClick={() => navigate("/frameworks/add")}>{t("dashboard.addFirstFramework")}</Button></Paper>
       ) : (
         <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(2, minmax(0, 1fr))", xl: "repeat(3, minmax(0, 1fr))" }, gap: 2.5 }}>
-          {dashboard.frameworks.map((framework) => {
-            const score = clampScore(framework.score);
-            const isCompleted = framework.status === "COMPLETED" && score === 100;
-            return (
-              <Paper key={framework.code} onClick={() => navigate(`/frameworks/${framework.code}`)} sx={{ p: 3, borderRadius: 5, cursor: "pointer", minHeight: 230, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                <Box>
-                  <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={2}>
-                    <Box>
-                      <Typography variant="h6" gutterBottom>{framework.name}</Typography>
-                      {framework.category && <Typography variant="body2" color="text.secondary">{framework.category}</Typography>}
-                    </Box>
-                    <Chip label={isCompleted ? t("dashboard.completed") : t("dashboard.inProgress")} color={isCompleted ? "success" : "primary"} size="small" />
-                  </Stack>
-                  <Stack direction="row" alignItems="flex-end" justifyContent="space-between" sx={{ mt: 3, mb: 1 }}>
-                    <Typography variant="h4">{score}%</Typography>
-                    <Typography variant="caption" color="text.secondary">readiness</Typography>
-                  </Stack>
-                  <LinearProgress variant="determinate" value={score} sx={{ height: 10, borderRadius: 999 }} />
-                </Box>
-                <Button variant="outlined" onClick={(event) => { event.stopPropagation(); navigate(`/frameworks/${framework.code}`); }} sx={{ alignSelf: "flex-start", mt: 3 }}>
-                  {isCompleted ? t("dashboard.view") : t("dashboard.continue")} →
-                </Button>
-              </Paper>
-            );
-          })}
-          <Paper onClick={() => navigate("/frameworks/add")} sx={{ p: 3, borderRadius: 5, minHeight: 230, display: "grid", placeItems: "center", borderStyle: "dashed", cursor: "pointer", textAlign: "center" }}>
-            <Box>
-              <Typography variant="h3" color="primary">+</Typography>
-              <Typography variant="h6" sx={{ mt: 1 }}>{t("dashboard.addNewFramework")}</Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>Expand your compliance coverage.</Typography>
-            </Box>
-          </Paper>
+          {dashboard.frameworks.map((framework) => { const score = clampScore(framework.score); const isCompleted = framework.status === "COMPLETED" && score === 100; return (<Paper key={framework.code} onClick={() => navigate(`/frameworks/${framework.code}`)} sx={{ p: 3, borderRadius: 5, cursor: "pointer", minHeight: 230, display: "flex", flexDirection: "column", justifyContent: "space-between" }}><Box><Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={2}><Box><Typography variant="h6" gutterBottom>{framework.name}</Typography>{framework.category && <Typography variant="body2" color="text.secondary">{framework.category}</Typography>}</Box><Chip label={isCompleted ? t("dashboard.completed") : t("dashboard.inProgress")} color={isCompleted ? "success" : "primary"} size="small" /></Stack><Stack direction="row" alignItems="flex-end" justifyContent="space-between" sx={{ mt: 3, mb: 1 }}><Typography variant="h4">{score}%</Typography><Typography variant="caption" color="text.secondary">readiness</Typography></Stack><LinearProgress variant="determinate" value={score} sx={{ height: 10, borderRadius: 999 }} /></Box><Button variant="outlined" onClick={(event) => { event.stopPropagation(); navigate(`/frameworks/${framework.code}`); }} sx={{ alignSelf: "flex-start", mt: 3 }}>{isCompleted ? t("dashboard.view") : t("dashboard.continue")} →</Button></Paper>); })}
+          <Paper onClick={() => navigate("/frameworks/add")} sx={{ p: 3, borderRadius: 5, minHeight: 230, display: "grid", placeItems: "center", borderStyle: "dashed", cursor: "pointer", textAlign: "center" }}><Box><Typography variant="h3" color="primary">+</Typography><Typography variant="h6" sx={{ mt: 1 }}>{t("dashboard.addNewFramework")}</Typography><Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>Expand your compliance coverage.</Typography></Box></Paper>
         </Box>
       )}
     </Box>
