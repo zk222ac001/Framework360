@@ -1,7 +1,7 @@
 {
-  "name": "eucompliance-backend",
+  "name": "framework360-backend",
   "version": "1.0.0",
-  "description": "Backend for EU Compliance project",
+  "description": "Backend for Framework360 project",
   "main": "src/server.js",
   "scripts": {
     "test:db": "cross-env NODE_ENV=test DATABASE_URL=file:./test.db prisma db push --force-reset",
