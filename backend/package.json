@@ -1,0 +1,46 @@
+{
+  "name": "eucompliance-backend",
+  "version": "1.0.0",
+  "description": "Backend for EU Compliance project",
+  "main": "src/server.js",
+  "scripts": {
+    "test:db": "cross-env NODE_ENV=test DATABASE_URL=file:./test.db prisma db push --force-reset",
+    "test": "npm run test:db && cross-env NODE_ENV=test DATABASE_URL=file:./test.db jest --runInBand",
+    "test:watch": "cross-env NODE_ENV=test DATABASE_URL=file:./test.db jest --watch --runInBand",
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate",
+    "studio": "prisma studio",
+    "seed:base": "node prisma/seed.js",
+    "seed:dev": "npm run seed:base && node prisma/seed.dev.js",
+    "seed:prod": "npm run seed:base && node prisma/seed.prod.js",
+    "db:reset:dev": "prisma db push --force-reset && npm run seed:dev",
+    "db:reset:prod-demo": "prisma db push --force-reset && npm run seed:prod",
+    "postinstall": "prisma generate",
+    "docker:dev": "prisma db push && npm run dev",
+    "docker:prod-demo": "prisma db push && npm run seed:prod && npm run start"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.0.0",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.4.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.1",
+    "multer": "^2.1.1",
+    "pdfkit": "^0.18.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "jest": "^30.3.0",
+    "nodemon": "^3.1.0",
+    "prisma": "^6.0.0",
+    "supertest": "^7.2.2"
+  }
+}

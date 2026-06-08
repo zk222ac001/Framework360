@@ -1,0 +1,540 @@
+{
+  "code": "NIS2",
+  "name": "NIS2",
+  "description": "Comprehensive paraphrased NIS2 cybersecurity self-assessment checklist for MVP use. This is not legal advice and not official legal text.",
+  "category": "EU Law",
+  "sections": [
+    {
+      "order": 1,
+      "title": "Scope, governance and management accountability",
+      "description": "Governance, management responsibility, scope assessment and cybersecurity oversight.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Has the company assessed whether it is in scope of NIS2?",
+          "description": "Check whether sector, size and activity criteria have been assessed and documented.",
+          "reference": "NIS2 scope / Annex I-II",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Has the company assessed whether it is in scope of NIS2?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 scope / Annex I-II.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Has management approved cybersecurity risk management measures?",
+          "description": "Assess whether senior management has approved and oversees cybersecurity measures.",
+          "reference": "NIS2 Art. 20",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Has management approved cybersecurity risk management measures?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 20.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are cybersecurity responsibilities clearly assigned?",
+          "description": "Check whether roles and owners are defined for security governance and operations.",
+          "reference": "NIS2 Art. 20-21",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are cybersecurity responsibilities clearly assigned?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 20-21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Does management receive cybersecurity status reporting?",
+          "description": "Assess whether risk, incidents and improvement activities are reported to management.",
+          "reference": "NIS2 Art. 20",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Does management receive cybersecurity status reporting?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 20.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are cybersecurity policies approved and maintained?",
+          "description": "Check whether policies define security expectations and are reviewed periodically.",
+          "reference": "NIS2 Art. 21(2)(a)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are cybersecurity policies approved and maintained?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(a).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "title": "Risk management and asset overview",
+      "description": "Risk analysis, assets, dependencies and security planning.",
+      "weight": 5,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are critical assets, systems and services identified?",
+          "description": "Verify that the company knows which systems support essential or important services.",
+          "reference": "NIS2 Art. 21",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are critical assets, systems and services identified?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Is a cybersecurity risk assessment performed regularly?",
+          "description": "Assess whether threats, vulnerabilities, likelihood and impact are evaluated.",
+          "reference": "NIS2 Art. 21(2)(a)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is a cybersecurity risk assessment performed regularly?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(a).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are risk treatment measures documented and tracked?",
+          "description": "Check whether risk owners, actions and deadlines are recorded.",
+          "reference": "NIS2 Art. 21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are risk treatment measures documented and tracked?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are physical and environmental risks considered for critical systems?",
+          "description": "Assess whether an all-hazards approach is used, including physical environment.",
+          "reference": "NIS2 Art. 21(2)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are physical and environmental risks considered for critical systems?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are dependencies on third parties and cloud services mapped?",
+          "description": "Check whether critical supplier and service dependencies are documented.",
+          "reference": "NIS2 Art. 21(2)(d)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are dependencies on third parties and cloud services mapped?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(d).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "title": "Security controls and protection",
+      "description": "Technical and organisational controls for networks, systems, users and data.",
+      "weight": 5,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are access controls implemented for critical systems?",
+          "description": "Check whether access is approved, role-based and regularly reviewed.",
+          "reference": "NIS2 Art. 21(2)(i)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are access controls implemented for critical systems?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(i).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Is multi-factor authentication used where appropriate?",
+          "description": "Assess whether MFA or equivalent controls protect critical accounts and remote access.",
+          "reference": "NIS2 Art. 21(2)(j)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is multi-factor authentication used where appropriate?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(j).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are privileged accounts restricted and monitored?",
+          "description": "Check whether administrator access is limited and logged.",
+          "reference": "NIS2 Art. 21",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are privileged accounts restricted and monitored?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are networks and systems protected against malware and intrusion?",
+          "description": "Assess whether endpoint protection, filtering and hardening are used.",
+          "reference": "NIS2 Art. 21(2)(e)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are networks and systems protected against malware and intrusion?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(e).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are vulnerabilities identified and remediated?",
+          "description": "Check whether patching and vulnerability management processes are in place.",
+          "reference": "NIS2 Art. 21(2)(e)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are vulnerabilities identified and remediated?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(e).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Is encryption used where appropriate?",
+          "description": "Assess whether data and communications are protected using encryption where relevant.",
+          "reference": "NIS2 Art. 21(2)(h)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is encryption used where appropriate?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(h).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 7,
+          "question": "Are secure configuration baselines applied?",
+          "description": "Check whether systems are configured according to security requirements.",
+          "reference": "NIS2 Art. 21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are secure configuration baselines applied?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 8,
+          "question": "Are logs collected and reviewed for critical systems?",
+          "description": "Assess whether relevant security events are logged and monitored.",
+          "reference": "NIS2 Art. 21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are logs collected and reviewed for critical systems?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "title": "Incident handling and reporting",
+      "description": "Incident detection, response, escalation and regulatory reporting readiness.",
+      "weight": 5,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Is an incident response process documented?",
+          "description": "Check whether incident roles, escalation paths and response steps are defined.",
+          "reference": "NIS2 Art. 21(2)(b)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is an incident response process documented?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(b).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are incidents classified by severity and impact?",
+          "description": "Assess whether the company can determine incident significance.",
+          "reference": "NIS2 Art. 23",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are incidents classified by severity and impact?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 23.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Can the company meet required incident notification timelines?",
+          "description": "Check whether processes support early warning and subsequent reporting where applicable.",
+          "reference": "NIS2 Art. 23",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Can the company meet required incident notification timelines?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 23.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are incidents documented and reviewed after resolution?",
+          "description": "Assess whether lessons learned and corrective actions are recorded.",
+          "reference": "NIS2 Art. 21-23",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are incidents documented and reviewed after resolution?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21-23.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are communication responsibilities defined during incidents?",
+          "description": "Check whether internal, external and authority communication is planned.",
+          "reference": "NIS2 Art. 23",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are communication responsibilities defined during incidents?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 23.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Are incident response exercises performed?",
+          "description": "Assess whether response capability is tested through tabletop or technical exercises.",
+          "reference": "NIS2 Art. 21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are incident response exercises performed?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "title": "Business continuity and crisis management",
+      "description": "Backup, disaster recovery, crisis management and resilience.",
+      "weight": 5,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are backups performed for critical systems and data?",
+          "description": "Check whether backups are scheduled, protected and monitored.",
+          "reference": "NIS2 Art. 21(2)(c)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are backups performed for critical systems and data?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(c).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are backup restoration tests performed?",
+          "description": "Assess whether recovery procedures are tested and documented.",
+          "reference": "NIS2 Art. 21(2)(c)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are backup restoration tests performed?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(c).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are disaster recovery plans documented?",
+          "description": "Check whether critical IT services have recovery plans and objectives.",
+          "reference": "NIS2 Art. 21(2)(c)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are disaster recovery plans documented?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(c).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are crisis management procedures defined?",
+          "description": "Assess whether decision-making and coordination during major incidents are planned.",
+          "reference": "NIS2 Art. 21(2)(c)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are crisis management procedures defined?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(c).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are continuity plans aligned with business priorities?",
+          "description": "Check whether critical processes and maximum tolerable downtime are considered.",
+          "reference": "NIS2 Art. 21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are continuity plans aligned with business priorities?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "title": "Supply chain security",
+      "description": "Supplier assessment, contracts, monitoring and ICT supply chain risk.",
+      "weight": 5,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are critical suppliers identified?",
+          "description": "Check whether suppliers supporting important systems, data or services are mapped.",
+          "reference": "NIS2 Art. 21(2)(d)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are critical suppliers identified?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(d).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are suppliers assessed for cybersecurity risk before use?",
+          "description": "Assess whether supplier security maturity is evaluated during onboarding.",
+          "reference": "NIS2 Art. 21(2)(d)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are suppliers assessed for cybersecurity risk before use?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(d).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are cybersecurity requirements included in supplier agreements?",
+          "description": "Check whether contracts include security, incident, access and continuity requirements.",
+          "reference": "NIS2 Art. 21(2)(d)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are cybersecurity requirements included in supplier agreements?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(d).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are supplier security obligations monitored?",
+          "description": "Assess whether supplier compliance is periodically reviewed.",
+          "reference": "NIS2 Art. 21(2)(d)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are supplier security obligations monitored?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(d).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are cloud and managed service providers governed appropriately?",
+          "description": "Check whether outsourced technology services are risk-assessed and monitored.",
+          "reference": "NIS2 Art. 21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are cloud and managed service providers governed appropriately?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "title": "Secure acquisition, development and maintenance",
+      "description": "Security in system acquisition, development, change management and vulnerability handling.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are security requirements defined for new systems and services?",
+          "description": "Check whether security requirements are included before procurement or development.",
+          "reference": "NIS2 Art. 21(2)(e)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are security requirements defined for new systems and services?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(e).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are secure development practices applied where software is developed?",
+          "description": "Assess whether code review, testing and secure design are part of development.",
+          "reference": "NIS2 Art. 21(2)(e)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are secure development practices applied where software is developed?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(e).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Is change management applied to critical systems?",
+          "description": "Check whether changes are approved, tested and documented.",
+          "reference": "NIS2 Art. 21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is change management applied to critical systems?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are vulnerabilities disclosed, tracked and remediated?",
+          "description": "Assess whether vulnerability handling includes prioritisation and follow-up.",
+          "reference": "NIS2 Art. 21(2)(e)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are vulnerabilities disclosed, tracked and remediated?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(e).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "title": "Awareness, training and cyber hygiene",
+      "description": "Security awareness, staff training and basic cyber hygiene practices.",
+      "weight": 3,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Do employees receive cybersecurity awareness training?",
+          "description": "Check whether staff are trained on phishing, passwords, reporting and safe behaviour.",
+          "reference": "NIS2 Art. 21(2)(g)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Do employees receive cybersecurity awareness training?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(g).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Do management and key roles receive relevant cybersecurity training?",
+          "description": "Assess whether leadership and privileged users receive targeted training.",
+          "reference": "NIS2 Art. 20-21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Do management and key roles receive relevant cybersecurity training?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 20-21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are cyber hygiene practices defined and communicated?",
+          "description": "Check whether basic practices such as updates, MFA and secure handling are promoted.",
+          "reference": "NIS2 Art. 21(2)(g)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are cyber hygiene practices defined and communicated?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(g).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are phishing or awareness exercises performed?",
+          "description": "Assess whether awareness effectiveness is tested or measured.",
+          "reference": "NIS2 Art. 21",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are phishing or awareness exercises performed?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 9,
+      "title": "Effectiveness, testing and improvement",
+      "description": "Testing, reviews, metrics and continuous improvement of cybersecurity measures.",
+      "weight": 3,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are cybersecurity measures reviewed for effectiveness?",
+          "description": "Check whether controls are tested, measured or reviewed periodically.",
+          "reference": "NIS2 Art. 21(2)(f)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are cybersecurity measures reviewed for effectiveness?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(f).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are security findings tracked to closure?",
+          "description": "Assess whether gaps from tests, audits or incidents are assigned and remediated.",
+          "reference": "NIS2 Art. 21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are security findings tracked to closure?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are internal or external security assessments performed?",
+          "description": "Check whether independent or structured reviews are conducted.",
+          "reference": "NIS2 Art. 21(2)(f)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are internal or external security assessments performed?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 Art. 21(2)(f).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are cybersecurity improvements prioritised based on risk?",
+          "description": "Assess whether remediation focuses on highest business and security risk.",
+          "reference": "NIS2 risk-based approach",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are cybersecurity improvements prioritised based on risk?\". Review current practice, assign an owner, define the process, and keep evidence updated for NIS2.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with NIS2 risk-based approach.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    }
+  ]
+}

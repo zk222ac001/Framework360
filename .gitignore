@@ -1,0 +1,51 @@
+# Node
+node_modules
+npm-debug.log
+
+# Env
+.env
+.env.*
+
+# Build
+dist
+build
+
+# OS
+.DS_Store
+
+# Logs
+logs
+*.log
+
+# Docker
+docker-compose.override.yml
+
+# IDE
+.vscode
+.idea
+
+# Typescript
+*.tsbuildinfo
+
+# Local SQLite databases
+backend/dev.db
+backend/dev.db-journal
+backend/test.db
+backend/test.db-journal
+
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+backend/prisma/test.db
+backend/prisma/test.db-journal
+backend/**/*.db
+backend/**/*.db-journal
+
+# Local environment files
+.env
+backend/.env
+frontend/.env
+backend/prisma/test.db 
+backend/prisma/*.db 
+backend/prisma/*.db-journal 
+backend/prisma/*.sqlite 
+backend/prisma/*.sqlite-journal 

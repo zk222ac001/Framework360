@@ -1,0 +1,532 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Sector {
+  FINANCE
+  INSURANCE
+  BANKING
+  HEALTHCARE
+  PHARMA
+  UTILITIES
+  WATER
+  TRANSPORT
+  LOGISTICS
+  IT
+  TELECOM
+  DIGITAL_INFRASTRUCTURE
+  CLOUD
+  PUBLIC
+  GOVERNMENT
+  MUNICIPAL
+  MANUFACTURING
+  INDUSTRIAL
+  RETAIL
+  ECOMMERCE
+  EDUCATION
+  MEDIA
+  FOOD
+  OTHER
+
+  @@map("Sektor")
+}
+
+enum Framework {
+  GDPR
+  NIS2
+  DORA
+  AI_ACT
+  CRA
+  DATA_ACT
+  EIDAS
+  CER
+  ISO27001
+  ISO27002
+  ISO27701
+  ISO22301
+  ISO42001
+  SOC2
+  CIS_CONTROLS
+  NIST_CSF
+  PCI_DSS
+  TISAX
+  D_MAERKET
+}
+
+enum DemoRequestStatus {
+  PENDING
+  EMAILED
+  ACTIVATED
+  EXPIRED
+  REJECTED
+}
+
+enum UserRole {
+  PLATFORM_ADMIN
+  CUSTOMER_ADMIN
+  USER
+  DEMO_USER
+}
+
+enum InvitationType {
+  DEMO_LOGIN
+  PASSWORD_RESET
+}
+
+enum EmailType {
+  DEMO_ACCESS
+  PASSWORD_RESET
+  WELCOME
+}
+
+enum AssessmentStatus {
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum RequirementAnswerStatus {
+  YES
+  PARTIAL
+  NO
+  NOT_APPLICABLE
+  UNANSWERED
+}
+
+enum TaskStatus {
+  OPEN
+  IN_PROGRESS
+  DONE
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum EmployeeCount {
+  ONE_TO_NINE
+  TEN_TO_FORTY_NINE
+  FIFTY_TO_TWO_FORTY_NINE
+  TWO_FIFTY_PLUS
+  UNKNOWN
+}
+
+enum Criticality {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum SystemAssetType {
+  APPLICATION
+  DATABASE
+  INFRASTRUCTURE
+  CLOUD_SERVICE
+  SAAS
+  API
+  WEBSITE
+  IDENTITY_PROVIDER
+  SECURITY_TOOL
+  BACKUP_SYSTEM
+  EMAIL_SYSTEM
+  ERP
+  CRM
+  HR_SYSTEM
+  PAYMENT_SYSTEM
+  OTHER
+}
+
+enum SystemAssetStatus {
+  ACTIVE
+  INACTIVE
+  PLANNED
+  RETIRED
+}
+
+enum DependencyNodeType {
+  SYSTEM
+  VENDOR
+  BUSINESS_PROCESS
+}
+
+enum DependencyType {
+  AUTHENTICATION
+  HOSTING
+  DATA
+  EMAIL
+  BACKUP
+  PAYMENT
+  NETWORK
+  MANUAL_PROCESS
+  OTHER
+}
+
+model Company {
+  id                Int                          @id @default(autoincrement())
+  name              String                       @map("navn")
+  cvr               String?                      @unique
+  sector            Sector?                      @map("sektor")
+  country           String?                      @map("land")
+  users             User[]
+  frameworks        CompanyFramework[]
+  demoRequests      DemoRequest[]
+  assessments       CompanyFrameworkAssessment[]
+  tasks             Task[]
+  scope             CompanyScope?
+  vendors           Vendor[]
+  systems           SystemAsset[]
+  businessProcesses BusinessProcess[]
+  dependencies      Dependency[]
+  createdAt         DateTime                     @default(now())
+  updatedAt         DateTime                     @updatedAt
+
+  @@map("Virksomhed")
+}
+
+model CompanyScope {
+  id                             Int           @id @default(autoincrement())
+  companyId                      Int           @unique
+  employeeCount                  EmployeeCount @default(UNKNOWN)
+  processesPersonalData          Boolean       @default(false)
+  handlesSensitiveData           Boolean       @default(false)
+  acceptsCardPayments            Boolean       @default(false)
+  usesAiSystems                  Boolean       @default(false)
+  servesFinancialCustomers       Boolean       @default(false)
+  isDigitalServiceProvider       Boolean       @default(false)
+  operatesCriticalInfrastructure Boolean       @default(false)
+  hasEuCustomers                 Boolean       @default(false)
+  usesCloudProviders             Boolean       @default(false)
+  hasCriticalSuppliers           Boolean       @default(false)
+  completedAt                    DateTime?
+  createdAt                      DateTime      @default(now())
+  updatedAt                      DateTime      @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model CompanyFramework {
+  id        Int       @id @default(autoincrement())
+  companyId Int       @map("virksomhedId")
+  framework Framework
+  company   Company   @relation(fields: [companyId], references: [id])
+  createdAt DateTime  @default(now())
+
+  @@unique([companyId, framework])
+  @@index([companyId])
+  @@map("VirksomhedFramework")
+}
+
+model User {
+  id                   Int                          @id @default(autoincrement())
+  firstName            String                       @map("fornavn")
+  lastName             String                       @map("efternavn")
+  email                String                       @unique
+  password             String?
+  authProvider         String?                      @default("LOCAL")
+  providerId           String?
+  role                 UserRole                     @default(USER) @map("rolle")
+  isActive             Boolean                      @default(true) @map("erAktiv")
+  mustChangePassword   Boolean                      @default(false)
+  onboardingCompleted  Boolean                      @default(false)
+  lastLogin            DateTime?                    @map("sidsteLogin")
+  companyId            Int?                         @map("virksomhedId")
+  company              Company?                     @relation(fields: [companyId], references: [id])
+  createdFromRequestId Int?                         @unique
+  createdFromRequest   DemoRequest?                 @relation("CreatedUserFromRequest", fields: [createdFromRequestId], references: [id])
+  invitations          Invitation[]
+  emailLogs            EmailLog[]
+  requirementAnswers   FrameworkRequirementAnswer[]
+  evidenceUploads      FrameworkEvidence[]
+  assignedTasks        Task[]
+  createdAt            DateTime                     @default(now())
+  updatedAt            DateTime                     @updatedAt
+  systemAssets         SystemAsset[]
+
+  @@map("Bruger")
+}
+
+model DemoRequest {
+  id            Int               @id @default(autoincrement())
+  email         String
+  firstName     String            @map("fornavn")
+  lastName      String            @map("efternavn")
+  companyName   String            @map("firmanavn")
+  jobTitle      String?           @map("jobtitel")
+  country       String?           @map("land")
+  status        DemoRequestStatus @default(PENDING)
+  companyId     Int?              @map("virksomhedId")
+  company       Company?          @relation(fields: [companyId], references: [id])
+  createdUserId Int?              @unique
+  createdUser   User?             @relation("CreatedUserFromRequest")
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([email])
+  @@index([companyName])
+}
+
+model Invitation {
+  id         Int            @id @default(autoincrement())
+  userId     Int
+  user       User           @relation(fields: [userId], references: [id])
+  type       InvitationType
+  secretHash String
+  expiresAt  DateTime
+  usedAt     DateTime?
+  createdAt  DateTime       @default(now())
+
+  @@index([userId, type])
+}
+
+model EmailLog {
+  id           Int       @id @default(autoincrement())
+  userId       Int?
+  user         User?     @relation(fields: [userId], references: [id])
+  toEmail      String
+  type         EmailType
+  subject      String
+  sentAt       DateTime?
+  failedAt     DateTime?
+  errorMessage String?
+  createdAt    DateTime  @default(now())
+
+  @@index([toEmail])
+}
+
+model FrameworkDefinition {
+  id          Int                          @id @default(autoincrement())
+  code        Framework                    @unique
+  name        String
+  description String?
+  category    String?
+  isActive    Boolean                      @default(true)
+  sections    FrameworkSection[]
+  assessments CompanyFrameworkAssessment[]
+  createdAt   DateTime                     @default(now())
+  updatedAt   DateTime                     @updatedAt
+}
+
+model FrameworkSection {
+  id                    Int                    @id @default(autoincrement())
+  frameworkDefinitionId Int
+  frameworkDefinition   FrameworkDefinition    @relation(fields: [frameworkDefinitionId], references: [id])
+  title                 String
+  description           String?
+  order                 Int
+  weight                Int                    @default(1)
+  requirements          FrameworkRequirement[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  @@unique([frameworkDefinitionId, order])
+  @@index([frameworkDefinitionId])
+}
+
+model FrameworkRequirement {
+  id                  Int                          @id @default(autoincrement())
+  sectionId           Int
+  section             FrameworkSection             @relation(fields: [sectionId], references: [id])
+  question            String
+  description         String?
+  reference           String?
+  implementationGuide String?
+  exampleEvidence     String?
+  riskIfMissing       String?
+  order               Int
+  weight              Int                          @default(1)
+  isRequired          Boolean                      @default(true)
+  isActive            Boolean                      @default(true)
+  answers             FrameworkRequirementAnswer[]
+  tasks               Task[]
+  createdAt           DateTime                     @default(now())
+  updatedAt           DateTime                     @updatedAt
+
+  @@unique([sectionId, order])
+  @@index([sectionId])
+}
+
+model CompanyFrameworkAssessment {
+  id                    Int                          @id @default(autoincrement())
+  companyId             Int                          @map("virksomhedId")
+  company               Company                      @relation(fields: [companyId], references: [id])
+  frameworkDefinitionId Int
+  frameworkDefinition   FrameworkDefinition          @relation(fields: [frameworkDefinitionId], references: [id])
+  status                AssessmentStatus             @default(IN_PROGRESS)
+  score                 Float                        @default(0)
+  completedAt           DateTime?
+  answers               FrameworkRequirementAnswer[]
+  tasks                 Task[]
+  createdAt             DateTime                     @default(now())
+  updatedAt             DateTime                     @updatedAt
+
+  @@unique([companyId, frameworkDefinitionId])
+  @@index([companyId])
+  @@index([frameworkDefinitionId])
+}
+
+model FrameworkRequirementAnswer {
+  id               Int                        @id @default(autoincrement())
+  assessmentId     Int
+  assessment       CompanyFrameworkAssessment @relation(fields: [assessmentId], references: [id])
+  requirementId    Int
+  requirement      FrameworkRequirement       @relation(fields: [requirementId], references: [id])
+  status           RequirementAnswerStatus    @default(UNANSWERED)
+  note             String?
+  answeredByUserId Int?
+  answeredBy       User?                      @relation(fields: [answeredByUserId], references: [id])
+  answeredAt       DateTime?
+  createdAt        DateTime                   @default(now())
+  updatedAt        DateTime                   @updatedAt
+  evidence         FrameworkEvidence[]
+
+  @@unique([assessmentId, requirementId])
+  @@index([assessmentId])
+  @@index([requirementId])
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  action    String
+  entity    String
+  entityId  Int?
+  metadata  String?
+  createdAt DateTime @default(now())
+}
+
+model FrameworkEvidence {
+  id               Int                        @id @default(autoincrement())
+  answerId         Int
+  answer           FrameworkRequirementAnswer @relation(fields: [answerId], references: [id])
+  filename         String
+  filePath         String
+  fileType         String
+  size             Int
+  uploadedByUserId Int?
+  uploadedBy       User?                      @relation(fields: [uploadedByUserId], references: [id])
+  description      String?
+  createdAt        DateTime                   @default(now())
+
+  @@index([answerId])
+  @@index([uploadedByUserId])
+}
+
+model Task {
+  id               Int                         @id @default(autoincrement())
+  companyId        Int                         @map("virksomhedId")
+  company          Company                     @relation(fields: [companyId], references: [id])
+  assessmentId     Int?
+  assessment       CompanyFrameworkAssessment? @relation(fields: [assessmentId], references: [id])
+  requirementId    Int?
+  requirement      FrameworkRequirement?       @relation(fields: [requirementId], references: [id])
+  title            String
+  description      String?
+  status           TaskStatus                  @default(OPEN)
+  priority         TaskPriority                @default(MEDIUM)
+  assignedToUserId Int?
+  assignedTo       User?                       @relation(fields: [assignedToUserId], references: [id])
+  dueDate          DateTime?
+  createdAt        DateTime                    @default(now())
+  updatedAt        DateTime                    @updatedAt
+}
+
+model Vendor {
+  id                 Int         @id @default(autoincrement())
+  companyId          Int
+  name               String
+  description        String?
+  website            String?
+  contactEmail       String?
+  criticality        Criticality @default(MEDIUM)
+  isCriticalSupplier Boolean     @default(false)
+  hasDpa             Boolean     @default(false)
+  hasSla             Boolean     @default(false)
+  hasSecurityReview  Boolean     @default(false)
+  country            String?
+  reviewDate         DateTime?
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+
+  company Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  systems SystemAsset[]
+
+  @@index([companyId])
+}
+
+model SystemAsset {
+  id                    Int               @id @default(autoincrement())
+  companyId             Int
+  name                  String
+  description           String?
+  type                  SystemAssetType   @default(OTHER)
+  criticality           Criticality       @default(MEDIUM)
+  ownerDepartment       String?
+  ownerUserId           Int?
+  vendorId              Int?
+  containsPersonalData  Boolean           @default(false)
+  containsSensitiveData Boolean           @default(false)
+  internetExposed       Boolean           @default(false)
+  mfaEnabled            Boolean           @default(false)
+  backupEnabled         Boolean           @default(false)
+  loggingEnabled        Boolean           @default(false)
+  monitoringEnabled     Boolean           @default(false)
+  rtoMinutes            Int?
+  rpoMinutes            Int?
+  status                SystemAssetStatus @default(ACTIVE)
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  ownerUser User?   @relation(fields: [ownerUserId], references: [id], onDelete: SetNull)
+  vendor    Vendor? @relation(fields: [vendorId], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
+  @@index([vendorId])
+  @@index([ownerUserId])
+}
+
+model BusinessProcess {
+  id                          Int         @id @default(autoincrement())
+  companyId                   Int
+  name                        String
+  description                 String?
+  ownerDepartment             String?
+  criticality                 Criticality @default(MEDIUM)
+  maxTolerableDowntimeMinutes Int?
+  manualWorkaroundAvailable   Boolean     @default(false)
+  createdAt                   DateTime    @default(now())
+  updatedAt                   DateTime    @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+}
+
+model Dependency {
+  id                        Int                @id @default(autoincrement())
+  companyId                 Int
+  sourceType                DependencyNodeType
+  sourceId                  Int
+  targetType                DependencyNodeType
+  targetId                  Int
+  dependencyType            DependencyType     @default(OTHER)
+  isCritical                Boolean            @default(false)
+  failureImpact             String?
+  manualWorkaroundAvailable Boolean            @default(false)
+  notes                     String?
+  createdAt                 DateTime           @default(now())
+  updatedAt                 DateTime           @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId])
+  @@index([sourceType, sourceId])
+  @@index([targetType, targetId])
+}

@@ -1,0 +1,17 @@
+node_modules
+.env
+prisma/dev.db
+prisma/dev.db-journal
+dev.db'
+uploads/
+backend/prisma/*.db
+backend/prisma/*.db-journal
+backend/prisma/*.db-shm
+backend/prisma/*.db-wal
+# Local Prisma/SQLite databases
+backend/prisma/test.db
+backend/prisma/dev.db
+backend/prisma/*.db
+backend/prisma/*.db-journal
+backend/prisma/*.sqlite
+backend/prisma/*.sqlite-journal

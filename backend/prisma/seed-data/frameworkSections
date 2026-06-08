@@ -1,0 +1,16 @@
+[
+  {
+    "framework": "GDPR",
+    "key": "LAWFULNESS_TRANSPARENCY",
+    "title": "Lawfulness, fairness and transparency",
+    "description": "Basic requirements for lawful and transparent processing.",
+    "order": 1
+  },
+  {
+    "framework": "GDPR",
+    "key": "DATA_SUBJECT_RIGHTS",
+    "title": "Data subject rights",
+    "description": "Handling of access, deletion, rectification and objection requests.",
+    "order": 2
+  }
+]

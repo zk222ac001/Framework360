@@ -1,0 +1,23 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+    ports:
+      - "5173:5173"
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: "file:/app/prisma/prod-demo.db"
+      PLATFORM_ADMIN_EMAIL: "admin@eucompliance.dk"
+      PLATFORM_ADMIN_PASSWORD: "${PLATFORM_ADMIN_PASSWORD}"
+      PROD_DEMO_PASSWORD: "${PROD_DEMO_PASSWORD}"
+    command: sh -c "npm run docker:prod-demo"
+    restart: unless-stopped

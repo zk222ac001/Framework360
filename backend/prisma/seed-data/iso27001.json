@@ -1,0 +1,970 @@
+{
+  "code": "ISO27001",
+  "name": "ISO/IEC 27001",
+  "description": "Paraphrased ISO/IEC 27001:2022 Annex A self-assessment checklist for MVP use. This is not the official standard text.",
+  "category": "ISO Standard",
+  "sections": [
+    {
+      "order": 1,
+      "title": "Organizational controls",
+      "description": "Governance, policies, supplier management, incident management, compliance and operational security management.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Does the company maintain approved information security policies?",
+          "description": "Check whether security policies are documented, approved, communicated and reviewed.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.1",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Does the company maintain approved information security policies?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are information security roles and responsibilities clearly assigned?",
+          "description": "Verify that ownership for security activities is defined across relevant teams.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.2",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are information security roles and responsibilities clearly assigned?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.2.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are conflicting duties separated where relevant?",
+          "description": "Assess whether critical activities are divided to reduce misuse or fraud risk.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.3",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are conflicting duties separated where relevant?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Does management actively support information security responsibilities?",
+          "description": "Check whether leadership communicates and enforces security expectations.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.4",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Does management actively support information security responsibilities?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.4.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Does the company maintain contact with relevant authorities?",
+          "description": "Assess whether relevant regulatory, emergency or supervisory contact points are known.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.5",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Does the company maintain contact with relevant authorities?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.5.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Does the company participate in relevant security communities or information-sharing groups?",
+          "description": "Check whether the organisation monitors external security knowledge sources.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.6",
+          "weight": 2,
+          "implementationGuide": "Document and implement a control for: \"Does the company participate in relevant security communities or information-sharing groups?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.6.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 7,
+          "question": "Does the company use threat intelligence to support security decisions?",
+          "description": "Assess whether threat information is collected and used to adjust controls.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.7",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Does the company use threat intelligence to support security decisions?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.7.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 8,
+          "question": "Is information security considered in project management?",
+          "description": "Check whether security requirements are included in projects from planning to delivery.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.8",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is information security considered in project management?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.8.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 9,
+          "question": "Does the company maintain an inventory of information and related assets?",
+          "description": "Verify that systems, data, services and owners are documented.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.9",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Does the company maintain an inventory of information and related assets?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.9.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 10,
+          "question": "Are acceptable use rules defined for information and assets?",
+          "description": "Assess whether users know how company information and assets may be used.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.10",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are acceptable use rules defined for information and assets?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.10.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 11,
+          "question": "Are assets returned when employment or contracts end?",
+          "description": "Check whether devices, keys, access cards and information are recovered.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.11",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are assets returned when employment or contracts end?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.11.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 12,
+          "question": "Is information classified based on sensitivity or business value?",
+          "description": "Assess whether classification levels exist and are applied consistently.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.12",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is information classified based on sensitivity or business value?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.12.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 13,
+          "question": "Are information labels applied where needed?",
+          "description": "Check whether classification labels are used to guide handling and protection.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.13",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are information labels applied where needed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.13.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 14,
+          "question": "Are information transfer rules defined and followed?",
+          "description": "Assess whether data sharing and transfer methods are controlled and documented.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.14",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are information transfer rules defined and followed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.14.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 15,
+          "question": "Are access control rules defined and maintained?",
+          "description": "Verify whether access control policies define who can access what and why.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.15",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are access control rules defined and maintained?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.15.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 16,
+          "question": "Is identity lifecycle management implemented?",
+          "description": "Check whether users are created, changed and removed through a controlled process.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.16",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is identity lifecycle management implemented?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.16.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 17,
+          "question": "Is authentication information protected?",
+          "description": "Assess whether passwords, secrets and credentials are handled securely.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.17",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is authentication information protected?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.17.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 18,
+          "question": "Are access rights reviewed and adjusted regularly?",
+          "description": "Check whether user permissions are reviewed and excessive access is removed.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.18",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are access rights reviewed and adjusted regularly?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.18.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 19,
+          "question": "Are supplier security requirements defined before using suppliers?",
+          "description": "Assess whether security expectations are included in supplier selection and agreements.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.19",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are supplier security requirements defined before using suppliers?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.19.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 20,
+          "question": "Are security requirements included in supplier agreements?",
+          "description": "Check whether contracts define information security obligations and responsibilities.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.20",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are security requirements included in supplier agreements?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.20.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 21,
+          "question": "Are ICT supply chain risks addressed?",
+          "description": "Assess whether dependencies on technology suppliers are understood and managed.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are ICT supply chain risks addressed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 22,
+          "question": "Are supplier services monitored and reviewed?",
+          "description": "Check whether supplier performance and security obligations are followed up.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.22",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are supplier services monitored and reviewed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.22.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 23,
+          "question": "Are cloud service security requirements managed?",
+          "description": "Assess whether cloud use is governed, approved and monitored.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.23",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are cloud service security requirements managed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.23.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 24,
+          "question": "Is incident management planned and prepared?",
+          "description": "Verify whether incident roles, processes and communication paths are established.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.24",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is incident management planned and prepared?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.24.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 25,
+          "question": "Are information security events assessed and classified?",
+          "description": "Check whether events are triaged to determine severity and required action.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.25",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are information security events assessed and classified?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.25.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 26,
+          "question": "Are information security incidents handled according to procedure?",
+          "description": "Assess whether incidents are contained, investigated and resolved consistently.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.26",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are information security incidents handled according to procedure?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.26.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 27,
+          "question": "Are lessons learned from incidents used for improvement?",
+          "description": "Check whether incidents lead to corrective actions and control improvements.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.27",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are lessons learned from incidents used for improvement?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.27.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 28,
+          "question": "Is evidence collected and protected during investigations?",
+          "description": "Assess whether relevant evidence can be preserved with integrity.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.28",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Is evidence collected and protected during investigations?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.28.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 29,
+          "question": "Is information security considered in business continuity planning?",
+          "description": "Check whether continuity plans include security requirements during disruptions.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.29",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is information security considered in business continuity planning?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.29.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 30,
+          "question": "Are ICT readiness plans in place for business continuity?",
+          "description": "Assess whether IT recovery capabilities support critical business needs.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.30",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are ICT readiness plans in place for business continuity?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.30.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 31,
+          "question": "Are legal, statutory and contractual requirements identified?",
+          "description": "Verify that relevant information security obligations are known and documented.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.31",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are legal, statutory and contractual requirements identified?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.31.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 32,
+          "question": "Are intellectual property rights respected and protected?",
+          "description": "Check whether software, content and licences are managed appropriately.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.32",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are intellectual property rights respected and protected?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.32.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 33,
+          "question": "Are records protected against loss, tampering and unauthorized access?",
+          "description": "Assess whether business and compliance records are retained and protected.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.33",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are records protected against loss, tampering and unauthorized access?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.33.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 34,
+          "question": "Is privacy and personal data protection addressed?",
+          "description": "Check whether personal data protection requirements are identified and implemented.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.34",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is privacy and personal data protection addressed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.34.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 35,
+          "question": "Is information security independently reviewed?",
+          "description": "Assess whether internal or external reviews evaluate the security programme.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.35",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is information security independently reviewed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.35.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 36,
+          "question": "Is compliance with security policies and standards monitored?",
+          "description": "Check whether adherence to internal rules is regularly assessed.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.36",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is compliance with security policies and standards monitored?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.36.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 37,
+          "question": "Are operating procedures documented and available?",
+          "description": "Assess whether key operational security activities are documented and maintained.",
+          "reference": "ISO/IEC 27001:2022 Annex A 5.37",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are operating procedures documented and available?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 5.37.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "title": "People controls",
+      "description": "Controls related to employees, contractors, awareness, confidentiality and remote work.",
+      "weight": 3,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are background checks performed where appropriate?",
+          "description": "Assess whether pre-employment or pre-engagement screening is risk-based and lawful.",
+          "reference": "ISO/IEC 27001:2022 Annex A 6.1",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are background checks performed where appropriate?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 6.1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are security responsibilities included in employment terms?",
+          "description": "Check whether employees and contractors accept relevant security obligations.",
+          "reference": "ISO/IEC 27001:2022 Annex A 6.2",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are security responsibilities included in employment terms?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 6.2.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Do employees receive security awareness, education and training?",
+          "description": "Assess whether people are trained based on role and risk.",
+          "reference": "ISO/IEC 27001:2022 Annex A 6.3",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Do employees receive security awareness, education and training?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 6.3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Is there a disciplinary process for security policy violations?",
+          "description": "Check whether consequences for serious security breaches are defined.",
+          "reference": "ISO/IEC 27001:2022 Annex A 6.4",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Is there a disciplinary process for security policy violations?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 6.4.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are responsibilities managed when employment changes or ends?",
+          "description": "Assess whether access and obligations are updated during role changes or termination.",
+          "reference": "ISO/IEC 27001:2022 Annex A 6.5",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are responsibilities managed when employment changes or ends?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 6.5.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Are confidentiality or non-disclosure requirements defined?",
+          "description": "Check whether confidentiality obligations are documented and acknowledged.",
+          "reference": "ISO/IEC 27001:2022 Annex A 6.6",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are confidentiality or non-disclosure requirements defined?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 6.6.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 7,
+          "question": "Is remote working controlled securely?",
+          "description": "Assess whether remote work is governed with appropriate technical and organisational measures.",
+          "reference": "ISO/IEC 27001:2022 Annex A 6.7",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is remote working controlled securely?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 6.7.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 8,
+          "question": "Is security event reporting encouraged and supported?",
+          "description": "Check whether employees know how to report suspicious events or weaknesses.",
+          "reference": "ISO/IEC 27001:2022 Annex A 6.8",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is security event reporting encouraged and supported?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 6.8.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "title": "Physical controls",
+      "description": "Controls for premises, physical access, equipment, facilities and environmental protection.",
+      "weight": 2,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are physical security perimeters defined for sensitive areas?",
+          "description": "Assess whether buildings, rooms and restricted areas are physically protected.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.1",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are physical security perimeters defined for sensitive areas?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are physical entry controls used for secure areas?",
+          "description": "Check whether access to offices, server rooms or restricted zones is controlled.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.2",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are physical entry controls used for secure areas?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.2.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are offices, rooms and facilities secured appropriately?",
+          "description": "Assess whether facilities are protected based on the information and assets inside.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.3",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are offices, rooms and facilities secured appropriately?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Is physical security monitored where needed?",
+          "description": "Check whether physical areas are monitored through alarms, CCTV or other measures.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.4",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Is physical security monitored where needed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.4.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are assets protected against physical and environmental threats?",
+          "description": "Assess protection against fire, water, power issues and other environmental risks.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.5",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are assets protected against physical and environmental threats?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.5.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Are rules defined for working in secure areas?",
+          "description": "Check whether activities in sensitive areas are controlled and supervised.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.6",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are rules defined for working in secure areas?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.6.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 7,
+          "question": "Are clear desk and clear screen practices applied?",
+          "description": "Assess whether sensitive information is protected when workstations are unattended.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.7",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are clear desk and clear screen practices applied?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.7.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 8,
+          "question": "Is equipment positioned and protected appropriately?",
+          "description": "Check whether equipment is located to reduce unauthorized access and damage.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.8",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Is equipment positioned and protected appropriately?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.8.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 9,
+          "question": "Are assets protected when used outside company premises?",
+          "description": "Assess whether laptops, mobile devices and removable media are secured offsite.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.9",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are assets protected when used outside company premises?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.9.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 10,
+          "question": "Is storage media managed securely throughout its lifecycle?",
+          "description": "Check whether media is protected, tracked, reused and disposed securely.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.10",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is storage media managed securely throughout its lifecycle?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.10.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 11,
+          "question": "Are supporting utilities protected for critical facilities?",
+          "description": "Assess whether power, cooling and other utilities support availability needs.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.11",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are supporting utilities protected for critical facilities?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.11.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 12,
+          "question": "Is cabling protected against interception or damage?",
+          "description": "Check whether power and network cabling is physically protected where needed.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.12",
+          "weight": 2,
+          "implementationGuide": "Document and implement a control for: \"Is cabling protected against interception or damage?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.12.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 13,
+          "question": "Is equipment maintained securely and regularly?",
+          "description": "Assess whether maintenance is planned and performed without exposing information.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.13",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Is equipment maintained securely and regularly?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.13.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 14,
+          "question": "Is equipment securely disposed of or reused?",
+          "description": "Check whether data is removed before disposal, reuse or transfer of equipment.",
+          "reference": "ISO/IEC 27001:2022 Annex A 7.14",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is equipment securely disposed of or reused?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 7.14.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "title": "Technological controls",
+      "description": "Controls for endpoint security, access, networks, logging, monitoring, cryptography and secure development.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are user endpoint devices protected and managed?",
+          "description": "Assess whether laptops, phones and workstations are configured and secured.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.1",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are user endpoint devices protected and managed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are privileged access rights restricted and monitored?",
+          "description": "Check whether admin rights are controlled, approved and reviewed.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.2",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are privileged access rights restricted and monitored?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.2.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Is access to information restricted based on need?",
+          "description": "Assess whether users only access information required for their role.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.3",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is access to information restricted based on need?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Is access to source code controlled?",
+          "description": "Check whether source repositories are protected and access is limited.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.4",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is access to source code controlled?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.4.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Is secure authentication implemented?",
+          "description": "Assess whether MFA, password controls or equivalent protections are used.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.5",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is secure authentication implemented?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.5.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Is capacity managed for critical systems?",
+          "description": "Check whether system performance and capacity are monitored and planned.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.6",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Is capacity managed for critical systems?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.6.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 7,
+          "question": "Are systems protected against malware?",
+          "description": "Assess whether anti-malware, hardening and user controls are in place.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.7",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are systems protected against malware?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.7.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 8,
+          "question": "Are technical vulnerabilities managed?",
+          "description": "Check whether vulnerabilities are identified, prioritised and remediated.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.8",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are technical vulnerabilities managed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.8.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 9,
+          "question": "Is configuration management applied to systems?",
+          "description": "Assess whether secure baseline configurations are defined and controlled.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.9",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is configuration management applied to systems?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.9.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 10,
+          "question": "Is information deleted securely when no longer needed?",
+          "description": "Check whether deletion processes prevent unnecessary retention or recovery.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.10",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is information deleted securely when no longer needed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.10.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 11,
+          "question": "Is data masking used where appropriate?",
+          "description": "Assess whether sensitive data is masked in non-production or restricted contexts.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.11",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Is data masking used where appropriate?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.11.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 12,
+          "question": "Are data leakage prevention measures implemented?",
+          "description": "Check whether controls reduce risk of unauthorized data exfiltration.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.12",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are data leakage prevention measures implemented?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.12.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 13,
+          "question": "Are backups performed and tested?",
+          "description": "Assess whether backups are reliable, protected and periodically restored.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.13",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are backups performed and tested?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.13.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 14,
+          "question": "Is redundancy used for critical information processing facilities?",
+          "description": "Check whether critical systems have redundancy based on availability needs.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.14",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is redundancy used for critical information processing facilities?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.14.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 15,
+          "question": "Are logs collected and protected?",
+          "description": "Assess whether relevant system and security logs are captured and retained.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.15",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are logs collected and protected?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.15.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 16,
+          "question": "Are monitoring activities performed?",
+          "description": "Check whether security events and system activity are monitored.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.16",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are monitoring activities performed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.16.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 17,
+          "question": "Are system clocks synchronized?",
+          "description": "Assess whether time synchronization supports logging and investigations.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.17",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are system clocks synchronized?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.17.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 18,
+          "question": "Are privileged utility programs controlled?",
+          "description": "Check whether powerful tools are restricted and monitored.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.18",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are privileged utility programs controlled?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.18.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 19,
+          "question": "Is software installation on operational systems controlled?",
+          "description": "Assess whether unauthorized or risky software installation is prevented.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.19",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is software installation on operational systems controlled?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.19.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 20,
+          "question": "Are networks secured and managed?",
+          "description": "Check whether network controls protect data and connected services.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.20",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are networks secured and managed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.20.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 21,
+          "question": "Are network services secured?",
+          "description": "Assess whether network services are approved, protected and monitored.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are network services secured?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 22,
+          "question": "Are networks segregated where appropriate?",
+          "description": "Check whether segmentation limits lateral movement and exposure.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.22",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are networks segregated where appropriate?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.22.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 23,
+          "question": "Is web filtering used where relevant?",
+          "description": "Assess whether access to malicious or inappropriate web content is restricted.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.23",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Is web filtering used where relevant?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.23.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 24,
+          "question": "Is cryptography used and managed appropriately?",
+          "description": "Check whether encryption and key management are applied where needed.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.24",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is cryptography used and managed appropriately?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.24.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 25,
+          "question": "Is a secure development lifecycle followed?",
+          "description": "Assess whether security is built into software development processes.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.25",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is a secure development lifecycle followed?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.25.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 26,
+          "question": "Are application security requirements defined?",
+          "description": "Check whether application projects include security requirements.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.26",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are application security requirements defined?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.26.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 27,
+          "question": "Are secure system architecture and engineering principles applied?",
+          "description": "Assess whether systems are designed using secure architecture principles.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.27",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are secure system architecture and engineering principles applied?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.27.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 28,
+          "question": "Are secure coding practices applied?",
+          "description": "Check whether developers follow secure coding standards and guidance.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.28",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are secure coding practices applied?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.28.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 29,
+          "question": "Is security testing performed during development and acceptance?",
+          "description": "Assess whether applications are tested for security before release.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.29",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is security testing performed during development and acceptance?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.29.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 30,
+          "question": "Is outsourced development controlled securely?",
+          "description": "Check whether external development providers follow required security practices.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.30",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is outsourced development controlled securely?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.30.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 31,
+          "question": "Are development, test and production environments separated?",
+          "description": "Assess whether environments are segregated to reduce risk of unauthorized changes.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.31",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are development, test and production environments separated?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.31.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 32,
+          "question": "Is change management applied to systems and applications?",
+          "description": "Check whether changes are reviewed, approved, tested and tracked.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.32",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is change management applied to systems and applications?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.32.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 33,
+          "question": "Is test information protected?",
+          "description": "Assess whether production or sensitive data is protected when used in testing.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.33",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is test information protected?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.33.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 34,
+          "question": "Are information systems protected during audit testing?",
+          "description": "Check whether audits and tests are controlled to avoid disruption or exposure.",
+          "reference": "ISO/IEC 27001:2022 Annex A 8.34",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are information systems protected during audit testing?\". Review current practice, assign an owner, define the process, and keep evidence updated for ISO27001.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with ISO/IEC 27001:2022 Annex A 8.34.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    }
+  ]
+}

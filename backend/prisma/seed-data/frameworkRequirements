@@ -1,0 +1,32 @@
+[
+  {
+    "framework": "GDPR",
+    "sectionKey": "LAWFULNESS_TRANSPARENCY",
+    "key": "GDPR_LAWFUL_BASIS",
+    "questionText": "Does your company have a documented lawful basis for processing personal data?",
+    "helpText": "Examples include consent, contract, legal obligation, vital interests, public task or legitimate interests.",
+    "referenceLabel": "GDPR Article 6",
+    "weight": 5,
+    "order": 1
+  },
+  {
+    "framework": "GDPR",
+    "sectionKey": "LAWFULNESS_TRANSPARENCY",
+    "key": "GDPR_PRIVACY_NOTICE",
+    "questionText": "Does your company provide clear privacy information to data subjects?",
+    "helpText": "This is typically done through a privacy notice or privacy policy.",
+    "referenceLabel": "GDPR Articles 12-14",
+    "weight": 4,
+    "order": 2
+  },
+  {
+    "framework": "GDPR",
+    "sectionKey": "DATA_SUBJECT_RIGHTS",
+    "key": "GDPR_RIGHTS_PROCESS",
+    "questionText": "Does your company have a process for handling data subject rights requests?",
+    "helpText": "This includes access, rectification, deletion, restriction and objection requests.",
+    "referenceLabel": "GDPR Articles 15-22",
+    "weight": 5,
+    "order": 1
+  }
+]

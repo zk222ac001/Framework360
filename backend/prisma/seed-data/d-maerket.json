@@ -1,0 +1,532 @@
+{
+  "code": "D_MAERKET",
+  "name": "D-mærket",
+  "description": "Comprehensive paraphrased D-mærket-inspired self-assessment checklist for MVP use. This is not the official D-mærket self-evaluation and must be validated against D-mærket's current criteria before certification use.",
+  "category": "Danish Trust Mark",
+  "sections": [
+    {
+      "order": 1,
+      "title": "Styring og forankring i ledelsen",
+      "description": "Ledelsesforankring, ansvar, politikker, risikovurdering og opfølgning.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Har ledelsen formelt taget ansvar for it-sikkerhed og ansvarlig dataanvendelse?",
+          "description": "Vurder om ansvar, beslutninger og prioriteringer er forankret på ledelsesniveau.",
+          "reference": "D-mærket Kriterie 1",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Har ledelsen formelt taget ansvar for it-sikkerhed og ansvarlig dataanvendelse?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Er roller og ansvar for it-sikkerhed og dataansvar tydeligt fordelt?",
+          "description": "Kontroller om relevante personer har definerede ansvarsområder.",
+          "reference": "D-mærket Kriterie 1",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Er roller og ansvar for it-sikkerhed og dataansvar tydeligt fordelt?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Findes der en godkendt politik for it-sikkerhed og dataansvar?",
+          "description": "Vurder om virksomheden har dokumenterede retningslinjer, der er godkendt og kommunikeret.",
+          "reference": "D-mærket Kriterie 1",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Findes der en godkendt politik for it-sikkerhed og dataansvar?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Gennemføres der regelmæssig risikovurdering af it og data?",
+          "description": "Kontroller om risici identificeres, vurderes og behandles systematisk.",
+          "reference": "D-mærket Kriterie 1",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Gennemføres der regelmæssig risikovurdering af it og data?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Følger ledelsen op på status, hændelser og forbedringstiltag?",
+          "description": "Vurder om sikkerhed og dataansvar rapporteres og følges op løbende.",
+          "reference": "D-mærket Kriterie 1",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Følger ledelsen op på status, hændelser og forbedringstiltag?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Er der en plan for løbende forbedring af digital ansvarlighed?",
+          "description": "Kontroller om forbedringer prioriteres og dokumenteres.",
+          "reference": "D-mærket Kriterie 1",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Er der en plan for løbende forbedring af digital ansvarlighed?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "title": "Awareness og sikker adfærd",
+      "description": "Medarbejderbevidsthed, træning, adfærd og rapportering af hændelser.",
+      "weight": 3,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Modtager medarbejdere awareness-træning i it-sikkerhed og dataansvar?",
+          "description": "Vurder om træning gennemføres ved opstart og løbende.",
+          "reference": "D-mærket Kriterie 2",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Modtager medarbejdere awareness-træning i it-sikkerhed og dataansvar?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 2.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Ved medarbejdere hvordan de skal håndtere personoplysninger og fortrolige data?",
+          "description": "Kontroller om medarbejdere har klare retningslinjer for datahåndtering.",
+          "reference": "D-mærket Kriterie 2",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Ved medarbejdere hvordan de skal håndtere personoplysninger og fortrolige data?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 2.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Ved medarbejdere hvordan de rapporterer mistænkelige hændelser?",
+          "description": "Vurder om rapporteringskanaler er kendte og nemme at bruge.",
+          "reference": "D-mærket Kriterie 2",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Ved medarbejdere hvordan de rapporterer mistænkelige hændelser?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 2.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Er sikker adfærd understøttet gennem konkrete retningslinjer?",
+          "description": "Kontroller om adgangskoder, phishing, enheder og datahåndtering er dækket.",
+          "reference": "D-mærket Kriterie 2",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Er sikker adfærd understøttet gennem konkrete retningslinjer?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 2.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Måles eller evalueres awareness-indsatsen?",
+          "description": "Vurder om virksomheden tester eller følger op på træningens effekt.",
+          "reference": "D-mærket Kriterie 2",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Måles eller evalueres awareness-indsatsen?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 2.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "title": "Teknisk it-sikkerhed",
+      "description": "Basale og risikobaserede tekniske sikkerhedsforanstaltninger.",
+      "weight": 5,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Er der overblik over virksomhedens systemer, enheder og data?",
+          "description": "Kontroller om aktiver og systemejere er registreret.",
+          "reference": "D-mærket Kriterie 3",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Er der overblik over virksomhedens systemer, enheder og data?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Er adgang til systemer styret efter behov og rolle?",
+          "description": "Vurder om brugere kun har den adgang de har behov for.",
+          "reference": "D-mærket Kriterie 3",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Er adgang til systemer styret efter behov og rolle?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Anvendes stærk autentificering på kritiske systemer?",
+          "description": "Kontroller om MFA eller tilsvarende beskyttelse bruges.",
+          "reference": "D-mærket Kriterie 3",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Anvendes stærk autentificering på kritiske systemer?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Er software og systemer opdateret løbende?",
+          "description": "Vurder om patch management er etableret.",
+          "reference": "D-mærket Kriterie 3",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Er software og systemer opdateret løbende?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Er backup etableret og testet?",
+          "description": "Kontroller om vigtige data kan genskabes efter fejl eller angreb.",
+          "reference": "D-mærket Kriterie 3",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Er backup etableret og testet?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Er fortrolige og vigtige data beskyttet mod tab?",
+          "description": "Vurder om adgang, backup, kryptering og delingskontroller beskytter data.",
+          "reference": "D-mærket Kriterie 3",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Er fortrolige og vigtige data beskyttet mod tab?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 7,
+          "question": "Logges relevante sikkerhedshændelser og systemaktiviteter?",
+          "description": "Kontroller om logs kan understøtte opdagelse og undersøgelse af hændelser.",
+          "reference": "D-mærket Kriterie 3",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Logges relevante sikkerhedshændelser og systemaktiviteter?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 8,
+          "question": "Er malware- og phishingbeskyttelse implementeret?",
+          "description": "Vurder om endpoints, mail og brugere beskyttes mod almindelige trusler.",
+          "reference": "D-mærket Kriterie 3",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Er malware- og phishingbeskyttelse implementeret?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 9,
+          "question": "Er fjernarbejde og mobile enheder beskyttet?",
+          "description": "Kontroller om remote access, VPN, MDM eller tilsvarende kontroller er anvendt.",
+          "reference": "D-mærket Kriterie 3",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Er fjernarbejde og mobile enheder beskyttet?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "title": "Krav til leverandørers it-sikkerhed og dataansvar",
+      "description": "Leverandøroverblik, risikovurdering, kontrakter og opfølgning.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Har virksomheden kortlagt leverandører der håndterer personoplysninger eller forretningskritiske data?",
+          "description": "Vurder om relevante leverandører er registreret og kategoriseret.",
+          "reference": "D-mærket Kriterie 4.1",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Har virksomheden kortlagt leverandører der håndterer personoplysninger eller forretningskritiske data?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 4.1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Risikovurderes leverandører før aftaleindgåelse?",
+          "description": "Kontroller om leverandørens sikkerhed og dataansvar vurderes før brug.",
+          "reference": "D-mærket Kriterie 4.1",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Risikovurderes leverandører før aftaleindgåelse?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 4.1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Stilles der kontraktuelle krav til leverandørers it-sikkerhed?",
+          "description": "Vurder om aftaler indeholder relevante sikkerhedskrav.",
+          "reference": "D-mærket Kriterie 4.2",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Stilles der kontraktuelle krav til leverandørers it-sikkerhed?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 4.2.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Stilles der krav til leverandørers ansvarlige databehandling?",
+          "description": "Kontroller om databeskyttelse, dataetik og GDPR-forpligtelser er dækket.",
+          "reference": "D-mærket Kriterie 4.3",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Stilles der krav til leverandørers ansvarlige databehandling?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 4.3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Følges der op på leverandørers sikkerhed og dataansvar?",
+          "description": "Vurder om leverandører gennemgås periodisk eller ved ændringer.",
+          "reference": "D-mærket Kriterie 4",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Følges der op på leverandørers sikkerhed og dataansvar?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 4.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Er der krav om hændelsesrapportering fra leverandører?",
+          "description": "Kontroller om leverandører skal underrette virksomheden ved relevante hændelser.",
+          "reference": "D-mærket Kriterie 4",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Er der krav om hændelsesrapportering fra leverandører?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 4.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "title": "Transparens og kontrol med data",
+      "description": "Overblik, gennemsigtighed, kontrol og lovlig anvendelse af data.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Har virksomheden overblik over hvilke data den indsamler og anvender?",
+          "description": "Vurder om datatyper, formål og systemer er kortlagt.",
+          "reference": "D-mærket Kriterie 5",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Har virksomheden overblik over hvilke data den indsamler og anvender?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 5.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Kommunikeres dataanvendelse tydeligt til kunder eller brugere?",
+          "description": "Kontroller om privatlivsinformation og dataanvendelse er forståelig.",
+          "reference": "D-mærket Kriterie 5",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Kommunikeres dataanvendelse tydeligt til kunder eller brugere?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 5.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Kan personer udøve kontrol over egne data hvor relevant?",
+          "description": "Vurder om anmodninger om indsigt, sletning eller ændring kan håndteres.",
+          "reference": "D-mærket Kriterie 5",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Kan personer udøve kontrol over egne data hvor relevant?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 5.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Er dataopbevaring og sletning styret?",
+          "description": "Kontroller om data slettes eller anonymiseres når der ikke længere er behov.",
+          "reference": "D-mærket Kriterie 5",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Er dataopbevaring og sletning styret?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 5.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Er dataanvendelse begrænset til legitime og dokumenterede formål?",
+          "description": "Vurder om virksomheden undgår uklar eller unødvendig dataanvendelse.",
+          "reference": "D-mærket Kriterie 5",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Er dataanvendelse begrænset til legitime og dokumenterede formål?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 5.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "title": "Privacy & security by design and default",
+      "description": "Indbygget privatliv og sikkerhed i produkter, services og processer.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Vurderes risici og behov før nye produkter eller tjenester udvikles?",
+          "description": "Kontroller om sikkerhed og dataansvar vurderes tidligt i udvikling eller anskaffelse.",
+          "reference": "D-mærket Kriterie 6.1",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Vurderes risici og behov før nye produkter eller tjenester udvikles?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 6.1.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Indbygges privacy by design and default i løsninger?",
+          "description": "Vurder om dataminimering, formålsbegrænsning og privatlivsvenlige standardindstillinger anvendes.",
+          "reference": "D-mærket Kriterie 6.2",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Indbygges privacy by design and default i løsninger?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 6.2.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Indbygges security by design and default i løsninger?",
+          "description": "Kontroller om sikkerhedskrav, adgangsstyring og logging tænkes ind fra start.",
+          "reference": "D-mærket Kriterie 6.3",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Indbygges security by design and default i løsninger?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 6.3.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Gennemføres test eller review af sikkerhed og privatliv før lancering?",
+          "description": "Vurder om ændringer evalueres før produktionssætning.",
+          "reference": "D-mærket Kriterie 6",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Gennemføres test eller review af sikkerhed og privatliv før lancering?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 6.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Dokumenteres designvalg relateret til sikkerhed og dataansvar?",
+          "description": "Kontroller om væsentlige valg og risikovurderinger kan forklares.",
+          "reference": "D-mærket Kriterie 6",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Dokumenteres designvalg relateret til sikkerhed og dataansvar?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 6.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "title": "Pålidelige algoritmer og AI",
+      "description": "Ansvarlig brug af algoritmer og AI, herunder transparens, risici og menneskelig kontrol.",
+      "weight": 3,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Har virksomheden overblik over brug af algoritmer eller AI?",
+          "description": "Vurder om AI-systemer og automatiserede beslutninger er identificeret.",
+          "reference": "D-mærket Kriterie 7",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Har virksomheden overblik over brug af algoritmer eller AI?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 7.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Vurderes risici ved algoritmer og AI før brug?",
+          "description": "Kontroller om bias, fejl, datakvalitet og påvirkning af personer vurderes.",
+          "reference": "D-mærket Kriterie 7",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Vurderes risici ved algoritmer og AI før brug?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 7.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Er der transparens omkring væsentlig brug af AI eller automatisering?",
+          "description": "Vurder om brugere eller kunder informeres hvor relevant.",
+          "reference": "D-mærket Kriterie 7",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Er der transparens omkring væsentlig brug af AI eller automatisering?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 7.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Er der menneskelig kontrol med væsentlige automatiserede beslutninger?",
+          "description": "Kontroller om mennesker kan gribe ind, vurdere eller tilsidesætte resultater.",
+          "reference": "D-mærket Kriterie 7",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Er der menneskelig kontrol med væsentlige automatiserede beslutninger?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 7.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Monitoreres AI-systemer for fejl, misbrug eller utilsigtede konsekvenser?",
+          "description": "Vurder om drift og resultater følges op over tid.",
+          "reference": "D-mærket Kriterie 7",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Monitoreres AI-systemer for fejl, misbrug eller utilsigtede konsekvenser?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 7.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "title": "Dataetik",
+      "description": "Ansvarlig, rimelig og transparent anvendelse af data ud over minimumslovkrav.",
+      "weight": 3,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Har virksomheden defineret principper for dataetik?",
+          "description": "Vurder om dataetik er formuleret og forankret i virksomheden.",
+          "reference": "D-mærket Kriterie 8",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Har virksomheden defineret principper for dataetik?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 8.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Vurderes dataanvendelse ud fra rimelighed og forventninger?",
+          "description": "Kontroller om virksomheden vurderer om dataanvendelse er acceptabel for kunder eller brugere.",
+          "reference": "D-mærket Kriterie 8",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Vurderes dataanvendelse ud fra rimelighed og forventninger?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 8.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Undgår virksomheden dataanvendelse der kan opleves som manipulerende eller uigennemsigtig?",
+          "description": "Vurder om data bruges på en måde, der respekterer brugernes autonomi.",
+          "reference": "D-mærket Kriterie 8",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Undgår virksomheden dataanvendelse der kan opleves som manipulerende eller uigennemsigtig?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 8.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Er ansvarlig dataanvendelse en del af beslutningsprocesser?",
+          "description": "Kontroller om nye dataaktiviteter vurderes ud fra etisk perspektiv.",
+          "reference": "D-mærket Kriterie 8",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Er ansvarlig dataanvendelse en del af beslutningsprocesser?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 8.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Kan virksomheden forklare og dokumentere væsentlige dataetiske valg?",
+          "description": "Vurder om beslutninger om dataanvendelse kan begrundes og dokumenteres.",
+          "reference": "D-mærket Kriterie 8",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Kan virksomheden forklare og dokumentere væsentlige dataetiske valg?\". Review current practice, assign an owner, define the process, and keep evidence updated for D_MAERKET.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with D-mærket Kriterie 8.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,706 @@
+{
+  "code": "GDPR",
+  "name": "GDPR",
+  "description": "Comprehensive paraphrased GDPR self-assessment checklist for MVP use. This is not legal advice and not official legal text.",
+  "category": "EU Law",
+  "sections": [
+    {
+      "order": 1,
+      "title": "Governance and accountability",
+      "description": "Management ownership, accountability, roles, documentation and governance of data protection work.",
+      "weight": 3,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Does the company maintain an overview of personal data processing activities?",
+          "description": "Check whether the company has records of processing activities, including purposes, categories of data, recipients and retention.",
+          "reference": "GDPR Art. 30",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Does the company maintain an overview of personal data processing activities?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 30.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Has internal responsibility for GDPR compliance been assigned?",
+          "description": "Assess whether GDPR ownership is clearly assigned to relevant roles or functions.",
+          "reference": "GDPR Art. 5(2)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Has internal responsibility for GDPR compliance been assigned?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 5(2).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are privacy policies and procedures documented and maintained?",
+          "description": "Check whether privacy procedures are written, available and periodically reviewed.",
+          "reference": "GDPR accountability principle",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are privacy policies and procedures documented and maintained?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR accountability principle.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Does management review data protection risks and compliance status?",
+          "description": "Assess whether privacy risks and compliance gaps are reported to relevant management.",
+          "reference": "GDPR Art. 24",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Does management review data protection risks and compliance status?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 24.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are employees aware of their data protection responsibilities?",
+          "description": "Check whether employees handling personal data receive guidance or training.",
+          "reference": "GDPR Art. 39 / accountability",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are employees aware of their data protection responsibilities?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 39 / accountability.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Is there a process for identifying when a Data Protection Officer is required?",
+          "description": "Assess whether the company has evaluated if DPO appointment is required based on its processing activities.",
+          "reference": "GDPR Art. 37-39",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Is there a process for identifying when a Data Protection Officer is required?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 37-39.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "title": "Lawful basis and processing principles",
+      "description": "Lawfulness, fairness, transparency, purpose limitation, minimisation, accuracy, retention and integrity.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Is a lawful basis defined for each processing activity?",
+          "description": "Verify that each processing activity has a documented lawful basis such as contract, legal obligation, consent or legitimate interest.",
+          "reference": "GDPR Art. 6",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is a lawful basis defined for each processing activity?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 6.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are special categories of personal data identified and justified?",
+          "description": "Check whether sensitive data processing has a valid legal condition and documented safeguards.",
+          "reference": "GDPR Art. 9",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are special categories of personal data identified and justified?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 9.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are processing purposes clearly defined before personal data is collected?",
+          "description": "Assess whether data is only collected for specific, explicit and legitimate purposes.",
+          "reference": "GDPR Art. 5(1)(b)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are processing purposes clearly defined before personal data is collected?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 5(1)(b).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Is data minimisation applied in systems and processes?",
+          "description": "Check whether only necessary personal data is collected and used.",
+          "reference": "GDPR Art. 5(1)(c)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is data minimisation applied in systems and processes?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 5(1)(c).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are procedures in place to keep personal data accurate and up to date?",
+          "description": "Assess whether inaccurate or outdated personal data is corrected or deleted.",
+          "reference": "GDPR Art. 5(1)(d)",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are procedures in place to keep personal data accurate and up to date?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 5(1)(d).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Are retention periods defined for personal data?",
+          "description": "Check whether personal data is deleted or anonymised when no longer needed.",
+          "reference": "GDPR Art. 5(1)(e)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are retention periods defined for personal data?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 5(1)(e).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 7,
+          "question": "Are legitimate interest assessments performed where relevant?",
+          "description": "Assess whether balancing tests are documented when legitimate interest is used.",
+          "reference": "GDPR Art. 6(1)(f)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are legitimate interest assessments performed where relevant?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 6(1)(f).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "title": "Transparency and privacy notices",
+      "description": "Information provided to data subjects about processing, rights, retention, recipients and contact points.",
+      "weight": 3,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are privacy notices available to relevant data subjects?",
+          "description": "Check whether customers, employees, users or other data subjects receive clear privacy information.",
+          "reference": "GDPR Art. 12-14",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are privacy notices available to relevant data subjects?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 12-14.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are privacy notices written in clear and understandable language?",
+          "description": "Assess whether information is concise, transparent and easy to understand.",
+          "reference": "GDPR Art. 12",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are privacy notices written in clear and understandable language?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 12.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Do privacy notices describe purposes, lawful bases and data categories?",
+          "description": "Verify whether notices explain what data is processed and why.",
+          "reference": "GDPR Art. 13-14",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Do privacy notices describe purposes, lawful bases and data categories?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 13-14.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Do privacy notices explain data subject rights?",
+          "description": "Check whether rights such as access, rectification, deletion, restriction and objection are described.",
+          "reference": "GDPR Art. 13-14",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Do privacy notices explain data subject rights?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 13-14.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are recipients, processors and transfer information described where relevant?",
+          "description": "Assess whether data sharing and international transfer information is provided.",
+          "reference": "GDPR Art. 13-14",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are recipients, processors and transfer information described where relevant?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 13-14.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "title": "Consent and preference management",
+      "description": "Use, documentation and withdrawal of consent where consent is the legal basis.",
+      "weight": 2,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Is consent only used where it is appropriate and freely given?",
+          "description": "Assess whether consent is suitable for the processing context and not forced.",
+          "reference": "GDPR Art. 7",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Is consent only used where it is appropriate and freely given?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 7.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Is consent documented and traceable?",
+          "description": "Check whether the company can demonstrate when and how consent was obtained.",
+          "reference": "GDPR Art. 7(1)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is consent documented and traceable?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 7(1).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Can consent be withdrawn as easily as it was given?",
+          "description": "Verify that withdrawal mechanisms are available and effective.",
+          "reference": "GDPR Art. 7(3)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Can consent be withdrawn as easily as it was given?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 7(3).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are marketing preferences and opt-outs respected?",
+          "description": "Assess whether opt-outs are recorded and applied across relevant systems.",
+          "reference": "GDPR Art. 21 / ePrivacy context",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are marketing preferences and opt-outs respected?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 21 / ePrivacy context.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "title": "Data subject rights",
+      "description": "Processes for handling access, correction, deletion, portability, restriction and objection requests.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Can the company handle access requests within required timelines?",
+          "description": "Check whether a documented process exists for responding to data subject access requests.",
+          "reference": "GDPR Art. 15",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Can the company handle access requests within required timelines?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 15.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Can the company handle rectification requests?",
+          "description": "Assess whether inaccurate personal data can be corrected efficiently.",
+          "reference": "GDPR Art. 16",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Can the company handle rectification requests?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 16.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Can the company assess and handle deletion requests?",
+          "description": "Check whether deletion requests can be evaluated and fulfilled where applicable.",
+          "reference": "GDPR Art. 17",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Can the company assess and handle deletion requests?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 17.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Can the company restrict processing when required?",
+          "description": "Assess whether systems and procedures support restriction of processing.",
+          "reference": "GDPR Art. 18",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Can the company restrict processing when required?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 18.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Can the company handle data portability requests where relevant?",
+          "description": "Check whether personal data can be exported in a structured and commonly used format where applicable.",
+          "reference": "GDPR Art. 20",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Can the company handle data portability requests where relevant?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 20.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Can the company handle objections to processing?",
+          "description": "Assess whether objections, especially to direct marketing or legitimate interest processing, are handled.",
+          "reference": "GDPR Art. 21",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Can the company handle objections to processing?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 21.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 7,
+          "question": "Are rights requests documented and tracked?",
+          "description": "Verify whether requests, decisions and response dates are logged.",
+          "reference": "GDPR Art. 12",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are rights requests documented and tracked?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 12.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "title": "Processors and third parties",
+      "description": "Processor agreements, vendor governance, sub-processors and shared responsibility.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are all processors handling personal data identified?",
+          "description": "Check whether the company maintains a list of processors and data flows.",
+          "reference": "GDPR Art. 28",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are all processors handling personal data identified?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 28.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are data processing agreements in place with processors?",
+          "description": "Verify that processor agreements contain required data protection terms.",
+          "reference": "GDPR Art. 28",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are data processing agreements in place with processors?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 28.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are processors assessed before use?",
+          "description": "Assess whether vendors are evaluated for security and data protection maturity.",
+          "reference": "GDPR Art. 28(1)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are processors assessed before use?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 28(1).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are sub-processors controlled or approved where relevant?",
+          "description": "Check whether sub-processor use is transparent and contractually regulated.",
+          "reference": "GDPR Art. 28(2)-(4)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are sub-processors controlled or approved where relevant?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 28(2)-(4).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are joint controller arrangements identified where relevant?",
+          "description": "Assess whether shared controller responsibilities are documented.",
+          "reference": "GDPR Art. 26",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are joint controller arrangements identified where relevant?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 26.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Are processors monitored periodically?",
+          "description": "Check whether vendor compliance is reviewed through questionnaires, evidence or audits.",
+          "reference": "GDPR Art. 28",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are processors monitored periodically?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 28.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "title": "International transfers",
+      "description": "Transfers outside the EU/EEA, safeguards and transfer risk assessments.",
+      "weight": 3,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are international transfers of personal data identified?",
+          "description": "Check whether transfers outside the EU/EEA are mapped.",
+          "reference": "GDPR Chapter V",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are international transfers of personal data identified?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Chapter V.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are appropriate transfer mechanisms used?",
+          "description": "Assess whether SCCs, adequacy decisions or other safeguards are used where required.",
+          "reference": "GDPR Art. 44-49",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are appropriate transfer mechanisms used?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 44-49.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are transfer risk assessments performed where relevant?",
+          "description": "Check whether risks related to third-country transfers are considered.",
+          "reference": "GDPR Chapter V / EDPB guidance",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are transfer risk assessments performed where relevant?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Chapter V / EDPB guidance.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are international transfer details reflected in privacy notices and records?",
+          "description": "Assess whether transfer information is documented and communicated.",
+          "reference": "GDPR Art. 13-14, 30",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are international transfer details reflected in privacy notices and records?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 13-14, 30.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "title": "Security of processing",
+      "description": "Technical and organisational measures to protect personal data.",
+      "weight": 5,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are access controls applied to systems processing personal data?",
+          "description": "Assess whether access is role-based, approved and reviewed.",
+          "reference": "GDPR Art. 32",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are access controls applied to systems processing personal data?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 32.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Is MFA used for systems with sensitive or high-risk personal data?",
+          "description": "Check whether strong authentication is used for critical systems.",
+          "reference": "GDPR Art. 32",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is MFA used for systems with sensitive or high-risk personal data?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 32.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Is personal data encrypted or otherwise protected where appropriate?",
+          "description": "Assess whether encryption, pseudonymisation or equivalent safeguards are used.",
+          "reference": "GDPR Art. 32",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is personal data encrypted or otherwise protected where appropriate?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 32.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are backups and recovery procedures in place?",
+          "description": "Check whether personal data can be restored after an incident.",
+          "reference": "GDPR Art. 32",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are backups and recovery procedures in place?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 32.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are systems patched and vulnerabilities managed?",
+          "description": "Assess whether technical weaknesses are identified and remediated.",
+          "reference": "GDPR Art. 32",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are systems patched and vulnerabilities managed?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 32.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Are logs collected for systems processing personal data?",
+          "description": "Check whether access and security events can be investigated.",
+          "reference": "GDPR Art. 32",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are logs collected for systems processing personal data?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 32.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 7,
+          "question": "Are security measures reviewed and tested periodically?",
+          "description": "Assess whether controls are evaluated and improved over time.",
+          "reference": "GDPR Art. 32(1)(d)",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are security measures reviewed and tested periodically?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 32(1)(d).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 9,
+      "title": "Privacy by design and DPIA",
+      "description": "Built-in data protection, risk assessments and high-risk processing controls.",
+      "weight": 4,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Is data protection considered when new systems or processes are designed?",
+          "description": "Check whether privacy requirements are included early in projects.",
+          "reference": "GDPR Art. 25",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is data protection considered when new systems or processes are designed?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 25.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are default settings privacy-friendly?",
+          "description": "Assess whether systems minimise data collection, visibility and retention by default.",
+          "reference": "GDPR Art. 25",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are default settings privacy-friendly?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 25.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Is there a process for identifying when a DPIA is required?",
+          "description": "Check whether high-risk processing is screened for DPIA needs.",
+          "reference": "GDPR Art. 35",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is there a process for identifying when a DPIA is required?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 35.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are DPIAs documented for high-risk processing?",
+          "description": "Assess whether risk assessments and mitigating measures are documented.",
+          "reference": "GDPR Art. 35",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are DPIAs documented for high-risk processing?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 35.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Is prior consultation considered where residual high risk remains?",
+          "description": "Check whether escalation to a supervisory authority is considered when required.",
+          "reference": "GDPR Art. 36",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Is prior consultation considered where residual high risk remains?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 36.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 10,
+      "title": "Breach response",
+      "description": "Detection, assessment, documentation and notification of personal data breaches.",
+      "weight": 5,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Is there a documented personal data breach response process?",
+          "description": "Assess whether employees know how to identify and escalate suspected breaches.",
+          "reference": "GDPR Art. 33-34",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Is there a documented personal data breach response process?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 33-34.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Can the company assess breach risk to individuals?",
+          "description": "Check whether breaches are evaluated for impact on rights and freedoms.",
+          "reference": "GDPR Art. 33-34",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Can the company assess breach risk to individuals?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 33-34.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Can the company notify the supervisory authority within required timelines if needed?",
+          "description": "Assess whether notification responsibilities and deadlines are understood.",
+          "reference": "GDPR Art. 33",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Can the company notify the supervisory authority within required timelines if needed?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 33.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Can affected individuals be informed where high risk exists?",
+          "description": "Check whether communication procedures are defined for high-risk breaches.",
+          "reference": "GDPR Art. 34",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Can affected individuals be informed where high risk exists?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 34.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 5,
+          "question": "Are breaches documented regardless of whether notification is required?",
+          "description": "Verify that breach facts, effects and remedial actions are recorded.",
+          "reference": "GDPR Art. 33(5)",
+          "weight": 5,
+          "implementationGuide": "Document and implement a control for: \"Are breaches documented regardless of whether notification is required?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 33(5).",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 6,
+          "question": "Are processors required to notify the controller without undue delay?",
+          "description": "Check whether processor contracts and procedures support breach escalation.",
+          "reference": "GDPR Art. 28, 33",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are processors required to notify the controller without undue delay?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 28, 33.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    },
+    {
+      "order": 11,
+      "title": "Children, automated decisions and special cases",
+      "description": "Additional controls for higher-risk or special processing scenarios.",
+      "weight": 2,
+      "requirements": [
+        {
+          "order": 1,
+          "question": "Are children’s data processing activities identified where relevant?",
+          "description": "Assess whether additional safeguards are applied when processing children’s data.",
+          "reference": "GDPR Art. 8 / Recitals",
+          "weight": 3,
+          "implementationGuide": "Document and implement a control for: \"Are children’s data processing activities identified where relevant?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 8 / Recitals.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 2,
+          "question": "Are automated decision-making activities identified?",
+          "description": "Check whether profiling or automated decisions with significant effects are documented.",
+          "reference": "GDPR Art. 22",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are automated decision-making activities identified?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 22.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 3,
+          "question": "Are safeguards in place for automated decisions where relevant?",
+          "description": "Assess whether human intervention, contesting decisions and transparency are supported.",
+          "reference": "GDPR Art. 22",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are safeguards in place for automated decisions where relevant?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR Art. 22.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        },
+        {
+          "order": 4,
+          "question": "Are high-risk processing activities reviewed periodically?",
+          "description": "Check whether risky processing is reassessed when systems, purposes or data change.",
+          "reference": "GDPR risk-based approach",
+          "weight": 4,
+          "implementationGuide": "Document and implement a control for: \"Are high-risk processing activities reviewed periodically?\". Review current practice, assign an owner, define the process, and keep evidence updated for GDPR.",
+          "exampleEvidence": "Policy, procedure, screenshot, system export, contract, log, or documentation proving compliance with GDPR risk-based approach.",
+          "riskIfMissing": "Missing this control increases compliance risk, reduces audit readiness, and may lead to security or regulatory issues."
+        }
+      ]
+    }
+  ]
+}
