@@ -50,7 +50,7 @@ function BrandLink({ to }: { to: string }) {
         variant="h6"
         sx={{ display: { xs: "none", md: "block" }, fontWeight: 600 }}
       >
-        BeCompliantEU
+        Framework360
       </Typography>
     </Link>
   );
