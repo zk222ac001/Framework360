@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: docker/frontend.Dockerfile
     ports:
-      - "5174:5173"
+      - "25173:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -15,8 +15,7 @@ services:
       context: .
       dockerfile: docker/backend.Dockerfile
     ports:
-      - "3001:3000"
-      - "5555:5555"
+      - "23000:3000"
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -24,6 +23,6 @@ services:
       NODE_ENV: development
       DATABASE_URL: "file:/app/prisma/dev.db"
       JWT_SECRET: "dev-secret-change-me"
-      CORS_ORIGIN: "http://localhost:5174"
+      CORS_ORIGIN: "http://localhost:25173"
     command: sh -c "npm run docker:dev"
     restart: unless-stopped
