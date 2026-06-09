@@ -52,6 +52,11 @@ router.get('/dashboard', requireAuth, async (req, res) => {
         company: {
           include: {
             frameworks: true,
+            vendors: true,
+            systems: true,
+            dependencies: true,
+            businessProcesses: true,
+            tasks: true,
             assessments: {
               include: {
                 frameworkDefinition: {
@@ -158,11 +163,29 @@ router.get('/dashboard', requireAuth, async (req, res) => {
       0
     );
 
+    const allEvidence = user.company.assessments.flatMap((assessment) =>
+      assessment.answers.flatMap((answer) => answer.evidence || [])
+    );
+
     const topActions = user.company.assessments
       .flatMap((assessment) => getAssessmentActions(assessment))
       .sort((a, b) => b.priorityWeight - a.priorityWeight)
-      .slice(0, 5)
+      .slice(0, 8)
       .map(({ priorityWeight, ...action }) => action);
+
+    const vendorRisk = buildVendorRisk(user.company.vendors || []);
+    const activity = buildActivityTimeline(
+      user.company.assessments,
+      allEvidence,
+      user.company.tasks || []
+    );
+    const evidenceAnalytics = buildEvidenceAnalytics(allEvidence, topActions);
+    const aiRecommendations = buildAiRecommendations(
+      frameworkCards,
+      topActions,
+      vendorRisk,
+      evidenceAnalytics
+    );
 
     return res.json({
       lawScore,
@@ -189,6 +212,10 @@ router.get('/dashboard', requireAuth, async (req, res) => {
       },
       frameworks: frameworkCards,
       topActions,
+      vendorRisk,
+      activity,
+      evidenceAnalytics,
+      aiRecommendations,
     });
   } catch (error) {
     console.error('GET /dashboard error:', error);
@@ -262,6 +289,128 @@ function getAssessmentActions(assessment) {
   }
 
   return actions;
+}
+
+function buildVendorRisk(vendors) {
+  const buckets = { critical: 0, high: 0, medium: 0, low: 0 };
+  const criticalVendors = vendors
+    .map((vendor) => {
+      const criticality = vendor.criticality || 'MEDIUM';
+      const riskScore = getCriticalityScore(criticality);
+      return {
+        id: vendor.id,
+        name: vendor.name,
+        category: vendor.category || null,
+        criticality,
+        riskScore,
+      };
+    })
+    .sort((a, b) => b.riskScore - a.riskScore);
+
+  for (const vendor of criticalVendors) {
+    if (vendor.riskScore >= 90) buckets.critical += 1;
+    else if (vendor.riskScore >= 70) buckets.high += 1;
+    else if (vendor.riskScore >= 40) buckets.medium += 1;
+    else buckets.low += 1;
+  }
+
+  return {
+    totalVendors: vendors.length,
+    criticalVendors: criticalVendors.slice(0, 5),
+    matrix: buckets,
+  };
+}
+
+function buildEvidenceAnalytics(evidence, topActions) {
+  const missingEvidenceActions = topActions.filter((action) => !action.hasEvidence).length;
+  return {
+    totalEvidence: evidence.length,
+    missingEvidenceActions,
+    recentUploads: evidence
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 5)
+      .map((item) => ({
+        id: item.id,
+        filename: item.filename,
+        fileType: item.fileType,
+        size: item.size,
+        createdAt: item.createdAt,
+      })),
+  };
+}
+
+function buildActivityTimeline(assessments, evidence, tasks) {
+  const assessmentEvents = assessments.map((assessment) => ({
+    type: 'ASSESSMENT_UPDATED',
+    title: `${assessment.frameworkDefinition.name} assessment updated`,
+    description: `${assessment.status.replace('_', ' ').toLowerCase()} assessment`,
+    createdAt: assessment.updatedAt,
+  }));
+
+  const evidenceEvents = evidence.map((item) => ({
+    type: 'EVIDENCE_UPLOADED',
+    title: `Evidence uploaded: ${item.filename}`,
+    description: item.description || item.fileType,
+    createdAt: item.createdAt,
+  }));
+
+  const taskEvents = tasks.map((task) => ({
+    type: 'TASK_ACTIVITY',
+    title: task.title,
+    description: `${task.priority} priority • ${task.status.replace('_', ' ').toLowerCase()}`,
+    createdAt: task.updatedAt,
+  }));
+
+  return [...assessmentEvents, ...evidenceEvents, ...taskEvents]
+    .filter((item) => item.createdAt)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 10);
+}
+
+function buildAiRecommendations(frameworks, topActions, vendorRisk, evidenceAnalytics) {
+  const weakestFramework = [...frameworks].sort((a, b) => a.score - b.score)[0];
+  const recommendations = [];
+
+  if (weakestFramework) {
+    recommendations.push({
+      title: `Improve ${weakestFramework.name}`,
+      description: `This is currently your weakest framework at ${Math.round(weakestFramework.score)}% readiness.`,
+      priority: weakestFramework.score < 50 ? 'HIGH' : 'MEDIUM',
+    });
+  }
+
+  if (evidenceAnalytics.missingEvidenceActions > 0) {
+    recommendations.push({
+      title: 'Attach missing evidence',
+      description: `${evidenceAnalytics.missingEvidenceActions} prioritized actions need supporting evidence.`,
+      priority: 'HIGH',
+    });
+  }
+
+  if (vendorRisk.matrix.critical > 0 || vendorRisk.matrix.high > 0) {
+    recommendations.push({
+      title: 'Review third-party risk',
+      description: `${vendorRisk.matrix.critical + vendorRisk.matrix.high} vendors require risk review.`,
+      priority: 'MEDIUM',
+    });
+  }
+
+  if (topActions.length > 0) {
+    recommendations.push({
+      title: 'Resolve top remediation items',
+      description: `${topActions.length} high-value actions are ready for remediation planning.`,
+      priority: 'MEDIUM',
+    });
+  }
+
+  return recommendations.slice(0, 5);
+}
+
+function getCriticalityScore(criticality) {
+  if (criticality === 'CRITICAL') return 95;
+  if (criticality === 'HIGH') return 75;
+  if (criticality === 'MEDIUM') return 50;
+  return 25;
 }
 
 function getPriority(weight) {
