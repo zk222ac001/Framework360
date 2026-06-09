@@ -1,8 +1,7 @@
 const express = require("express");
-const { PrismaClient } = require("@prisma/client");
-const authenticateToken = require("../middleware/authenticateToken");
+const prisma = require("../db");
+const { requireAuth } = require("../middleware/auth.middleware");
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 function requireCompany(req, res) {
@@ -37,7 +36,7 @@ function mapTaskToApproval(task) {
   };
 }
 
-router.get("/approvals", authenticateToken, async (req, res, next) => {
+router.get("/approvals", requireAuth, async (req, res, next) => {
   try {
     const companyId = requireCompany(req, res);
     if (!companyId) return;
@@ -68,7 +67,7 @@ router.get("/approvals", authenticateToken, async (req, res, next) => {
   }
 });
 
-router.patch("/approvals/:id", authenticateToken, async (req, res, next) => {
+router.patch("/approvals/:id", requireAuth, async (req, res, next) => {
   try {
     const companyId = requireCompany(req, res);
     if (!companyId) return;
@@ -92,7 +91,7 @@ router.patch("/approvals/:id", authenticateToken, async (req, res, next) => {
 
     await prisma.auditLog.create({
       data: {
-        userId: req.user?.id || null,
+        userId: req.user?.userId || null,
         action: `APPROVAL_${decision || "REVIEW"}`,
         entity: "Task",
         entityId: task.id,
