@@ -29,6 +29,48 @@ export type DashboardTopAction = {
   hasEvidence: boolean;
 };
 
+export type DashboardVendorRisk = {
+  totalVendors: number;
+  criticalVendors: Array<{
+    id: number;
+    name: string;
+    category?: string | null;
+    criticality: string;
+    riskScore: number;
+  }>;
+  matrix: {
+    critical: number;
+    high: number;
+    medium: number;
+    low: number;
+  };
+};
+
+export type DashboardEvidenceAnalytics = {
+  totalEvidence: number;
+  missingEvidenceActions: number;
+  recentUploads: Array<{
+    id: number;
+    filename: string;
+    fileType: string;
+    size: number;
+    createdAt: string;
+  }>;
+};
+
+export type DashboardActivityItem = {
+  type: "ASSESSMENT_UPDATED" | "EVIDENCE_UPLOADED" | "TASK_ACTIVITY" | string;
+  title: string;
+  description?: string | null;
+  createdAt: string;
+};
+
+export type DashboardAiRecommendation = {
+  title: string;
+  description: string;
+  priority: "LOW" | "MEDIUM" | "HIGH" | string;
+};
+
 export type DashboardResponse = {
   user: {
     id: number;
@@ -55,4 +97,8 @@ export type DashboardResponse = {
   certificateScore: number;
   frameworks: DashboardFrameworkProgress[];
   topActions?: DashboardTopAction[];
+  vendorRisk?: DashboardVendorRisk;
+  evidenceAnalytics?: DashboardEvidenceAnalytics;
+  activity?: DashboardActivityItem[];
+  aiRecommendations?: DashboardAiRecommendation[];
 };
