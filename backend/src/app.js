@@ -22,6 +22,7 @@ const systemRoutes = require('./routes/system.routes');
 const businessProcessRoutes = require('./routes/businessProcess.routes');
 const dependencyRoutes = require('./routes/dependency.routes');
 const auditFindingsRoutes = require('./routes/auditFindings.routes');
+const evidenceCampaignRoutes = require('./routes/evidenceCampaign.routes');
 const { errorHandler } = require('./middleware/error.middleware');
 
 const app = express();
@@ -67,6 +68,7 @@ app.use('/admin', adminSeedRoutes);
 app.use('/', evidenceRoutes);
 app.use('/', reportRoutes);
 app.use('/', auditFindingsRoutes);
+app.use('/', evidenceCampaignRoutes);
 app.use('/tasks', taskRoutes);
 app.use('/auth/sso', ssoRoutes);
 app.use('/vendors', vendorRoutes);
