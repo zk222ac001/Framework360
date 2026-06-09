@@ -1,8 +1,7 @@
 const express = require("express");
-const { PrismaClient } = require("@prisma/client");
-const authenticateToken = require("../middleware/authenticateToken");
+const prisma = require("../db");
+const { requireAuth } = require("../middleware/auth.middleware");
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 function requireCompany(req, res) {
@@ -35,7 +34,7 @@ function mapActionToRequest(action, index) {
   };
 }
 
-router.get("/evidence-campaigns", authenticateToken, async (req, res, next) => {
+router.get("/evidence-campaigns", requireAuth, async (req, res, next) => {
   try {
     const companyId = requireCompany(req, res);
     if (!companyId) return;
@@ -82,14 +81,14 @@ router.get("/evidence-campaigns", authenticateToken, async (req, res, next) => {
   }
 });
 
-router.post("/evidence-campaigns/remind", authenticateToken, async (req, res, next) => {
+router.post("/evidence-campaigns/remind", requireAuth, async (req, res, next) => {
   try {
     const companyId = requireCompany(req, res);
     if (!companyId) return;
 
     await prisma.auditLog.create({
       data: {
-        userId: req.user?.id || null,
+        userId: req.user?.userId || null,
         action: "EVIDENCE_CAMPAIGN_REMINDER_SENT",
         entity: "EvidenceCampaign",
         metadata: JSON.stringify({ companyId, requestId: req.body?.requestId || null }),
