@@ -71,6 +71,20 @@ export type DashboardAiRecommendation = {
   priority: "LOW" | "MEDIUM" | "HIGH" | string;
 };
 
+export type DashboardInteractiveAnalytics = {
+  readinessTrend: Array<{ label: string; value: number }>;
+  evidenceGrowth: Array<{ label: string; value: number }>;
+  vendorRiskChart: Array<{ label: string; value: number }>;
+  frameworkPerformance: Array<{
+    label: string;
+    name: string;
+    score: number;
+    gaps: number;
+    progress: number;
+  }>;
+  vendorCount: number;
+};
+
 export type DashboardResponse = {
   user: {
     id: number;
@@ -101,4 +115,5 @@ export type DashboardResponse = {
   evidenceAnalytics?: DashboardEvidenceAnalytics;
   activity?: DashboardActivityItem[];
   aiRecommendations?: DashboardAiRecommendation[];
+  interactiveAnalytics?: DashboardInteractiveAnalytics;
 };
