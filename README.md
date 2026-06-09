@@ -135,6 +135,8 @@ docker compose exec backend npm run seed:dev
 http://localhost:25173
 ```
 ## if docker is not working ......................................
-  -docker compose down -v
+```bash
+   docker compose down -v
   -docker compose build --no-cache frontend
   -docker compose up
+```
