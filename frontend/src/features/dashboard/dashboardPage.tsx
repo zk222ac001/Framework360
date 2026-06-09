@@ -10,7 +10,7 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { getDashboard } from "../../api/dashboard";
-import type { DashboardResponse } from "../../types/dashboard";
+import type { DashboardFrameworkProgress, DashboardResponse, DashboardTopAction } from "../../types/dashboard";
 import { useTranslation } from "react-i18next";
 
 function getErrorMessage(error: unknown) {
@@ -107,6 +107,101 @@ function InsightPanel({ averageScoreValue, frameworksCount, completedCount }: { 
   );
 }
 
+function FrameworkComparisonChart({ frameworks }: { frameworks: DashboardFrameworkProgress[] }) {
+  const ranked = [...frameworks].sort((a, b) => clampScore(b.score) - clampScore(a.score)).slice(0, 8);
+  return (
+    <Paper sx={{ p: 3, borderRadius: 5 }}>
+      <Typography variant="h6" gutterBottom>Framework score comparison</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>Compare readiness across active frameworks using real assessment scores.</Typography>
+      <Stack spacing={1.6}>
+        {ranked.map((framework) => {
+          const score = clampScore(framework.score);
+          return (
+            <Box key={framework.code}>
+              <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.75 }}>
+                <Typography variant="body2" sx={{ fontWeight: 800 }}>{framework.name}</Typography>
+                <Typography variant="body2" color="text.secondary">{score}%</Typography>
+              </Stack>
+              <LinearProgress variant="determinate" value={score} sx={{ height: 10, borderRadius: 999 }} />
+            </Box>
+          );
+        })}
+      </Stack>
+    </Paper>
+  );
+}
+
+function GapHeatmap({ frameworks }: { frameworks: DashboardFrameworkProgress[] }) {
+  return (
+    <Paper sx={{ p: 3, borderRadius: 5 }}>
+      <Typography variant="h6" gutterBottom>Compliance gap heatmap</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>Prioritize frameworks with the highest number of missing or partial controls.</Typography>
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" }, gap: 1.5 }}>
+        {frameworks.slice(0, 8).map((framework) => {
+          const gaps = framework.gapsCount || 0;
+          const severity = gaps >= 10 ? "error.main" : gaps >= 5 ? "warning.main" : gaps > 0 ? "primary.main" : "success.main";
+          return (
+            <Box key={framework.code} sx={{ p: 2, borderRadius: 3, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider" }}>
+              <Stack direction="row" justifyContent="space-between" alignItems="center">
+                <Typography variant="body2" sx={{ fontWeight: 800 }}>{framework.code}</Typography>
+                <Chip label={`${gaps} gaps`} size="small" sx={{ color: severity }} />
+              </Stack>
+              <Typography variant="caption" color="text.secondary">{framework.name}</Typography>
+            </Box>
+          );
+        })}
+      </Box>
+    </Paper>
+  );
+}
+
+function RemediationActions({ actions }: { actions: DashboardTopAction[] }) {
+  return (
+    <Paper sx={{ p: 3, borderRadius: 5, height: "100%" }}>
+      <Typography variant="h6" gutterBottom>Top remediation actions</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>Prioritized from unanswered, partial or non-compliant requirements.</Typography>
+      <Stack spacing={1.5}>
+        {actions.length === 0 && <Typography variant="body2" color="text.secondary">No critical remediation actions right now.</Typography>}
+        {actions.slice(0, 5).map((action) => (
+          <Box key={`${action.assessmentId}-${action.requirementId}`} sx={{ p: 2, borderRadius: 3, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider" }}>
+            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.75 }}>
+              <Chip label={action.priority} color={action.priority === "HIGH" ? "error" : action.priority === "MEDIUM" ? "warning" : "primary"} size="small" />
+              <Typography variant="caption" color="text.secondary">{action.framework} • {action.section}</Typography>
+            </Stack>
+            <Typography variant="body2" sx={{ fontWeight: 800 }}>{action.title}</Typography>
+            {action.evidenceNeeded && <Typography variant="caption" color="text.secondary">Evidence needed: {action.evidenceNeeded}</Typography>}
+          </Box>
+        ))}
+      </Stack>
+    </Paper>
+  );
+}
+
+function AssistantPanel({ actions, frameworks }: { actions: DashboardTopAction[]; frameworks: DashboardFrameworkProgress[] }) {
+  const missingEvidence = actions.filter((action) => !action.hasEvidence).length;
+  const weakestFramework = [...frameworks].sort((a, b) => clampScore(a.score) - clampScore(b.score))[0];
+  return (
+    <Paper sx={{ p: 3, borderRadius: 5, height: "100%", background: "linear-gradient(135deg, rgba(37,99,235,.12), rgba(20,184,166,.08))" }}>
+      <Chip label="AI compliance assistant" color="primary" sx={{ mb: 2 }} />
+      <Typography variant="h6" gutterBottom>Recommended next moves</Typography>
+      <Stack spacing={1.5}>
+        <Box sx={{ p: 2, borderRadius: 3, bgcolor: "background.paper", border: "1px solid", borderColor: "divider" }}>
+          <Typography variant="subtitle2">Missing evidence detection</Typography>
+          <Typography variant="body2" color="text.secondary">{missingEvidence} prioritized control gaps are missing supporting evidence.</Typography>
+        </Box>
+        <Box sx={{ p: 2, borderRadius: 3, bgcolor: "background.paper", border: "1px solid", borderColor: "divider" }}>
+          <Typography variant="subtitle2">Framework recommendation</Typography>
+          <Typography variant="body2" color="text.secondary">Focus next on {weakestFramework?.name || "your lowest scoring framework"} to increase overall readiness fastest.</Typography>
+        </Box>
+        <Box sx={{ p: 2, borderRadius: 3, bgcolor: "background.paper", border: "1px solid", borderColor: "divider" }}>
+          <Typography variant="subtitle2">Audit preparation</Typography>
+          <Typography variant="body2" color="text.secondary">Resolve high-priority gaps first, then attach evidence to each partially implemented control.</Typography>
+        </Box>
+      </Stack>
+    </Paper>
+  );
+}
+
 export default function DashboardPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -123,10 +218,12 @@ export default function DashboardPage() {
   const euLawFrameworks = dashboard?.frameworks.filter((framework) => isEuLawFramework(framework.category)) || [];
   const voluntaryFrameworks = dashboard?.frameworks.filter((framework) => !isEuLawFramework(framework.category)) || [];
   const frameworks = dashboard?.frameworks || [];
+  const topActions = dashboard?.topActions || [];
   const completedFrameworks = frameworks.filter((framework) => framework.status === "COMPLETED" && clampScore(framework.score) === 100);
-  const averageOverallScore = averageScore(frameworks.map((framework) => framework.score));
-  const lawScore = averageScore(euLawFrameworks.map((framework) => framework.score));
-  const certificateScore = averageScore(voluntaryFrameworks.map((framework) => framework.score));
+  const averageOverallScore = dashboard?.overall?.averageScore ?? averageScore(frameworks.map((framework) => framework.score));
+  const totalGaps = dashboard?.overall?.totalGaps ?? frameworks.reduce((sum, framework) => sum + (framework.gapsCount || 0), 0);
+  const lawScore = dashboard?.lawScore ?? averageScore(euLawFrameworks.map((framework) => framework.score));
+  const certificateScore = dashboard?.certificateScore ?? averageScore(voluntaryFrameworks.map((framework) => framework.score));
 
   if (isLoading) return <Box sx={{ display: "flex", justifyContent: "center", py: 10 }}><CircularProgress /></Box>;
 
@@ -153,12 +250,22 @@ export default function DashboardPage() {
           </Stack>
           <Stack direction={{ xs: "column", md: "row" }} spacing={2.5}>
             <MetricCard label="Active frameworks" value={frameworks.length} helper="Frameworks currently tracked in your workspace." icon="FW" />
-            <MetricCard label="Completed" value={completedFrameworks.length} helper="Frameworks with a complete assessment score." icon="OK" />
+            <MetricCard label="Open gaps" value={totalGaps} helper="Controls requiring action or evidence." icon="GP" />
             <MetricCard label="Average readiness" value={`${averageOverallScore}%`} helper="Average maturity across all selected frameworks." icon="UP" />
           </Stack>
         </Box>
         <Box sx={{ flex: 1, minWidth: 320 }}><InsightPanel averageScoreValue={averageOverallScore} frameworksCount={frameworks.length} completedCount={completedFrameworks.length} /></Box>
       </Stack>
+
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", xl: "1.2fr 1fr" }, gap: 3, mb: 3 }}>
+        <FrameworkComparisonChart frameworks={frameworks} />
+        <GapHeatmap frameworks={frameworks} />
+      </Box>
+
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", xl: "1.1fr .9fr" }, gap: 3, mb: 4 }}>
+        <RemediationActions actions={topActions} />
+        <AssistantPanel actions={topActions} frameworks={frameworks} />
+      </Box>
 
       <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", md: "center" }} spacing={2} sx={{ mb: 2.5 }}>
         <Box><Typography variant="h5">{t("dashboard.frameworks")}</Typography><Typography variant="body2" color="text.secondary">Continue assessments, review readiness, or add another compliance framework.</Typography></Box>
