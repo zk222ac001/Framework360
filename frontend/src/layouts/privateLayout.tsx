@@ -21,19 +21,7 @@ function getInitials(first?: string, last?: string, email?: string) {
 
 function navIcon(label: string) {
   return (
-    <Box
-      sx={{
-        width: 30,
-        height: 30,
-        borderRadius: 2,
-        display: "grid",
-        placeItems: "center",
-        bgcolor: "surface.level2",
-        color: "primary.main",
-        fontSize: 12,
-        fontWeight: 800,
-      }}
-    >
+    <Box sx={{ width: 30, height: 30, borderRadius: 2, display: "grid", placeItems: "center", bgcolor: "surface.level2", color: "primary.main", fontSize: 12, fontWeight: 800 }}>
       {label}
     </Box>
   );
@@ -44,34 +32,9 @@ function SidebarLink({ to, label, icon }: { to: string; label: string; icon: str
   const isActive = location.pathname === to || (to !== "/dashboard" && location.pathname.startsWith(to));
 
   return (
-    <Link
-      component={RouterLink}
-      to={to}
-      underline="none"
-      color="text.primary"
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        gap: 1.5,
-        px: 1.25,
-        py: 1,
-        borderRadius: 3,
-        fontWeight: isActive ? 800 : 650,
-        bgcolor: isActive ? "surface.level2" : "transparent",
-        border: "1px solid",
-        borderColor: isActive ? "divider" : "transparent",
-        boxShadow: isActive ? "0 10px 30px rgba(37, 99, 235, 0.12)" : "none",
-        transition: "all 160ms ease",
-        "&:hover": {
-          bgcolor: "surface.level2",
-          transform: "translateX(2px)",
-        },
-      }}
-    >
+    <Link component={RouterLink} to={to} underline="none" color="text.primary" sx={{ display: "flex", alignItems: "center", gap: 1.5, px: 1.25, py: 1, borderRadius: 3, fontWeight: isActive ? 800 : 650, bgcolor: isActive ? "surface.level2" : "transparent", border: "1px solid", borderColor: isActive ? "divider" : "transparent", boxShadow: isActive ? "0 10px 30px rgba(37, 99, 235, 0.12)" : "none", transition: "all 160ms ease", "&:hover": { bgcolor: "surface.level2", transform: "translateX(2px)" } }}>
       {navIcon(icon)}
-      <Typography variant="body2" sx={{ fontWeight: "inherit" }}>
-        {label}
-      </Typography>
+      <Typography variant="body2" sx={{ fontWeight: "inherit" }}>{label}</Typography>
     </Link>
   );
 }
@@ -90,24 +53,8 @@ export default function PrivateLayout() {
   }
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.primary", display: "flex" }}>
-      <Box
-        component="aside"
-        sx={{
-          width: sidebarWidth,
-          minHeight: "100vh",
-          position: "sticky",
-          top: 0,
-          display: { xs: "none", md: "flex" },
-          flexDirection: "column",
-          px: 2.25,
-          py: 2.5,
-          borderRight: "1px solid",
-          borderColor: "divider",
-          bgcolor: "background.paper",
-          backdropFilter: "blur(20px)",
-        }}
-      >
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.primary", display: "flex", width: "100%", maxWidth: "100vw", overflowX: "hidden" }}>
+      <Box component="aside" sx={{ width: sidebarWidth, minWidth: sidebarWidth, minHeight: "100vh", position: "sticky", top: 0, display: { xs: "none", md: "flex" }, flexDirection: "column", px: 2.25, py: 2.5, borderRight: "1px solid", borderColor: "divider", bgcolor: "background.paper", backdropFilter: "blur(20px)" }}>
         <Link component={RouterLink} to="/dashboard" underline="none" sx={{ mb: 3, display: "block" }}>
           <Box component="img" src="/framework360-wordmark.svg" alt="Framework360" sx={{ width: 218, height: 54, objectFit: "contain", objectPosition: "left center", color: "text.primary" }} />
         </Link>
@@ -127,12 +74,8 @@ export default function PrivateLayout() {
         </Stack>
 
         <Box sx={{ p: 2, borderRadius: 4, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider", mb: 2 }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 0.5 }}>
-            Readiness snapshot
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Keep frameworks, evidence, vendors and dependencies connected in one place.
-          </Typography>
+          <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 0.5 }}>Readiness snapshot</Typography>
+          <Typography variant="body2" color="text.secondary">Keep frameworks, evidence, vendors and dependencies connected in one place.</Typography>
         </Box>
 
         <Divider sx={{ mb: 2 }} />
@@ -140,54 +83,30 @@ export default function PrivateLayout() {
         <Stack direction="row" spacing={1.25} alignItems="center">
           <Avatar sx={{ width: 42, height: 42 }}>{getInitials(user?.firstName, user?.lastName, user?.email)}</Avatar>
           <Box sx={{ minWidth: 0, flex: 1 }}>
-            <Typography variant="body2" sx={{ fontWeight: 800 }} noWrap>
-              {fullName}
-            </Typography>
-            <Typography variant="caption" color="text.secondary" noWrap>
-              {formatRole(user?.role)}
-            </Typography>
+            <Typography variant="body2" sx={{ fontWeight: 800 }} noWrap>{fullName}</Typography>
+            <Typography variant="caption" color="text.secondary" noWrap>{formatRole(user?.role)}</Typography>
           </Box>
         </Stack>
       </Box>
 
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Box
-          component="header"
-          sx={{
-            minHeight: 72,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            px: { xs: 2, md: 4 },
-            borderBottom: "1px solid",
-            borderColor: "divider",
-            bgcolor: "background.paper",
-            backdropFilter: "blur(20px)",
-            position: "sticky",
-            top: 0,
-            zIndex: 10,
-          }}
-        >
-          <Stack direction="row" spacing={1.5} alignItems="center">
+      <Box sx={{ flex: 1, minWidth: 0, width: "100%", maxWidth: "100%", overflowX: "hidden" }}>
+        <Box component="header" sx={{ minHeight: 72, display: "flex", alignItems: "center", justifyContent: "space-between", px: { xs: 2, md: 4 }, borderBottom: "1px solid", borderColor: "divider", bgcolor: "background.paper", backdropFilter: "blur(20px)", position: "sticky", top: 0, zIndex: 10, maxWidth: "100%", overflowX: "hidden" }}>
+          <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>
             <Box component="img" src="/favicon.svg" alt="Framework360" sx={{ display: { xs: "block", md: "none" }, width: 38, height: 38 }} />
-            <Box>
-              <Typography variant="subtitle1" sx={{ fontWeight: 850 }}>
-                Framework360
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                Compliance command center
-              </Typography>
+            <Box sx={{ minWidth: 0 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 850 }}>Framework360</Typography>
+              <Typography variant="caption" color="text.secondary">Compliance command center</Typography>
             </Box>
           </Stack>
 
-          <Stack direction="row" spacing={1.25} alignItems="center">
+          <Stack direction="row" spacing={1.25} alignItems="center" sx={{ flexShrink: 0 }}>
             <ThemeToggle />
             <Button variant="soft" size="small" onClick={() => navigate("/settings")}>{t("navbar.settings")}</Button>
             <Button variant="outlined" size="small" onClick={handleLogout}>{t("navbar.logout")}</Button>
           </Stack>
         </Box>
 
-        <Box component="main" sx={{ minHeight: "calc(100vh - 72px)" }}>
+        <Box component="main" sx={{ minHeight: "calc(100vh - 72px)", width: "100%", maxWidth: "100%", overflowX: "hidden" }}>
           <Outlet />
         </Box>
       </Box>
