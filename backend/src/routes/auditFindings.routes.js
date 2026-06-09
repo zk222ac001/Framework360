@@ -1,8 +1,7 @@
 const express = require("express");
-const { PrismaClient } = require("@prisma/client");
-const authenticateToken = require("../middleware/authenticateToken");
+const prisma = require("../db");
+const { requireAuth } = require("../middleware/auth.middleware");
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 function requireCompany(req, res) {
@@ -30,7 +29,7 @@ function mapTaskToFinding(task) {
   };
 }
 
-router.get("/audit-findings", authenticateToken, async (req, res, next) => {
+router.get("/audit-findings", requireAuth, async (req, res, next) => {
   try {
     const companyId = requireCompany(req, res);
     if (!companyId) return;
@@ -60,7 +59,7 @@ router.get("/audit-findings", authenticateToken, async (req, res, next) => {
   }
 });
 
-router.post("/audit-findings", authenticateToken, async (req, res, next) => {
+router.post("/audit-findings", requireAuth, async (req, res, next) => {
   try {
     const companyId = requireCompany(req, res);
     if (!companyId) return;
@@ -84,7 +83,7 @@ router.post("/audit-findings", authenticateToken, async (req, res, next) => {
 
     await prisma.auditLog.create({
       data: {
-        userId: req.user?.id || null,
+        userId: req.user?.userId || null,
         action: "AUDIT_FINDING_CREATED",
         entity: "Task",
         entityId: task.id,
@@ -98,7 +97,7 @@ router.post("/audit-findings", authenticateToken, async (req, res, next) => {
   }
 });
 
-router.patch("/audit-findings/:id", authenticateToken, async (req, res, next) => {
+router.patch("/audit-findings/:id", requireAuth, async (req, res, next) => {
   try {
     const companyId = requireCompany(req, res);
     if (!companyId) return;
@@ -122,7 +121,7 @@ router.patch("/audit-findings/:id", authenticateToken, async (req, res, next) =>
 
     await prisma.auditLog.create({
       data: {
-        userId: req.user?.id || null,
+        userId: req.user?.userId || null,
         action: "AUDIT_FINDING_UPDATED",
         entity: "Task",
         entityId: task.id,
