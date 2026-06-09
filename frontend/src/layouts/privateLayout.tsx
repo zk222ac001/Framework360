@@ -61,9 +61,14 @@ export default function PrivateLayout() {
 
         <Chip label="Compliance workspace" color="primary" size="small" sx={{ alignSelf: "flex-start", mb: 2 }} />
 
-        <Stack spacing={0.75} sx={{ flex: 1 }}>
+        <Stack spacing={0.75} sx={{ flex: 1, overflowY: "auto", pr: 0.5 }}>
           <SidebarLink to="/dashboard" label={t("navbar.dashboard")} icon="DB" />
           <SidebarLink to="/audit" label="Audit Center" icon="AU" />
+          <SidebarLink to="/findings" label="Findings" icon="FD" />
+          <SidebarLink to="/evidence-campaigns" label="Evidence Campaigns" icon="EC" />
+          <SidebarLink to="/workflows" label="Workflows" icon="WF" />
+          <SidebarLink to="/copilot" label="AI Copilot" icon="AI" />
+          <SidebarLink to="/vendor-risk" label="Vendor Risk" icon="VR" />
           <SidebarLink to="/vendors" label={t("navbar.vendors")} icon="VD" />
           <SidebarLink to="/systems" label={t("navbar.systems")} icon="SY" />
           <SidebarLink to="/business-processes" label={t("navbar.processes")} icon="PR" />
@@ -73,7 +78,7 @@ export default function PrivateLayout() {
           {isAdmin && <SidebarLink to="/admin" label={t("navbar.admin")} icon="AD" />}
         </Stack>
 
-        <Box sx={{ p: 2, borderRadius: 4, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider", mb: 2 }}>
+        <Box sx={{ p: 2, borderRadius: 4, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider", mb: 2, mt: 2 }}>
           <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 0.5 }}>Readiness snapshot</Typography>
           <Typography variant="body2" color="text.secondary">Keep frameworks, evidence, vendors and dependencies connected in one place.</Typography>
         </Box>
@@ -101,7 +106,7 @@ export default function PrivateLayout() {
 
           <Stack direction="row" spacing={1.25} alignItems="center" sx={{ flexShrink: 0 }}>
             <ThemeToggle />
-            <Button variant="soft" size="small" onClick={() => navigate("/settings")}>{t("navbar.settings")}</Button>
+            <Button variant="outlined" size="small" onClick={() => navigate("/settings")}>{t("navbar.settings")}</Button>
             <Button variant="outlined" size="small" onClick={handleLogout}>{t("navbar.logout")}</Button>
           </Stack>
         </Box>
