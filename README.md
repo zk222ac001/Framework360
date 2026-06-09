@@ -77,10 +77,6 @@ Password: DevAdmin123
 Role: PLATFORM_ADMIN
 ```
 
-This account has access to platform administration features.
-
----
-
 ## Customer Administrator
 
 ```text
@@ -92,10 +88,6 @@ CVR: 12345678
 Sector: IT
 Country: DK
 ```
-
-This account represents a customer organization and can be used to explore the platform as a company administrator.
-
----
 
 ## Demo User
 
@@ -109,108 +101,36 @@ Sector: IT
 Country: DK
 ```
 
-This account can be used for general testing and demonstration purposes.
-
----
-
 # Accessing the Database with Prisma Studio
-
-To inspect and edit the database through Prisma Studio, execute:
 
 ```bash
 docker compose exec backend npx prisma studio --hostname 0.0.0.0
 ```
 
-Prisma Studio will then be available at:
+Prisma Studio:
 
 ```text
 http://localhost:5555
 ```
-
-This allows direct inspection of all database tables and records.
-
----
-
-# Stopping the Application
-
-Stop all containers:
-
-```bash
-docker compose down
-```
-
-Stop all containers and remove volumes:
-
-```bash
-docker compose down -v
-```
-
----
 
 # Quick Start Guide for Examiners
 
 1. Extract the project archive.
 2. Open a terminal in the project root directory.
-3. Start the application:
+3. Run:
 
 ```bash
 docker compose up --build
 ```
 
-4. Open a second terminal and create demo data:
+4. Seed demo data:
 
 ```bash
 docker compose exec backend npm run seed:dev
 ```
 
-5. Open the application:
+5. Open:
 
 ```text
-http://localhost:5173
+http://localhost:25173
 ```
-
-6. Log in using one of the test accounts listed above.
-
-7. (Optional) Open Prisma Studio:
-
-```bash
-docker compose exec backend npx prisma studio --hostname 0.0.0.0
-```
-
-and navigate to:
-
-```text
-http://localhost:5555
-```
-
----
-
-# Project Structure
-
-```text
-.
-├── backend/
-│   ├── prisma/
-│   ├── src/
-│   └── package.json
-│
-├── frontend/
-│   ├── src/
-│   └── package.json
-│
-├── docker/
-│   ├── backend.Dockerfile
-│   └── frontend.Dockerfile
-│
-├── docker-compose.yml
-└── README.md
-```
-
----
-
-# Notes
-
-- The `node_modules` directories are intentionally excluded from the submission archive.
-- Docker automatically installs all required dependencies.
-- The project uses a local SQLite database for development and demonstration purposes.
-- The platform is intended for demonstration and evaluation as part of the exam project.
