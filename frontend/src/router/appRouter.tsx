@@ -26,6 +26,7 @@ import AuditFindingsPage from "../features/auditFindings/AuditFindingsPage";
 import WorkflowApprovalsPage from "../features/workflows/WorkflowApprovalsPage";
 import AiComplianceCopilotPage from "../features/copilot/AiComplianceCopilotPage";
 import VendorRiskCenterPage from "../features/vendorRisk/VendorRiskCenterPage";
+import EvidenceCampaignsPage from "../features/evidenceCampaigns/EvidenceCampaignsPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 function PricingPage() {
@@ -62,6 +63,7 @@ const router = createBrowserRouter([
           { path: "/dashboard", element: <DashboardPage /> },
           { path: "/audit", element: <AuditCenterPage /> },
           { path: "/findings", element: <AuditFindingsPage /> },
+          { path: "/evidence-campaigns", element: <EvidenceCampaignsPage /> },
           { path: "/workflows", element: <WorkflowApprovalsPage /> },
           { path: "/copilot", element: <AiComplianceCopilotPage /> },
           { path: "/vendor-risk", element: <VendorRiskCenterPage /> },
