@@ -2,7 +2,7 @@
 // Uses environment variable in production and localhost during development.
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-  "http://localhost:3000";
+  "http://localhost:23000";
 
 // Custom error class used for API request failures.
 // Includes HTTP status code and backend response data.
