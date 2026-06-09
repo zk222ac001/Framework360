@@ -11,6 +11,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { getDashboard } from "../../api/dashboard";
 import type { DashboardResponse } from "../../types/dashboard";
+import { InteractiveAnalyticsSection } from "./components/analyticsCharts";
 import { useTranslation } from "react-i18next";
 
 function getErrorMessage(error: unknown) {
@@ -110,6 +111,8 @@ export default function DashboardPage() {
           <MetricCard label="Evidence files" value={dashboard?.evidenceAnalytics?.totalEvidence || 0} helper="Uploaded evidence files." />
           <MetricCard label="Vendors" value={dashboard?.vendorRisk?.totalVendors || 0} helper="Registered third-party vendors." />
         </Box>
+
+        <InteractiveAnalyticsSection data={dashboard?.interactiveAnalytics} />
 
         <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1fr 1fr" }, gap: 2.5, mb: 4 }}>
           <Paper sx={{ p: 3, borderRadius: 5, minWidth: 0 }}>
