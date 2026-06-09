@@ -116,6 +116,7 @@ export default function PrivateLayout() {
 
         <Stack spacing={0.75} sx={{ flex: 1 }}>
           <SidebarLink to="/dashboard" label={t("navbar.dashboard")} icon="DB" />
+          <SidebarLink to="/audit" label="Audit Center" icon="AU" />
           <SidebarLink to="/vendors" label={t("navbar.vendors")} icon="VD" />
           <SidebarLink to="/systems" label={t("navbar.systems")} icon="SY" />
           <SidebarLink to="/business-processes" label={t("navbar.processes")} icon="PR" />
