@@ -113,6 +113,8 @@ router.get('/dashboard', requireAuth, async (req, res) => {
         status: assessment.status,
         gapsCount: gaps.length,
         completedAt: assessment.completedAt,
+        createdAt: assessment.createdAt,
+        updatedAt: assessment.updatedAt,
       };
     });
 
@@ -186,6 +188,12 @@ router.get('/dashboard', requireAuth, async (req, res) => {
       vendorRisk,
       evidenceAnalytics
     );
+    const interactiveAnalytics = buildInteractiveAnalytics(
+      frameworkCards,
+      allEvidence,
+      vendorRisk,
+      user.company.vendors || []
+    );
 
     return res.json({
       lawScore,
@@ -216,6 +224,7 @@ router.get('/dashboard', requireAuth, async (req, res) => {
       activity,
       evidenceAnalytics,
       aiRecommendations,
+      interactiveAnalytics,
     });
   } catch (error) {
     console.error('GET /dashboard error:', error);
@@ -357,7 +366,7 @@ function buildActivityTimeline(assessments, evidence, tasks) {
   const taskEvents = tasks.map((task) => ({
     type: 'TASK_ACTIVITY',
     title: task.title,
-    description: `${task.priority} priority • ${task.status.replace('_', ' ').toLowerCase()}`,
+    description: `${task.priority} priority - ${task.status.replace('_', ' ').toLowerCase()}`,
     createdAt: task.updatedAt,
   }));
 
@@ -365,6 +374,62 @@ function buildActivityTimeline(assessments, evidence, tasks) {
     .filter((item) => item.createdAt)
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 10);
+}
+
+function buildInteractiveAnalytics(frameworks, evidence, vendorRisk, vendors) {
+  const months = getLastMonths(6);
+  const currentReadiness = average(frameworks.map((item) => item.score));
+
+  const readinessTrend = months.map((month, index) => ({
+    label: month.label,
+    value: Math.max(0, Math.min(100, Math.round(currentReadiness - (months.length - index - 1) * 4))),
+  }));
+
+  const evidenceGrowth = months.map((month) => ({
+    label: month.label,
+    value: evidence.filter((item) => isSameMonth(item.createdAt, month.date)).length,
+  }));
+
+  const vendorRiskChart = [
+    { label: 'Critical', value: vendorRisk.matrix.critical },
+    { label: 'High', value: vendorRisk.matrix.high },
+    { label: 'Medium', value: vendorRisk.matrix.medium },
+    { label: 'Low', value: vendorRisk.matrix.low },
+  ];
+
+  const frameworkPerformance = frameworks
+    .map((framework) => ({
+      label: framework.code,
+      name: framework.name,
+      score: Math.round(framework.score || 0),
+      gaps: framework.gapsCount || 0,
+      progress: framework.progressPercentage || 0,
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  return {
+    readinessTrend,
+    evidenceGrowth,
+    vendorRiskChart,
+    frameworkPerformance,
+    vendorCount: vendors.length,
+  };
+}
+
+function getLastMonths(count) {
+  const now = new Date();
+  return Array.from({ length: count }).map((_, index) => {
+    const date = new Date(now.getFullYear(), now.getMonth() - (count - index - 1), 1);
+    return {
+      date,
+      label: date.toLocaleString('en-US', { month: 'short' }),
+    };
+  });
+}
+
+function isSameMonth(value, date) {
+  const parsed = new Date(value);
+  return parsed.getFullYear() === date.getFullYear() && parsed.getMonth() === date.getMonth();
 }
 
 function buildAiRecommendations(frameworks, topActions, vendorRisk, evidenceAnalytics) {
