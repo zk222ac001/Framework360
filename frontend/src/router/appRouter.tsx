@@ -21,27 +21,22 @@ import VendorsPage from "../features/vendors/VendorsPage";
 import SystemsPage from "../features/systems/SystemsPage";
 import BusinessProcessesPage from "../features/businessProcesses/BusinessProcessesPage";
 import DependenciesPage from "../features/dependencies/DependenciesPage";
+import AuditCenterPage from "../features/audit/AuditCenterPage";
 import ProtectedRoute from "../components/ProtectedRoute";
-// Central route configuration for public, private and admin pages.
 
-// Temporary placeholder pages for public marketing routes.
 function PricingPage() {
   return <Typography>Pricing page</Typography>;
 }
 
-// Temporary placeholder pages for public marketing routes.
 function FeaturesPage() {
   return <Typography>Features page</Typography>;
 }
 
-// Temporary placeholder pages for public marketing routes.
 function AboutPage() {
   return <Typography>About page</Typography>;
 }
 
-// Application routes grouped by access level.
 const router = createBrowserRouter([
-  // Public routes available without authentication.
   {
     path: "/",
     element: <PublicLayout />,
@@ -54,8 +49,6 @@ const router = createBrowserRouter([
       { path: "requestdemo", element: <RequestDemoPage /> },
     ],
   },
-
-  // Authenticated customer routes.
   {
     element: <ProtectedRoute />,
     children: [
@@ -63,6 +56,7 @@ const router = createBrowserRouter([
         element: <PrivateLayout />,
         children: [
           { path: "/dashboard", element: <DashboardPage /> },
+          { path: "/audit", element: <AuditCenterPage /> },
           { path: "/vendors", element: <VendorsPage /> },
           { path: "/systems", element: <SystemsPage /> },
           { path: "/business-processes", element: <BusinessProcessesPage /> },
@@ -72,36 +66,16 @@ const router = createBrowserRouter([
           { path: "/change-password", element: <ChangePasswordPage /> },
           { path: "/settings", element: <AccountSettingsPage /> },
           { path: "/settings/change-email", element: <ChangeEmailPage /> },
-          {
-            path: "/settings/change-password",
-            element: <ChangePasswordPage />,
-          },
-          {
-            path: "/onboarding/select-product",
-            element: <ProductSelectionPage />,
-          },
-          {
-            path: "/onboarding/company",
-            element: <CompanyOnboardingPage />,
-          },
-          {
-            path: "/onboarding/scope",
-            element: <ScopeOnboardingPage />,
-          },
-          {
-            path: "/onboarding/frameworks",
-            element: <FrameworkSelectionOnboardingPage />,
-          },
-          {
-            path: "/evidence",
-            element: <EvidenceOverviewPage />,
-          },
+          { path: "/settings/change-password", element: <ChangePasswordPage /> },
+          { path: "/onboarding/select-product", element: <ProductSelectionPage /> },
+          { path: "/onboarding/company", element: <CompanyOnboardingPage /> },
+          { path: "/onboarding/scope", element: <ScopeOnboardingPage /> },
+          { path: "/onboarding/frameworks", element: <FrameworkSelectionOnboardingPage /> },
+          { path: "/evidence", element: <EvidenceOverviewPage /> },
         ],
       },
     ],
   },
-
-  // Platform admin only routes.
   {
     element: <ProtectedRoute allowedRoles={["PLATFORM_ADMIN"]} />,
     children: [
@@ -113,7 +87,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-// Provides configured React Router instance to the app.
 export default function AppRouter() {
   return <RouterProvider router={router} />;
 }
