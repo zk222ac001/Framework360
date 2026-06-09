@@ -22,6 +22,10 @@ import SystemsPage from "../features/systems/SystemsPage";
 import BusinessProcessesPage from "../features/businessProcesses/BusinessProcessesPage";
 import DependenciesPage from "../features/dependencies/DependenciesPage";
 import AuditCenterPage from "../features/audit/AuditCenterPage";
+import AuditFindingsPage from "../features/auditFindings/AuditFindingsPage";
+import WorkflowApprovalsPage from "../features/workflows/WorkflowApprovalsPage";
+import AiComplianceCopilotPage from "../features/copilot/AiComplianceCopilotPage";
+import VendorRiskCenterPage from "../features/vendorRisk/VendorRiskCenterPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 function PricingPage() {
@@ -57,6 +61,10 @@ const router = createBrowserRouter([
         children: [
           { path: "/dashboard", element: <DashboardPage /> },
           { path: "/audit", element: <AuditCenterPage /> },
+          { path: "/findings", element: <AuditFindingsPage /> },
+          { path: "/workflows", element: <WorkflowApprovalsPage /> },
+          { path: "/copilot", element: <AiComplianceCopilotPage /> },
+          { path: "/vendor-risk", element: <VendorRiskCenterPage /> },
           { path: "/vendors", element: <VendorsPage /> },
           { path: "/systems", element: <SystemsPage /> },
           { path: "/business-processes", element: <BusinessProcessesPage /> },
