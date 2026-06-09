@@ -23,7 +23,7 @@ import BusinessProcessesPage from "../features/businessProcesses/BusinessProcess
 import DependenciesPage from "../features/dependencies/DependenciesPage";
 import AuditCenterPage from "../features/audit/AuditCenterPage";
 import AuditFindingsPage from "../features/auditFindings/AuditFindingsPage";
-import WorkflowApprovalsPage from "../features/workflows/WorkflowApprovalsPage";
+import WorkflowApprovalsApiPage from "../features/workflows/WorkflowApprovalsApiPage";
 import AiComplianceCopilotPage from "../features/copilot/AiComplianceCopilotPage";
 import VendorRiskCenterPage from "../features/vendorRisk/VendorRiskCenterPage";
 import EvidenceCampaignsPage from "../features/evidenceCampaigns/EvidenceCampaignsPage";
@@ -64,7 +64,7 @@ const router = createBrowserRouter([
           { path: "/audit", element: <AuditCenterPage /> },
           { path: "/findings", element: <AuditFindingsPage /> },
           { path: "/evidence-campaigns", element: <EvidenceCampaignsPage /> },
-          { path: "/workflows", element: <WorkflowApprovalsPage /> },
+          { path: "/workflows", element: <WorkflowApprovalsApiPage /> },
           { path: "/copilot", element: <AiComplianceCopilotPage /> },
           { path: "/vendor-risk", element: <VendorRiskCenterPage /> },
           { path: "/vendors", element: <VendorsPage /> },
