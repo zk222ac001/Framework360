@@ -95,21 +95,21 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
           surface3: "#273449",
           border: "rgba(148, 163, 184, 0.24)",
           mutedForeground: "#cbd5e1",
-          primary: "#3b82f6",
-          primaryHover: "#2563eb",
-          primaryActive: "#1d4ed8",
+          primary: "#0f766e",
+          primaryHover: "#115e59",
+          primaryActive: "#134e4a",
           primaryForeground: "#ffffff",
           secondary: "rgba(31, 41, 55, 0.82)",
           secondaryHover: "rgba(39, 52, 73, 0.92)",
           secondaryForeground: "#f8fafc",
-          link: "#93c5fd",
-          linkHover: "#bfdbfe",
-          success: "#10b981",
+          link: "#5eead4",
+          linkHover: "#99f6e4",
+          success: "#22c55e",
           warning: "#f59e0b",
           destructive: "#ef4444",
           shadow: "0 24px 80px rgba(0, 0, 0, 0.34)",
           softShadow: "0 12px 40px rgba(0, 0, 0, 0.22)",
-          focusRing: "rgba(59, 130, 246, 0.32)",
+          focusRing: "rgba(20, 184, 166, 0.32)",
         }
       : {
           background: "#f8fafc",
@@ -119,21 +119,21 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
           surface3: "#e2e8f0",
           border: "rgba(100, 116, 139, 0.22)",
           mutedForeground: "#64748b",
-          primary: "#2563eb",
-          primaryHover: "#1d4ed8",
-          primaryActive: "#1e40af",
+          primary: "#0f766e",
+          primaryHover: "#115e59",
+          primaryActive: "#134e4a",
           primaryForeground: "#ffffff",
           secondary: "#f1f5f9",
           secondaryHover: "#e2e8f0",
           secondaryForeground: "#0f172a",
-          link: "#2563eb",
-          linkHover: "#1d4ed8",
-          success: "#10b981",
-          warning: "#f59e0b",
-          destructive: "#ef4444",
+          link: "#0f766e",
+          linkHover: "#115e59",
+          success: "#16a34a",
+          warning: "#d97706",
+          destructive: "#dc2626",
           shadow: "0 24px 80px rgba(15, 23, 42, 0.12)",
           softShadow: "0 12px 36px rgba(15, 23, 42, 0.08)",
-          focusRing: "rgba(37, 99, 235, 0.2)",
+          focusRing: "rgba(20, 184, 166, 0.22)",
         };
 
     return createTheme({
@@ -202,8 +202,8 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
             body: {
               backgroundColor: tokens.background,
               backgroundImage: isDark
-                ? "radial-gradient(circle at top left, rgba(37, 99, 235, 0.2), transparent 34rem), radial-gradient(circle at top right, rgba(20, 184, 166, 0.13), transparent 32rem)"
-                : "radial-gradient(circle at top left, rgba(37, 99, 235, 0.1), transparent 32rem), radial-gradient(circle at top right, rgba(20, 184, 166, 0.12), transparent 30rem)",
+                ? "radial-gradient(circle at top left, rgba(15, 118, 110, 0.24), transparent 34rem), radial-gradient(circle at top right, rgba(34, 197, 94, 0.12), transparent 32rem)"
+                : "radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 32rem), radial-gradient(circle at top right, rgba(34, 197, 94, 0.1), transparent 30rem)",
               backgroundAttachment: "fixed",
               color: tokens.foreground,
               WebkitFontSmoothing: "antialiased",
@@ -256,8 +256,8 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
                 transform: "translateY(-2px)",
                 boxShadow: tokens.shadow,
                 borderColor: isDark
-                  ? "rgba(147, 197, 253, 0.34)"
-                  : "rgba(37, 99, 235, 0.24)",
+                  ? "rgba(94, 234, 212, 0.34)"
+                  : "rgba(15, 118, 110, 0.24)",
               },
             },
           },
@@ -284,13 +284,13 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
             containedPrimary: {
               background: `linear-gradient(135deg, ${tokens.primary}, #14b8a6)`,
               boxShadow: isDark
-                ? "0 12px 30px rgba(37, 99, 235, 0.22)"
-                : "0 12px 30px rgba(37, 99, 235, 0.18)",
+                ? "0 12px 30px rgba(15, 118, 110, 0.28)"
+                : "0 12px 30px rgba(15, 118, 110, 0.2)",
               "&:hover": {
                 background: `linear-gradient(135deg, ${tokens.primaryHover}, #0d9488)`,
                 boxShadow: isDark
-                  ? "0 16px 38px rgba(37, 99, 235, 0.28)"
-                  : "0 16px 38px rgba(37, 99, 235, 0.24)",
+                  ? "0 16px 38px rgba(15, 118, 110, 0.34)"
+                  : "0 16px 38px rgba(15, 118, 110, 0.26)",
               },
             },
             outlined: {
@@ -334,8 +334,8 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
               },
               "&:hover .MuiOutlinedInput-notchedOutline": {
                 borderColor: isDark
-                  ? "rgba(147, 197, 253, 0.4)"
-                  : "rgba(37, 99, 235, 0.32)",
+                  ? "rgba(94, 234, 212, 0.42)"
+                  : "rgba(15, 118, 110, 0.34)",
               },
               "&.Mui-focused": {
                 boxShadow: `0 0 0 4px ${tokens.focusRing}`,
