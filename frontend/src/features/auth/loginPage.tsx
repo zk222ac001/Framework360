@@ -12,7 +12,7 @@ import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
 import { useAuth } from "../../context/useAuth";
@@ -89,7 +89,7 @@ export default function LoginPage() {
           <Box sx={{ display: "grid", gap: 2, mt: 4 }}>
             {platformHighlights.map((item) => (
               <Box key={item} sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-                <CheckCircleOutlineIcon color="primary" />
+                <CheckCircleIcon color="primary" />
                 <Typography variant="body1" sx={{ fontWeight: 700 }}>{item}</Typography>
               </Box>
             ))}
