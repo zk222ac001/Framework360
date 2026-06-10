@@ -32,47 +32,27 @@ export default function LoginPage() {
   const location = useLocation();
   const { login } = useAuth();
 
-  const [values, setValues] = useState<LoginFormValues>({
-    email: "",
-    password: "",
-    rememberMe: false,
-  });
+  const [values, setValues] = useState<LoginFormValues>({ email: "", password: "", rememberMe: false });
   const [errors, setErrors] = useState<LoginFormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
-  const handleChange =
-    (field: keyof LoginFormValues) =>
-    (event: ChangeEvent<HTMLInputElement>) => {
-      const value =
-        field === "rememberMe" ? event.target.checked : event.target.value;
-
-      setValues((prev) => ({ ...prev, [field]: value }));
-      setErrors((prev) => ({ ...prev, [field]: "" }));
-      setSubmitError("");
-    };
+  const handleChange = (field: keyof LoginFormValues) => (event: ChangeEvent<HTMLInputElement>) => {
+    const value = field === "rememberMe" ? event.target.checked : event.target.value;
+    setValues((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: "" }));
+    setSubmitError("");
+  };
 
   const validate = (): LoginFormErrors => {
     const newErrors: LoginFormErrors = {};
-
-    if (!values.email.trim()) {
-      newErrors.email = t("auth.login.errors.emailRequired");
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
-      newErrors.email = t("auth.login.errors.invalidEmail");
-    }
-
-    if (!values.password.trim()) {
-      newErrors.password = t("auth.login.errors.passwordRequired");
-    }
-
+    if (!values.email.trim()) newErrors.email = t("auth.login.errors.emailRequired");
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) newErrors.email = t("auth.login.errors.invalidEmail");
+    if (!values.password.trim()) newErrors.password = t("auth.login.errors.passwordRequired");
     return newErrors;
   };
 
-  const getRedirectPath = (user: {
-    role: string;
-    mustChangePassword: boolean;
-    onboardingCompleted: boolean;
-  }) => {
+  const getRedirectPath = (user: { role: string; mustChangePassword: boolean; onboardingCompleted: boolean }) => {
     if (user.role === "PLATFORM_ADMIN") return "/admin";
     if (user.mustChangePassword) return "/change-password";
     if (!user.onboardingCompleted) return "/onboarding/select-product";
@@ -82,23 +62,16 @@ export default function LoginPage() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSubmitError("");
-
     const validationErrors = validate();
     setErrors(validationErrors);
     if (Object.keys(validationErrors).length > 0) return;
-
     try {
       setIsSubmitting(true);
       const user = await login(values.email, values.password, values.rememberMe);
-      const from = (location.state as { from?: { pathname?: string } } | null)
-        ?.from?.pathname;
+      const from = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname;
       navigate(from || getRedirectPath(user), { replace: true });
     } catch (error) {
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : t("auth.login.errors.loginFailed"),
-      );
+      setSubmitError(error instanceof Error ? error.message : t("auth.login.errors.loginFailed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -108,15 +81,10 @@ export default function LoginPage() {
     <Box sx={{ minHeight: "calc(100vh - 76px)", display: "flex", justifyContent: "center", alignItems: "center", px: { xs: 2, md: 4 }, py: { xs: 5, md: 8 } }}>
       <Box sx={{ width: "100%", maxWidth: 1120, display: "grid", gridTemplateColumns: { xs: "1fr", md: "1.05fr 0.95fr" }, gap: { xs: 3, md: 5 }, alignItems: "center" }}>
         <Box sx={{ display: { xs: "none", md: "block" } }}>
-          <Typography variant="overline" color="primary.main" sx={{ fontWeight: 800, letterSpacing: "0.16em" }}>
-            Framework360 secure portal
-          </Typography>
-          <Typography variant="h2" sx={{ mt: 1.5, mb: 2, maxWidth: 560, lineHeight: 1.05 }}>
-            Manage compliance with confidence.
-          </Typography>
+          <Typography variant="overline" color="primary.main" sx={{ fontWeight: 800, letterSpacing: "0.16em" }}>Framework360 secure portal</Typography>
+          <Typography variant="h2" sx={{ mt: 1.5, mb: 2, maxWidth: 560, lineHeight: 1.05 }}>Manage compliance with confidence.</Typography>
           <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 560, lineHeight: 1.6, fontWeight: 500 }}>
-            Sign in to manage frameworks, evidence, risks, vendors, systems,
-            business processes, and audit readiness in one secure workspace.
+            Sign in to manage frameworks, evidence, risks, vendors, systems, business processes, and audit readiness in one secure workspace.
           </Typography>
           <Box sx={{ display: "grid", gap: 2, mt: 4 }}>
             {platformHighlights.map((item) => (
@@ -131,8 +99,7 @@ export default function LoginPage() {
             <Box>
               <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>Built for compliance teams</Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                Keep requirements, gaps, actions, and proof connected so your
-                organization is better prepared for reviews and audits.
+                Keep requirements, gaps, actions, and proof connected so your organization is better prepared for reviews and audits.
               </Typography>
             </Box>
           </Paper>
@@ -144,8 +111,7 @@ export default function LoginPage() {
           </Box>
           <Typography variant="h4" gutterBottom>{t("auth.login.title")}</Typography>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
-            Sign in securely to access your compliance dashboard and manage
-            evidence, risks, frameworks, and audit readiness.
+            Sign in securely to access your compliance dashboard and manage evidence, risks, frameworks, and audit readiness.
           </Typography>
 
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
@@ -154,7 +120,7 @@ export default function LoginPage() {
 
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
               <FormControlLabel control={<Checkbox checked={values.rememberMe} onChange={handleChange("rememberMe")} />} label={t("auth.login.rememberMe")} />
-              <Link component={RouterLink} to="/requestdemo" variant="body2">
+              <Link component={RouterLink} to="/forgot-password" variant="body2" sx={{ fontWeight: 700 }}>
                 Forgot password?
               </Link>
             </Box>
@@ -165,18 +131,12 @@ export default function LoginPage() {
                   <CircularProgress size={20} color="inherit" />
                   {t("auth.login.signingIn")}
                 </Box>
-              ) : (
-                "Sign in securely"
-              )}
+              ) : "Sign in securely"}
             </Button>
 
             {submitError && <Alert severity="error">{submitError}</Alert>}
 
-            <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center", mt: 1 }}>
-              Password reset is not automated yet. Use "Forgot password?" to request access support.
-            </Typography>
-
-            <Typography variant="body2" sx={{ textAlign: "center", mt: 0.5 }}>
+            <Typography variant="body2" sx={{ textAlign: "center", mt: 1 }}>
               {t("auth.login.needAccess")} {" "}
               <Link component={RouterLink} to="/requestdemo">{t("auth.login.requestDemo")}</Link>
             </Typography>
