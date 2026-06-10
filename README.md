@@ -137,6 +137,6 @@ http://localhost:25173
 ## if docker is not working ......................................
 ```bash
    docker compose down -v
-  -docker compose build --no-cache frontend
-  -docker compose up
+   docker compose build --no-cache frontend
+   docker compose up
 ```
