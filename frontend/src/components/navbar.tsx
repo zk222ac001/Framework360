@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -46,7 +46,7 @@ function BrandLink({ to }: { to: string }) {
           objectFit: "contain",
           objectPosition: "left center",
           color: "text.primary",
-          filter: "drop-shadow(0 10px 22px rgba(37, 99, 235, 0.12))",
+          filter: "drop-shadow(0 10px 22px rgba(15, 118, 110, 0.14))",
         }}
       />
     </Link>
@@ -63,6 +63,7 @@ function Navbar({ variant }: NavbarProps) {
   const [languageAnchorEl, setLanguageAnchorEl] = useState<null | HTMLElement>(null);
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   async function handleLogout() {
@@ -127,6 +128,8 @@ function Navbar({ variant }: NavbarProps) {
     );
   }
 
+  const isLoginPage = location.pathname === "/login";
+
   return (
     <AppBar position="static">
       <Box sx={{ width: "100%", px: 3 }}>
@@ -144,7 +147,11 @@ function Navbar({ variant }: NavbarProps) {
               <MenuItem onClick={() => handleLanguageChange("en")}>🇬🇧 English</MenuItem>
               <MenuItem onClick={() => handleLanguageChange("da")}>🇩🇰 Danish</MenuItem>
             </Menu>
-            <Button component={RouterLink} to="/login" variant="outlined" color="primary">{t("navbar.login")}</Button>
+            {!isLoginPage && (
+              <Button component={RouterLink} to="/login" variant="outlined" color="primary">
+                {t("navbar.login")}
+              </Button>
+            )}
             <Button component={RouterLink} to="/requestdemo" variant="contained" color="primary">{t("navbar.requestDemo")}</Button>
           </Box>
         </Toolbar>
