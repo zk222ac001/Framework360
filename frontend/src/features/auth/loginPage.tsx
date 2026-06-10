@@ -12,13 +12,20 @@ import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
 import { useAuth } from "../../context/useAuth";
 // Authentication page for user login.
 
-// Form state structure for login inputs.
 type LoginFormValues = { email: string; password: string; rememberMe: boolean };
-// Validation errors for login form fields.
 type LoginFormErrors = Partial<Record<keyof LoginFormValues, string>>;
+
+const platformHighlights = [
+  "Framework assessments and compliance gaps",
+  "Evidence, vendors, systems, and dependencies",
+  "Audit readiness and workflow approvals",
+];
 
 export default function LoginPage() {
   const { t } = useTranslation();
@@ -26,7 +33,6 @@ export default function LoginPage() {
   const location = useLocation();
   const { login } = useAuth();
 
-  // Stores login form values.
   const [values, setValues] = useState<LoginFormValues>({
     email: "",
     password: "",
@@ -36,7 +42,6 @@ export default function LoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
-  // Updates form values and clears validation errors.
   const handleChange =
     (field: keyof LoginFormValues) =>
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -48,7 +53,6 @@ export default function LoginPage() {
       setSubmitError("");
     };
 
-  // Validates login form before authentication request.
   const validate = (): LoginFormErrors => {
     const newErrors: LoginFormErrors = {};
 
@@ -65,7 +69,6 @@ export default function LoginPage() {
     return newErrors;
   };
 
-  // Determines where user should be redirected after login.
   const getRedirectPath = (user: {
     role: string;
     mustChangePassword: boolean;
@@ -77,7 +80,6 @@ export default function LoginPage() {
     return "/dashboard";
   };
 
-  // Handles login request and redirects authenticated user.
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -97,11 +99,9 @@ export default function LoginPage() {
         values.rememberMe,
       );
 
-      // Redirect back to originally requested protected route if available.
       const from = (location.state as { from?: { pathname?: string } } | null)
         ?.from?.pathname;
 
-      // Navigate user to appropriate destination after login.
       navigate(from || getRedirectPath(user), { replace: true });
     } catch (error) {
       setSubmitError(
@@ -117,91 +117,199 @@ export default function LoginPage() {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "calc(100vh - 76px)",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        p: 2,
+        px: { xs: 2, md: 4 },
+        py: { xs: 5, md: 8 },
       }}
     >
-      <Paper
-        elevation={3}
-        sx={{ p: 4, borderRadius: 3, width: "100%", maxWidth: 450 }}
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: 1120,
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", md: "1.05fr 0.95fr" },
+          gap: { xs: 3, md: 5 },
+          alignItems: "center",
+        }}
       >
-        <Typography variant="h5" gutterBottom>
-          {t("auth.login.title")}
-        </Typography>
-
-        <Typography variant="body2" sx={{ mb: 3 }}>
-          {t("auth.login.subtitle")}
-        </Typography>
-
-        {/* Login form */}
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
-        >
-          <TextField
-            label={t("auth.login.email")}
-            type="email"
-            fullWidth
-            value={values.email}
-            onChange={handleChange("email")}
-            error={!!errors.email}
-            helperText={errors.email}
-            autoComplete="email"
-          />
-
-          <TextField
-            label={t("auth.login.password")}
-            type="password"
-            fullWidth
-            value={values.password}
-            onChange={handleChange("password")}
-            error={!!errors.password}
-            helperText={errors.password}
-            autoComplete="current-password"
-          />
-
-          {/* Persistent login option */}
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={values.rememberMe}
-                onChange={handleChange("rememberMe")}
-              />
-            }
-            label={t("auth.login.rememberMe")}
-          />
-
-          <Button
-            type="submit"
-            variant="contained"
-            size="large"
-            disabled={isSubmitting}
+        <Box sx={{ display: { xs: "none", md: "block" } }}>
+          <Typography
+            variant="overline"
+            color="primary.main"
+            sx={{ fontWeight: 800, letterSpacing: "0.16em" }}
           >
-            {isSubmitting ? (
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <CircularProgress size={20} color="inherit" />
-                {t("auth.login.signingIn")}
-              </Box>
-            ) : (
-              t("auth.login.signIn")
-            )}
-          </Button>
-
-          {submitError && <Alert severity="error">{submitError}</Alert>}
-
-          <Typography variant="body2" sx={{ textAlign: "center", mt: 1 }}>
-            {t("auth.login.needAccess")}{" "}
-            <Link component={RouterLink} to="/requestdemo">
-              {t("auth.login.requestDemo")}
-            </Link>
+            Framework360 secure portal
           </Typography>
+
+          <Typography
+            variant="h2"
+            sx={{ mt: 1.5, mb: 2, maxWidth: 560, lineHeight: 1.05 }}
+          >
+            Manage compliance with confidence.
+          </Typography>
+
+          <Typography
+            variant="h6"
+            color="text.secondary"
+            sx={{ maxWidth: 560, lineHeight: 1.6, fontWeight: 500 }}
+          >
+            Sign in to manage frameworks, evidence, risks, vendors, systems,
+            business processes, and audit readiness in one secure workspace.
+          </Typography>
+
+          <Box sx={{ display: "grid", gap: 2, mt: 4 }}>
+            {platformHighlights.map((item) => (
+              <Box key={item} sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                <CheckCircleOutlineIcon color="primary" />
+                <Typography variant="body1" sx={{ fontWeight: 700 }}>
+                  {item}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+
+          <Paper
+            sx={{
+              mt: 5,
+              p: 2.5,
+              maxWidth: 520,
+              borderRadius: 4,
+              display: "flex",
+              gap: 2,
+              alignItems: "flex-start",
+              bgcolor: "background.paper",
+            }}
+          >
+            <ShieldOutlinedIcon color="primary" sx={{ mt: 0.4 }} />
+            <Box>
+              <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                Built for compliance teams
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                Keep requirements, gaps, actions, and proof connected so your
+                organization is better prepared for reviews and audits.
+              </Typography>
+            </Box>
+          </Paper>
         </Box>
-      </Paper>
+
+        <Paper
+          elevation={3}
+          sx={{
+            p: { xs: 3, sm: 4, md: 5 },
+            borderRadius: 6,
+            width: "100%",
+            maxWidth: 520,
+            mx: "auto",
+          }}
+        >
+          <Box
+            sx={{
+              width: 52,
+              height: 52,
+              borderRadius: 3,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              bgcolor: "primary.main",
+              color: "primary.contrastText",
+              mb: 3,
+            }}
+          >
+            <LockOutlinedIcon />
+          </Box>
+
+          <Typography variant="h4" gutterBottom>
+            {t("auth.login.title")}
+          </Typography>
+
+          <Typography variant="body1" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
+            Sign in securely to access your compliance dashboard and manage
+            evidence, risks, frameworks, and audit readiness.
+          </Typography>
+
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+          >
+            <TextField
+              label={t("auth.login.email")}
+              type="email"
+              fullWidth
+              value={values.email}
+              onChange={handleChange("email")}
+              error={!!errors.email}
+              helperText={errors.email}
+              autoComplete="email"
+            />
+
+            <TextField
+              label={t("auth.login.password")}
+              type="password"
+              fullWidth
+              value={values.password}
+              onChange={handleChange("password")}
+              error={!!errors.password}
+              helperText={errors.password}
+              autoComplete="current-password"
+            />
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={values.rememberMe}
+                    onChange={handleChange("rememberMe")}
+                  />
+                }
+                label={t("auth.login.rememberMe")}
+              />
+
+              <Link component={RouterLink} to="/requestdemo" variant="body2">
+                Need access?
+              </Link>
+            </Box>
+
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              disabled={isSubmitting}
+              sx={{ mt: 1, minHeight: 48 }}
+            >
+              {isSubmitting ? (
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <CircularProgress size={20} color="inherit" />
+                  {t("auth.login.signingIn")}
+                </Box>
+              ) : (
+                "Sign in securely"
+              )}
+            </Button>
+
+            {submitError && <Alert severity="error">{submitError}</Alert>}
+
+            <Typography variant="body2" sx={{ textAlign: "center", mt: 1 }}>
+              {t("auth.login.needAccess")} {" "}
+              <Link component={RouterLink} to="/requestdemo">
+                {t("auth.login.requestDemo")}
+              </Link>
+            </Typography>
+          </Box>
+        </Paper>
+      </Box>
     </Box>
   );
 }
