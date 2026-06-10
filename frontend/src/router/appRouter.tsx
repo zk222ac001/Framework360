@@ -6,6 +6,8 @@ import LandingPage from "../features/landing/landingPage";
 import DashboardPage from "../features/dashboard/dashboardPage";
 import LoginPage from "../features/auth/loginPage";
 import RequestDemoPage from "../features/auth/requestDemoPage";
+import ForgotPasswordPage from "../features/auth/ForgotPasswordPage";
+import ResetPasswordPage from "../features/auth/ResetPasswordPage";
 import ChangePasswordPage from "../features/auth/changePasswordPage";
 import AdminPage from "../features/admin/adminPage";
 import ProductSelectionPage from "../features/onboarding/productSelectionPage";
@@ -51,6 +53,8 @@ const router = createBrowserRouter([
       { path: "pricing", element: <PricingPage /> },
       { path: "about", element: <AboutPage /> },
       { path: "login", element: <LoginPage /> },
+      { path: "forgot-password", element: <ForgotPasswordPage /> },
+      { path: "reset-password", element: <ResetPasswordPage /> },
       { path: "requestdemo", element: <RequestDemoPage /> },
     ],
   },
