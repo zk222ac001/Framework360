@@ -41,6 +41,20 @@ export type ChangePasswordPayload = {
   newPassword: string;
 };
 
+export type ForgotPasswordPayload = {
+  email: string;
+};
+
+export type ForgotPasswordResponse = {
+  message: string;
+  resetToken?: string;
+};
+
+export type ResetPasswordPayload = {
+  token: string;
+  newPassword: string;
+};
+
 export type LoginPayload = {
   email: string;
   password: string;
