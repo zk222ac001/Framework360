@@ -58,6 +58,44 @@ Frontend updates the screen
 
 Companies often need to follow different compliance frameworks such as GDPR, ISO 27001, or NIS2. Without a system, this can become confusing because requirements, documents, evidence, systems, vendors, and tasks may be spread across emails, spreadsheets, and folders.
 
+Framework360 currently defines 19 compliance frameworks in the database schema:
+
+```text
+1. GDPR
+2. NIS2
+3. DORA
+4. AI_ACT
+5. CRA
+6. DATA_ACT
+7. EIDAS
+8. CER
+9. ISO27001
+10. ISO27002
+11. ISO27701
+12. ISO22301
+13. ISO42001
+14. SOC2
+15. CIS_CONTROLS
+16. NIST_CSF
+17. PCI_DSS
+18. TISAX
+19. D_MAERKET
+```
+
+Some simple examples:
+
+```text
+GDPR       -> Personal data protection
+NIS2       -> Cybersecurity requirements
+DORA       -> Digital operational resilience for financial sector
+AI_ACT     -> AI system regulation
+ISO27001   -> Information security management
+ISO27701   -> Privacy information management
+SOC2       -> Service organization security controls
+PCI_DSS    -> Payment card data security
+NIST_CSF   -> Cybersecurity framework
+```
+
 Framework360 connects everything in one place:
 
 ```text
