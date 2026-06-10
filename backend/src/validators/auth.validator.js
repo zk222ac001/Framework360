@@ -22,6 +22,15 @@ const changePasswordSchema = z.object({
   newPassword: z.string().min(8, 'New password must be at least 8 characters'),
 });
 
+const forgotPasswordSchema = z.object({
+  email: z.string().email('Invalid email'),
+}).strict();
+
+const resetPasswordSchema = z.object({
+  token: z.string().min(32, 'Reset token is required'),
+  newPassword: z.string().min(8, 'New password must be at least 8 characters'),
+}).strict();
+
 const updateMyProfileSchema = z.object({
   firstName: z.string().min(1, 'First name is required').max(100).optional(),
   lastName: z.string().min(1, 'Last name is required').max(100).optional(),
@@ -36,6 +45,8 @@ module.exports = {
   registerSchema,
   loginSchema,
   changePasswordSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
   updateMyProfileSchema,
   updateMyEmailSchema,
 };
