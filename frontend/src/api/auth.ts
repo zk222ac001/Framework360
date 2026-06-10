@@ -1,9 +1,12 @@
 import { apiFetch } from "./http";
 import type {
   ChangePasswordPayload,
+  ForgotPasswordPayload,
+  ForgotPasswordResponse,
   LoginPayload,
   LoginResponse,
   AuthUser,
+  ResetPasswordPayload,
   UpdateEmailPayload,
   UpdateProfilePayload,
   UpdateUserResponse,
@@ -20,6 +23,22 @@ function unwrapUser(response: MeResponse): AuthUser {
 // Sends login credentials and returns authenticated user data.
 export async function login(payload: LoginPayload) {
   return apiFetch<LoginResponse>("/auth/login", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+// Requests a password reset token for an email address.
+export async function forgotPassword(payload: ForgotPasswordPayload) {
+  return apiFetch<ForgotPasswordResponse>("/auth/forgot-password", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+// Resets a password using a valid password reset token.
+export async function resetPassword(payload: ResetPasswordPayload) {
+  return apiFetch<{ message: string }>("/auth/reset-password", {
     method: "POST",
     body: JSON.stringify(payload),
   });
