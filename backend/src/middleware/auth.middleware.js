@@ -28,19 +28,24 @@ function requireAuth(req, res, next) {
   }
 }
 
-function requirePlatformAdmin(req, res, next) {
-  if (!req.user) {
-    return res.status(401).json({ error: 'Not authenticated' });
-  }
+function requireRole(...allowedRoles) {
+  return function roleMiddleware(req, res, next) {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
 
-  if (req.user.role !== 'PLATFORM_ADMIN') {
-    return res.status(403).json({ error: 'Platform admin access required' });
-  }
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({ error: 'Insufficient permissions' });
+    }
 
-  return next();
+    return next();
+  };
 }
+
+const requirePlatformAdmin = requireRole('PLATFORM_ADMIN');
 
 module.exports = {
   requireAuth,
+  requireRole,
   requirePlatformAdmin,
 };
