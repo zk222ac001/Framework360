@@ -12,6 +12,7 @@ const {
   updateDemoRequestStatusSchema,
 } = require("../validators/demoRequest.validator");
 const { logAction } = require("../utils/audit");
+const { sendAccountActivatedEmail } = require("../services/mail.service");
 const {
   normalizeEmail,
   normalizeName,
@@ -179,13 +180,23 @@ router.post(
         },
       });
 
+      let activationEmail = { sent: false, skipped: true };
+      try {
+        activationEmail = await sendAccountActivatedEmail({
+          to: user.email,
+          firstName: user.firstName,
+        });
+      } catch (emailError) {
+        activationEmail = { sent: false, skipped: false };
+      }
+
       await prisma.emailLog.create({
         data: {
           userId: user.id,
           toEmail: user.email,
           type: "DEMO_ACCESS",
-          subject: "Your demo is ready",
-          sentAt: new Date(),
+          subject: "Your Framework360 account is ready",
+          sentAt: activationEmail.sent ? new Date() : null,
         },
       });
 
@@ -197,10 +208,11 @@ router.post(
         metadata: {
           createdUserId: user.id,
           email: user.email,
+          activationEmail,
         },
       });
 
-      return res.status(201).json({ user, temporaryPassword });
+      return res.status(201).json({ user, temporaryPassword, activationEmail });
     } catch (error) {
       console.error("POST /demo-requests/:id/activate error:", error);
 
