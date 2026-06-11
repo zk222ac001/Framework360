@@ -1,0 +1,11 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Copy this datasource into schema.prisma after validating migrations in staging.
+// The current application schema is otherwise Prisma-compatible with PostgreSQL.
