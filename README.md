@@ -2,74 +2,78 @@
 
 ## Overview
 
-This project is a proof-of-concept (MVP) compliance platform developed as part of an exam project. The platform helps organizations gain an overview of relevant compliance frameworks, requirements, gaps, action plans, evidence, vendors, systems, business processes, and dependencies.
+Framework360 is a compliance management platform for organizations that need a central overview of frameworks, requirements, gaps, action plans, evidence, vendors, systems, business processes, dependencies, approvals, and audit findings.
 
-The solution consists of:
+The project started as a proof-of-concept/MVP exam project and has since been updated with a production-readiness foundation. It is still important to validate the application in a real staging/production environment before using it for sensitive production data.
 
-- Frontend (React + TypeScript)
-- Backend (Node.js + Express)
-- SQLite database (Prisma ORM)
-- Docker Compose setup
+## Technology Stack
 
----
+- Frontend: React + TypeScript + Vite
+- Backend: Node.js + Express
+- ORM: Prisma
+- Default local database: SQLite
+- Recommended production database: PostgreSQL
+- Container runtime: Docker Compose
 
-# Requirements
+## Repository Structure
 
-The following software must be installed:
+```text
+backend/      Express API, Prisma schema, routes, middleware, tests
+frontend/     React frontend application
+docker/       Development and production Dockerfiles / web server config
+docs/         Deployment, security, and production-readiness documentation
+```
+
+## Requirements
+
+For Docker-based usage:
 
 - Docker
 - Docker Compose
 
-No local Node.js installation is required when running the project through Docker.
+For local non-Docker development:
 
----
+- Node.js compatible with the backend and frontend package configuration
+- npm
 
-# Running the Application
+## Development Quick Start
 
-Open a terminal in the project root directory (where `docker-compose.yml` is located).
-
-Build and start the application:
+Start the development environment:
 
 ```bash
 docker compose up --build
 ```
 
-The application will be available at:
+The development application is available at:
 
 ```text
 Frontend: http://localhost:25173
 Backend API: http://localhost:23000
 ```
 
-The backend automatically runs Prisma database synchronization (`prisma db push`) when the container starts.
+The development backend runs Prisma database synchronization with `prisma db push` when the container starts.
 
----
+## Creating Demo/Test Data
 
-# Creating Demo/Test Data
-
-After the containers have started, open a new terminal and execute:
+After the containers have started, open a new terminal and run:
 
 ```bash
 docker compose exec backend npm run seed:dev
 ```
 
-This command creates the demo users and sample data used during development.
-
-If you want to completely reset the database and recreate all demo data:
+To completely reset the development database and recreate all demo data:
 
 ```bash
 docker compose exec backend npm run db:reset:dev
 ```
 
-Warning: This command deletes all existing data in the development database.
+Warning: this deletes all existing data in the development database.
 
----
-
-# Test Accounts
+## Development Test Accounts
 
 The following accounts are created by the development seed.
 
-## Platform Administrator
+### Platform Administrator
 
 ```text
 Email: dev.admin@eucompliance.test
@@ -77,7 +81,7 @@ Password: DevAdmin123
 Role: PLATFORM_ADMIN
 ```
 
-## Customer Administrator
+### Customer Administrator
 
 ```text
 Email: simon@test.dk
@@ -89,7 +93,7 @@ Sector: IT
 Country: DK
 ```
 
-## Demo User
+### Demo User
 
 ```text
 Email: demo@test.dk
@@ -101,42 +105,150 @@ Sector: IT
 Country: DK
 ```
 
-# Accessing the Database with Prisma Studio
+These credentials are for local development only. Do not use demo credentials in production.
+
+## Production-Style Local Run
+
+Create a production environment file from the template:
+
+```bash
+cp .env.example .env.production
+```
+
+Update `.env.production` with strong values, especially:
+
+```text
+JWT_SECRET
+CORS_ORIGIN
+DATABASE_URL
+PLATFORM_ADMIN_EMAIL
+PLATFORM_ADMIN_PASSWORD
+```
+
+Start the production-style Compose setup:
+
+```bash
+docker compose -f docker-compose.prod.yml up --build
+```
+
+The production-style frontend is served on:
+
+```text
+http://localhost
+```
+
+The backend health endpoint is available at:
+
+```text
+http://localhost:3000/health
+```
+
+## Health and Observability
+
+The backend exposes:
+
+```text
+GET /health
+```
+
+The health response includes application status, timestamp, uptime, environment, request ID, and database connectivity status.
+
+The backend also includes structured JSON logging and request correlation through the `X-Request-Id` header.
+
+## Audit Logging
+
+Framework360 includes persistent audit logging for important security and administrative events. Platform administrators can access the audit-log API through:
+
+```text
+GET /audit-logs
+GET /audit-logs/:id
+```
+
+Audit logging is intended to support accountability for authentication, company administration, evidence handling, and other sensitive actions.
+
+## Prisma Studio
+
+For local development database inspection:
 
 ```bash
 docker compose exec backend npx prisma studio --hostname 0.0.0.0
 ```
 
-Prisma Studio:
+Then open:
 
 ```text
 http://localhost:5555
 ```
 
-# Quick Start Guide for Examiners
+Prisma Studio should not be exposed in production.
 
-1. Extract the project archive.
-2. Open a terminal in the project root directory.
-3. Run:
+## Validation Commands
 
-```bash
-docker compose up --build
-```
-
-4. Seed demo data:
+Backend:
 
 ```bash
-docker compose exec backend npm run seed:dev
+cd backend
+npm install
+npm run generate
+npm test
 ```
 
-5. Open:
+Frontend:
 
-```text
-http://localhost:25173
-```
-## if docker is not working ......................................
 ```bash
-   docker compose down -v
-   docker compose build --no-cache frontend
-   docker compose up
+cd frontend
+npm install
+npm run lint
+npm run build
+```
+
+Docker production-style validation:
+
+```bash
+docker compose -f docker-compose.prod.yml up --build
+```
+
+## Production Readiness Notes
+
+The repository now includes a production-readiness foundation:
+
+- Production backend Dockerfile
+- Production frontend Dockerfile
+- Nginx frontend static hosting config
+- Hardened production Compose file
+- Production environment validation
+- Deployment documentation
+- Authorization matrix documentation
+- Audit-log reporting API
+- Structured JSON logging
+- Request ID middleware
+- Health endpoint with database check
+- Safer evidence-upload filenames
+
+Before real production use, still complete and verify:
+
+- PostgreSQL migration and staging validation
+- Database backup and restore procedure
+- HTTPS/TLS termination
+- Secret management
+- CI/CD deployment workflow
+- Monitoring and alerting
+- Security review of all route families
+- Load testing and incident response plan
+
+## Troubleshooting Docker
+
+If Docker becomes stuck or stale containers cause issues:
+
+```bash
+docker compose down -v
+docker compose build --no-cache
+docker compose up
+```
+
+For production-style containers:
+
+```bash
+docker compose -f docker-compose.prod.yml down -v
+docker compose -f docker-compose.prod.yml up --build
 ```
