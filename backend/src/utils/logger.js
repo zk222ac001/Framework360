@@ -1,10 +1,26 @@
-function log(level, message, meta = {}) {
+function serializeError(error) {
+  if (!error) return null;
+
+  return {
+    name: error.name,
+    message: error.message,
+    stack: process.env.NODE_ENV === 'production' ? undefined : error.stack,
+  };
+}
+
+function log(level, message, fields = {}) {
   const entry = {
     timestamp: new Date().toISOString(),
     level,
     message,
-    ...meta,
+    service: 'framework360-backend',
+    environment: process.env.NODE_ENV || 'development',
+    ...fields,
   };
+
+  if (entry.error instanceof Error) {
+    entry.error = serializeError(entry.error);
+  }
 
   const line = JSON.stringify(entry);
 
@@ -18,11 +34,11 @@ function log(level, message, meta = {}) {
     return;
   }
 
-  console.log(line);
+  console.info(line);
 }
 
 module.exports = {
-  info: (message, meta) => log('info', message, meta),
-  warn: (message, meta) => log('warn', message, meta),
-  error: (message, meta) => log('error', message, meta),
+  info: (message, fields) => log('info', message, fields),
+  warn: (message, fields) => log('warn', message, fields),
+  error: (message, fields) => log('error', message, fields),
 };
