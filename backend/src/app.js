@@ -3,10 +3,10 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const morgan = require('morgan');
 const ssoRoutes = require('./routes/sso.routes');
 const adminFrameworkRoutes = require('./routes/adminFramework.routes');
 const adminSeedRoutes = require('./routes/adminSeed.routes');
+const auditLogRoutes = require('./routes/auditLog.routes');
 const authRoutes = require('./routes/auth.routes');
 const companyRoutes = require('./routes/company.routes');
 const controlRoutes = require('./routes/control.routes');
@@ -24,10 +24,14 @@ const dependencyRoutes = require('./routes/dependency.routes');
 const auditFindingsRoutes = require('./routes/auditFindings.routes');
 const evidenceCampaignRoutes = require('./routes/evidenceCampaign.routes');
 const approvalRoutes = require('./routes/approval.routes');
+const prisma = require('./db');
+const { requestContext } = require('./middleware/requestContext.middleware');
+const { requestLogger } = require('./middleware/requestLogger.middleware');
 const { errorHandler } = require('./middleware/error.middleware');
 
 const app = express();
 
+app.use(requestContext);
 app.use(cookieParser());
 
 app.use(
@@ -40,7 +44,7 @@ app.use(
 app.use(express.json());
 
 app.use(helmet());
-app.use(morgan('dev'));
+app.use(requestLogger);
 
 const strictLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -53,8 +57,25 @@ const strictLimiter = rateLimit({
 app.use('/auth/login', strictLimiter);
 app.use('/demo-requests', strictLimiter);
 
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
+app.get('/health', async (req, res) => {
+  const health = {
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    uptimeSeconds: Math.round(process.uptime()),
+    environment: process.env.NODE_ENV || 'development',
+    requestId: req.requestId,
+    database: 'unknown',
+  };
+
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    health.database = 'connected';
+    return res.json(health);
+  } catch (error) {
+    health.status = 'degraded';
+    health.database = 'disconnected';
+    return res.status(503).json(health);
+  }
 });
 
 app.use('/auth', authRoutes);
@@ -66,6 +87,7 @@ app.use('/controls', controlRoutes);
 app.use('/frameworks', frameworkRoutes);
 app.use('/admin', adminFrameworkRoutes);
 app.use('/admin', adminSeedRoutes);
+app.use('/audit-logs', auditLogRoutes);
 app.use('/', evidenceRoutes);
 app.use('/', reportRoutes);
 app.use('/', auditFindingsRoutes);
