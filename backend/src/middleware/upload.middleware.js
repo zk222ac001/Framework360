@@ -1,6 +1,7 @@
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 
 const uploadDir = path.join(process.cwd(), 'uploads', 'evidence');
 
@@ -8,13 +9,23 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+function safeFileName(originalName) {
+  const extension = path.extname(originalName || '').toLowerCase();
+  const baseName = path
+    .basename(originalName || 'evidence', extension)
+    .replace(/[^a-zA-Z0-9._-]/g, '-')
+    .replace(/-+/g, '-')
+    .slice(0, 80) || 'evidence';
+
+  return `${Date.now()}-${crypto.randomUUID()}-${baseName}${extension}`;
+}
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}-${file.originalname}`;
-    cb(null, uniqueName);
+    cb(null, safeFileName(file.originalname));
   },
 });
 
@@ -29,7 +40,7 @@ const fileFilter = (req, file, cb) => {
   ];
 
   if (!allowedTypes.includes(file.mimetype)) {
-    return cb(new Error('Filtype er ikke tilladt'), false);
+    return cb(new Error('File type is not allowed'), false);
   }
 
   return cb(null, true);
