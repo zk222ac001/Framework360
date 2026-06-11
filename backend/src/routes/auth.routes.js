@@ -147,6 +147,7 @@ router.post('/register', validate(registerSchema), async (req, res) => {
     const user = await prisma.user.create({ data: { firstName: normalizedFirstName, lastName: normalizedLastName, email: normalizedEmail, password: hashedPassword, authProvider: 'LOCAL', providerId: null, role: 'CUSTOMER_ADMIN', isActive: true, mustChangePassword: false, onboardingCompleted: false, companyId: company.id } });
     const frameworks = getFrameworksFromSector(company.sector);
     await prisma.$transaction(frameworks.map((framework) => prisma.companyFramework.upsert({ where: { companyId_framework: { companyId: company.id, framework } }, update: {}, create: { companyId: company.id, framework } })));
+    await logAction({ userId: user.id, action: 'USER_REGISTERED', entity: 'User', entityId: user.id, metadata: { email: user.email, companyId: company.id } });
     const result = await prisma.user.findUnique({ where: { id: user.id }, select: { id: true, firstName: true, lastName: true, email: true, role: true, isActive: true, mustChangePassword: true, onboardingCompleted: true, createdAt: true, company: { include: { frameworks: true } } } });
     return res.status(201).json(result);
   } catch (error) {
@@ -196,6 +197,7 @@ router.patch('/me/profile', requireAuth, validate(updateMyProfileSchema), async 
     if (lastName !== undefined) data.lastName = lastName.trim();
     if (Object.keys(data).length === 0) return res.status(400).json({ error: 'At least one field must be provided' });
     const user = await prisma.user.update({ where: { id: userId }, data, select: { id: true, firstName: true, lastName: true, email: true, role: true, isActive: true, lastLogin: true, companyId: true, company: { select: { id: true, name: true, cvr: true, sector: true, country: true } } } });
+    await logAction({ userId, action: 'PROFILE_UPDATED', entity: 'User', entityId: userId, metadata: { changedFields: Object.keys(data) } });
     return res.json({ message: 'Profile updated', user });
   } catch (error) {
     console.error('PATCH /auth/me/profile error:', error);
@@ -217,6 +219,7 @@ router.patch('/me/email', requireAuth, validate(updateMyEmailSchema), async (req
     const emailAlreadyUsed = await prisma.user.findUnique({ where: { email: normalizedEmail }, select: { id: true } });
     if (emailAlreadyUsed && emailAlreadyUsed.id !== userId) return res.status(409).json({ error: 'Email is already in use' });
     const user = await prisma.user.update({ where: { id: userId }, data: { email: normalizedEmail }, select: { id: true, firstName: true, lastName: true, email: true, role: true, isActive: true, lastLogin: true, companyId: true, company: { select: { id: true, name: true, cvr: true, sector: true, country: true } } } });
+    await logAction({ userId, action: 'EMAIL_CHANGED', entity: 'User', entityId: userId, metadata: { previousEmail: existingUser.email, newEmail: normalizedEmail } });
     return res.json({ message: 'Email updated', user });
   } catch (error) {
     console.error('PATCH /auth/me/email error:', error);
@@ -226,6 +229,7 @@ router.patch('/me/email', requireAuth, validate(updateMyEmailSchema), async (req
 
 router.post('/logout', requireAuth, async (req, res) => {
   try {
+    await logAction({ userId: req.user.userId, action: 'LOGOUT', entity: 'User', entityId: req.user.userId, metadata: { email: req.user.email } });
     clearAuthCookie(res);
     return res.json({ message: 'Logged out' });
   } catch (error) {
