@@ -4,6 +4,7 @@ const { validate } = require('../middleware/validate.middleware');
 const { companySchema, updateMyCompanySchema } = require('../validators/company.validator');
 const prisma = require('../db');
 const { requireAuth } = require('../middleware/auth.middleware');
+const { logAction } = require('../utils/audit');
 const {
   normalizeCompanyName,
   normalizeUpperEnum,
@@ -111,6 +112,14 @@ router.patch('/me', requireAuth, validate(updateMyCompanySchema), async (req, re
       },
     });
 
+    await logAction({
+      userId: user.userId,
+      action: 'COMPANY_SELF_UPDATED',
+      entity: 'Company',
+      entityId: company.id,
+      metadata: { changedFields: Object.keys(data) },
+    });
+
     return res.json(company);
   } catch (error) {
     console.error('PATCH /companies/me error:', error);
@@ -216,6 +225,14 @@ router.post('/', requireAuth, validate(companySchema), async (req, res) => {
       },
     });
 
+    await logAction({
+      userId: req.user.userId,
+      action: 'COMPANY_CREATED',
+      entity: 'Company',
+      entityId: company.id,
+      metadata: { name: company.name, cvr: company.cvr },
+    });
+
     return res.status(201).json(company);
   } catch (error) {
     console.error('POST /companies error:', error);
@@ -256,6 +273,14 @@ router.put('/:id', requireAuth, validate(companySchema), async (req, res) => {
       },
     });
 
+    await logAction({
+      userId: req.user.userId,
+      action: 'COMPANY_UPDATED',
+      entity: 'Company',
+      entityId: company.id,
+      metadata: { name: company.name, cvr: company.cvr },
+    });
+
     return res.json(company);
   } catch (error) {
     console.error('PUT /companies/:id error:', error);
@@ -285,8 +310,21 @@ router.delete('/:id', requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'Invalid id' });
     }
 
+    const company = await prisma.company.findUnique({
+      where: { id },
+      select: { id: true, name: true, cvr: true },
+    });
+
     await prisma.company.delete({
       where: { id },
+    });
+
+    await logAction({
+      userId: req.user.userId,
+      action: 'COMPANY_DELETED',
+      entity: 'Company',
+      entityId: id,
+      metadata: company || {},
     });
 
     return res.status(204).send();
