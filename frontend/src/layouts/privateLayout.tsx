@@ -85,7 +85,7 @@ export default function PrivateLayout() {
 
         <Divider sx={{ mb: 2 }} />
 
-        <Stack direction="row" spacing={1.25} alignItems="center">
+        <Stack direction="row" spacing={1.25} sx={{ alignItems: "center" }}>
           <Avatar sx={{ width: 42, height: 42 }}>{getInitials(user?.firstName, user?.lastName, user?.email)}</Avatar>
           <Box sx={{ minWidth: 0, flex: 1 }}>
             <Typography variant="body2" sx={{ fontWeight: 800 }} noWrap>{fullName}</Typography>
@@ -96,7 +96,7 @@ export default function PrivateLayout() {
 
       <Box sx={{ flex: 1, minWidth: 0, width: "100%", maxWidth: "100%", overflowX: "hidden" }}>
         <Box component="header" sx={{ minHeight: 72, display: "flex", alignItems: "center", justifyContent: "space-between", px: { xs: 2, md: 4 }, borderBottom: "1px solid", borderColor: "divider", bgcolor: "background.paper", backdropFilter: "blur(20px)", position: "sticky", top: 0, zIndex: 10, maxWidth: "100%", overflowX: "hidden" }}>
-          <Stack direction="row" spacing={1.5} alignItems="center" sx={{ minWidth: 0 }}>
+          <Stack direction="row" spacing={1.5} sx={{ alignItems: "center", minWidth: 0 }}>
             <Box component="img" src="/favicon.svg" alt="Framework360" sx={{ display: { xs: "block", md: "none" }, width: 38, height: 38 }} />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 850 }}>Framework360</Typography>
@@ -104,7 +104,7 @@ export default function PrivateLayout() {
             </Box>
           </Stack>
 
-          <Stack direction="row" spacing={1.25} alignItems="center" sx={{ flexShrink: 0 }}>
+          <Stack direction="row" spacing={1.25} sx={{ alignItems: "center", flexShrink: 0 }}>
             <ThemeToggle />
             <Button variant="outlined" size="small" onClick={() => navigate("/settings")}>{t("navbar.settings")}</Button>
             <Button variant="outlined" size="small" onClick={handleLogout}>{t("navbar.logout")}</Button>
