@@ -22,6 +22,10 @@ const {
 
 const router = express.Router();
 
+function shouldExposeDevTemporaryPassword() {
+  return process.env.NODE_ENV !== "production" && process.env.EXPOSE_DEV_TEMPORARY_PASSWORD === "true";
+}
+
 router.post("/", validate(createDemoRequestSchema), async (req, res) => {
   try {
     const { email, firstName, lastName, companyName, jobTitle, country } =
@@ -212,7 +216,12 @@ router.post(
         },
       });
 
-      return res.status(201).json({ user, temporaryPassword, activationEmail });
+      const response = { user, activationEmail };
+      if (shouldExposeDevTemporaryPassword()) {
+        response.temporaryPassword = temporaryPassword;
+      }
+
+      return res.status(201).json(response);
     } catch (error) {
       console.error("POST /demo-requests/:id/activate error:", error);
 
