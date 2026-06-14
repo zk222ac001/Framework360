@@ -9,6 +9,52 @@ const {
 } = require('../validators/task.validator');
 const router = express.Router();
 
+async function getUserCompanyId(req, res) {
+  const user = await prisma.user.findUnique({
+    where: { id: req.user.userId },
+    select: { companyId: true },
+  });
+
+  if (!user?.companyId) {
+    res.status(400).json({ error: 'User has no company' });
+    return null;
+  }
+
+  return user.companyId;
+}
+
+async function validateTaskRelations({ companyId, assessmentId, assignedToUserId }) {
+  if (assessmentId) {
+    const assessment = await prisma.companyFrameworkAssessment.findFirst({
+      where: {
+        id: assessmentId,
+        companyId,
+      },
+      select: { id: true },
+    });
+
+    if (!assessment) {
+      return { ok: false, status: 400, error: 'Assessment does not belong to this company' };
+    }
+  }
+
+  if (assignedToUserId) {
+    const assignee = await prisma.user.findFirst({
+      where: {
+        id: assignedToUserId,
+        companyId,
+      },
+      select: { id: true },
+    });
+
+    if (!assignee) {
+      return { ok: false, status: 400, error: 'Assigned user does not belong to this company' };
+    }
+  }
+
+  return { ok: true };
+}
+
 router.post('/', requireAuth, validate(createTaskSchema), async (req, res) => {
   try {
     const {
@@ -21,18 +67,22 @@ router.post('/', requireAuth, validate(createTaskSchema), async (req, res) => {
       assignedToUserId,
     } = req.body;
 
-    const user = await prisma.user.findUnique({
-      where: { id: req.user.userId },
-      select: { companyId: true },
+    const companyId = await getUserCompanyId(req, res);
+    if (!companyId) return;
+
+    const relationValidation = await validateTaskRelations({
+      companyId,
+      assessmentId,
+      assignedToUserId,
     });
 
-    if (!user?.companyId) {
-      return res.status(400).json({ error: 'User has no company' });
+    if (!relationValidation.ok) {
+      return res.status(relationValidation.status).json({ error: relationValidation.error });
     }
 
     const task = await prisma.task.create({
       data: {
-        companyId: user.companyId,
+        companyId,
         assessmentId: assessmentId || null,
         requirementId: requirementId || null,
         title,
@@ -56,17 +106,11 @@ router.post('/', requireAuth, validate(createTaskSchema), async (req, res) => {
 
 router.get('/', requireAuth, async (req, res) => {
   try {
-    const user = await prisma.user.findUnique({
-      where: { id: req.user.userId },
-      select: { companyId: true },
-    });
-
-    if (!user?.companyId) {
-      return res.status(400).json({ error: 'User has no company' });
-    }
+    const companyId = await getUserCompanyId(req, res);
+    if (!companyId) return;
 
     const tasks = await prisma.task.findMany({
-      where: { companyId: user.companyId },
+      where: { companyId },
       include: {
         requirement: true,
         assessment: {
@@ -105,21 +149,28 @@ router.patch('/:id', requireAuth, validate(updateTaskSchema), async (req, res) =
       return res.status(400).json({ error: 'Invalid task id' });
     }
 
-    const user = await prisma.user.findUnique({
-      where: { id: req.user.userId },
-      select: { companyId: true },
+    const companyId = await getUserCompanyId(req, res);
+    if (!companyId) return;
+
+    const existingTask = await prisma.task.findFirst({
+      where: { id, companyId },
     });
 
-    if (!user?.companyId) {
-      return res.status(400).json({ error: 'User has no company' });
+    if (!existingTask) {
+      return res.status(404).json({ error: 'Task not found' });
     }
 
-    const existingTask = await prisma.task.findUnique({
-      where: { id },
+    const nextAssessmentId = req.body.assessmentId !== undefined ? req.body.assessmentId : existingTask.assessmentId;
+    const nextAssignedToUserId = req.body.assignedToUserId !== undefined ? req.body.assignedToUserId : existingTask.assignedToUserId;
+
+    const relationValidation = await validateTaskRelations({
+      companyId,
+      assessmentId: nextAssessmentId,
+      assignedToUserId: nextAssignedToUserId,
     });
 
-    if (!existingTask || existingTask.companyId !== user.companyId) {
-      return res.status(404).json({ error: 'Task not found' });
+    if (!relationValidation.ok) {
+      return res.status(relationValidation.status).json({ error: relationValidation.error });
     }
 
     const task = await prisma.task.update({
@@ -129,6 +180,8 @@ router.patch('/:id', requireAuth, validate(updateTaskSchema), async (req, res) =
         description: req.body.description,
         status: req.body.status,
         priority: req.body.priority,
+        assessmentId: req.body.assessmentId,
+        requirementId: req.body.requirementId,
         assignedToUserId: req.body.assignedToUserId,
         dueDate: req.body.dueDate ? new Date(req.body.dueDate) : req.body.dueDate,
       },
