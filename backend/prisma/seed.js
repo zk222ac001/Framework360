@@ -34,14 +34,21 @@ async function main() {
   await prisma.user.upsert({
     where: { email: adminEmail },
     update: {
+      password: hashedPassword,
+      authProvider: "LOCAL",
+      providerId: null,
       role: "PLATFORM_ADMIN",
       isActive: true,
+      mustChangePassword: false,
+      onboardingCompleted: true,
     },
     create: {
       firstName: "Platform",
       lastName: "Admin",
       email: adminEmail,
       password: hashedPassword,
+      authProvider: "LOCAL",
+      providerId: null,
       role: "PLATFORM_ADMIN",
       isActive: true,
       mustChangePassword: false,
