@@ -34,7 +34,7 @@ function BarSeries({ points, suffix = "" }: { points: SeriesPoint[]; suffix?: st
         const width = Math.max(4, Math.round((value / max) * 100));
         return (
           <Box key={point.label}>
-            <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.6 }}>
+            <Stack direction="row" sx={{ mb: 0.6, justifyContent: "space-between" }}>
               <Typography variant="body2" sx={{ fontWeight: 800 }}>{point.label}</Typography>
               <Typography variant="body2" color="text.secondary">{value}{suffix}</Typography>
             </Stack>
@@ -55,11 +55,11 @@ function MiniTrend({ points }: { points: SeriesPoint[] }) {
 
   const max = getMaxValue(points);
   return (
-    <Stack direction="row" alignItems="flex-end" spacing={1} sx={{ height: 150, mt: 2 }}>
+    <Stack direction="row" spacing={1} sx={{ height: 150, mt: 2, alignItems: "flex-end" }}>
       {points.map((point) => {
         const height = Math.max(10, Math.round(((point.value || 0) / max) * 130));
         return (
-          <Stack key={point.label} spacing={1} alignItems="center" sx={{ flex: 1 }}>
+          <Stack key={point.label} spacing={1} sx={{ flex: 1, alignItems: "center" }}>
             <Typography variant="caption" color="text.secondary">{Math.round(point.value)}%</Typography>
             <Box sx={{ width: "100%", maxWidth: 42, height, borderRadius: "12px 12px 4px 4px", background: "linear-gradient(180deg, #14b8a6, #2563eb)" }} />
             <Typography variant="caption" color="text.secondary">{point.label}</Typography>
@@ -73,7 +73,7 @@ function MiniTrend({ points }: { points: SeriesPoint[] }) {
 export function ReadinessTrendChart({ data }: { data?: DashboardInteractiveAnalytics }) {
   return (
     <Paper sx={{ p: 3, borderRadius: 5, height: "100%" }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+      <Stack direction="row" sx={{ mb: 1, justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h6">Readiness trend</Typography>
         <Chip label="6 months" size="small" color="primary" />
       </Stack>
@@ -114,7 +114,7 @@ export function FrameworkPerformanceChart({ data }: { data?: DashboardInteractiv
         {!rows.length && <EmptyState label="No framework performance data yet." />}
         {rows.slice(0, 8).map((framework) => (
           <Box key={framework.label} sx={{ p: 2, borderRadius: 3, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider" }}>
-            <Stack direction="row" justifyContent="space-between" spacing={2} sx={{ mb: 1 }}>
+            <Stack direction="row" spacing={2} sx={{ mb: 1, justifyContent: "space-between" }}>
               <Box>
                 <Typography variant="body2" sx={{ fontWeight: 900 }}>{framework.name}</Typography>
                 <Typography variant="caption" color="text.secondary">{framework.gaps} open gaps</Typography>

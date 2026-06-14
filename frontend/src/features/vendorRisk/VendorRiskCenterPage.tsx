@@ -68,7 +68,7 @@ export default function VendorRiskCenterPage() {
           {!vendors.length && <Typography variant="body2" color="text.secondary">No critical vendors registered yet.</Typography>}
           {vendors.map((vendor) => (
             <Box key={vendor.id} sx={{ p: 2, borderRadius: 3, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider" }}>
-              <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" spacing={2}>
+              <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ justifyContent: "space-between" }}>
                 <Box sx={{ minWidth: 0, flex: 1 }}>
                   <Typography variant="subtitle1" sx={{ fontWeight: 900 }}>{vendor.name}</Typography>
                   <Typography variant="caption" color="text.secondary">{vendor.criticality} criticality</Typography>

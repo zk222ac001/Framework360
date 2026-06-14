@@ -46,7 +46,7 @@ function WorkflowMetric({ label, value, helper }: { label: string; value: string
 function ApprovalQueue({ items, onStatusChange }: { items: ApprovalItem[]; onStatusChange: (key: string, status: ApprovalStatus) => void }) {
   return (
     <Paper sx={{ p: 3, borderRadius: 5 }}>
-      <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" spacing={2} sx={{ mb: 2 }}>
+      <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mb: 2, justifyContent: "space-between" }}>
         <Box>
           <Typography variant="h6">Approval queue</Typography>
           <Typography variant="body2" color="text.secondary">Review control remediation items before they are considered audit-ready.</Typography>
@@ -60,9 +60,9 @@ function ApprovalQueue({ items, onStatusChange }: { items: ApprovalItem[]; onSta
           const key = `${item.assessmentId}-${item.requirementId}`;
           return (
             <Box key={key} sx={{ p: 2, borderRadius: 3, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider" }}>
-              <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" spacing={1.5}>
+              <Stack direction={{ xs: "column", md: "row" }} spacing={1.5} sx={{ justifyContent: "space-between" }}>
                 <Box sx={{ minWidth: 0 }}>
-                  <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1, flexWrap: "wrap" }}>
+                  <Stack direction="row" spacing={1} sx={{ mb: 1, flexWrap: "wrap", alignItems: "center" }}>
                     <Chip label={item.priority} size="small" color={priorityColor(item.priority)} />
                     <Chip label={item.approvalStatus.replace("_", " ")} size="small" color={statusColor(item.approvalStatus)} />
                     <Typography variant="caption" color="text.secondary">{item.framework} - {item.section}</Typography>
@@ -104,7 +104,7 @@ function OwnershipModel({ items }: { items: ApprovalItem[] }) {
         {!owners.length && <Typography variant="body2" color="text.secondary">No owners assigned yet.</Typography>}
         {owners.map(([owner, stats]) => (
           <Box key={owner} sx={{ p: 2, borderRadius: 3, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider" }}>
-            <Stack direction="row" justifyContent="space-between" spacing={2}>
+            <Stack direction="row" spacing={2} sx={{ justifyContent: "space-between" }}>
               <Box>
                 <Typography variant="body2" sx={{ fontWeight: 900 }}>{owner}</Typography>
                 <Typography variant="caption" color="text.secondary">{stats.total} assigned items</Typography>

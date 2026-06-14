@@ -46,6 +46,7 @@ export default function PrivateLayout() {
   const isAdmin = user?.role === "PLATFORM_ADMIN";
   const showOnboarding = user && !user.onboardingCompleted && !isAdmin;
   const fullName = formatFullName(user?.firstName, user?.lastName);
+  const homePath = isAdmin ? "/admin" : "/dashboard";
 
   async function handleLogout() {
     await logout();
@@ -55,33 +56,40 @@ export default function PrivateLayout() {
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default", color: "text.primary", display: "flex", width: "100%", maxWidth: "100vw", overflowX: "hidden" }}>
       <Box component="aside" sx={{ width: sidebarWidth, minWidth: sidebarWidth, minHeight: "100vh", position: "sticky", top: 0, display: { xs: "none", md: "flex" }, flexDirection: "column", px: 2.25, py: 2.5, borderRight: "1px solid", borderColor: "divider", bgcolor: "background.paper", backdropFilter: "blur(20px)" }}>
-        <Link component={RouterLink} to="/dashboard" underline="none" sx={{ mb: 3, display: "block" }}>
+        <Link component={RouterLink} to={homePath} underline="none" sx={{ mb: 3, display: "block" }}>
           <Box component="img" src="/framework360-wordmark.svg" alt="Framework360" sx={{ width: 218, height: 54, objectFit: "contain", objectPosition: "left center", color: "text.primary" }} />
         </Link>
 
-        <Chip label="Compliance workspace" color="primary" size="small" sx={{ alignSelf: "flex-start", mb: 2 }} />
+        <Chip label={isAdmin ? "Platform administration" : "Compliance workspace"} color="primary" size="small" sx={{ alignSelf: "flex-start", mb: 2 }} />
 
         <Stack spacing={0.75} sx={{ flex: 1, overflowY: "auto", pr: 0.5 }}>
-          <SidebarLink to="/dashboard" label={t("navbar.dashboard")} icon="DB" />
-          <SidebarLink to="/audit" label="Audit Center" icon="AU" />
-          <SidebarLink to="/findings" label="Findings" icon="FD" />
-          <SidebarLink to="/evidence-campaigns" label="Evidence Campaigns" icon="EC" />
-          <SidebarLink to="/workflows" label="Workflows" icon="WF" />
-          <SidebarLink to="/copilot" label="AI Copilot" icon="AI" />
-          <SidebarLink to="/vendor-risk" label="Vendor Risk" icon="VR" />
-          <SidebarLink to="/vendors" label={t("navbar.vendors")} icon="VD" />
-          <SidebarLink to="/systems" label={t("navbar.systems")} icon="SY" />
-          <SidebarLink to="/business-processes" label={t("navbar.processes")} icon="PR" />
-          <SidebarLink to="/dependencies" label={t("navbar.dependencies")} icon="DP" />
-          <SidebarLink to="/evidence" label={t("navbar.evidence")} icon="EV" />
-          {showOnboarding && <SidebarLink to="/onboarding/select-product" label={t("navbar.continueSetup")} icon="ON" />}
-          {isAdmin && <SidebarLink to="/admin" label={t("navbar.admin")} icon="AD" />}
+          {isAdmin ? (
+            <SidebarLink to="/admin" label={t("navbar.admin")} icon="AD" />
+          ) : (
+            <>
+              <SidebarLink to="/dashboard" label={t("navbar.dashboard")} icon="DB" />
+              <SidebarLink to="/audit" label="Audit Center" icon="AU" />
+              <SidebarLink to="/findings" label="Findings" icon="FD" />
+              <SidebarLink to="/evidence-campaigns" label="Evidence Campaigns" icon="EC" />
+              <SidebarLink to="/workflows" label="Workflows" icon="WF" />
+              <SidebarLink to="/copilot" label="AI Copilot" icon="AI" />
+              <SidebarLink to="/vendor-risk" label="Vendor Risk" icon="VR" />
+              <SidebarLink to="/vendors" label={t("navbar.vendors")} icon="VD" />
+              <SidebarLink to="/systems" label={t("navbar.systems")} icon="SY" />
+              <SidebarLink to="/business-processes" label={t("navbar.processes")} icon="PR" />
+              <SidebarLink to="/dependencies" label={t("navbar.dependencies")} icon="DP" />
+              <SidebarLink to="/evidence" label={t("navbar.evidence")} icon="EV" />
+              {showOnboarding && <SidebarLink to="/onboarding/select-product" label={t("navbar.continueSetup")} icon="ON" />}
+            </>
+          )}
         </Stack>
 
-        <Box sx={{ p: 2, borderRadius: 4, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider", mb: 2, mt: 2 }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 0.5 }}>Readiness snapshot</Typography>
-          <Typography variant="body2" color="text.secondary">Keep frameworks, evidence, vendors and dependencies connected in one place.</Typography>
-        </Box>
+        {!isAdmin && (
+          <Box sx={{ p: 2, borderRadius: 4, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider", mb: 2, mt: 2 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800, mb: 0.5 }}>Readiness snapshot</Typography>
+            <Typography variant="body2" color="text.secondary">Keep frameworks, evidence, vendors and dependencies connected in one place.</Typography>
+          </Box>
+        )}
 
         <Divider sx={{ mb: 2 }} />
 
@@ -100,7 +108,7 @@ export default function PrivateLayout() {
             <Box component="img" src="/favicon.svg" alt="Framework360" sx={{ display: { xs: "block", md: "none" }, width: 38, height: 38 }} />
             <Box sx={{ minWidth: 0 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 850 }}>Framework360</Typography>
-              <Typography variant="caption" color="text.secondary">Compliance command center</Typography>
+              <Typography variant="caption" color="text.secondary">{isAdmin ? "Platform admin console" : "Compliance command center"}</Typography>
             </Box>
           </Stack>
 

@@ -20,6 +20,18 @@ const onboardingPaths = [
   "/change-password",
 ];
 
+const platformAdminPaths = [
+  "/admin",
+  "/settings",
+  "/settings/change-email",
+  "/settings/change-password",
+  "/change-password",
+];
+
+function pathMatches(pathname: string, paths: string[]) {
+  return paths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+}
+
 export default function ProtectedRoute({
   requireAuth = true,
   allowedRoles,
@@ -48,11 +60,13 @@ export default function ProtectedRoute({
     return <Navigate to="/change-password" replace />;
 
   const isPlatformAdmin = user?.role === "PLATFORM_ADMIN";
+  const isPlatformAdminPath = pathMatches(location.pathname, platformAdminPaths);
+
+  if (isPlatformAdmin && !isPlatformAdminPath)
+    return <Navigate to="/admin" replace />;
 
   // Redirect incomplete non-admin users back to onboarding.
-  const isOnboardingPath = onboardingPaths.some((path) =>
-    location.pathname.startsWith(path),
-  );
+  const isOnboardingPath = pathMatches(location.pathname, onboardingPaths);
   if (
     user &&
     !isPlatformAdmin &&

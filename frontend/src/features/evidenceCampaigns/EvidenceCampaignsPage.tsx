@@ -40,7 +40,7 @@ function RequestCard({ request, onRemind }: { request: EvidenceCampaignRequest; 
 
   return (
     <Paper sx={{ p: 2.5, borderRadius: 4, minWidth: 0 }}>
-      <Stack direction={{ xs: "column", lg: "row" }} justifyContent="space-between" spacing={2}>
+      <Stack direction={{ xs: "column", lg: "row" }} spacing={2} sx={{ justifyContent: "space-between" }}>
         <Box sx={{ minWidth: 0 }}>
           <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap", mb: 1 }}>
             <Chip label={request.priority} size="small" color={priorityColor(request.priority)} />
@@ -68,7 +68,7 @@ function CampaignPanel({ campaign, onRemind }: { campaign: EvidenceCampaign; onR
   return (
     <Stack spacing={2.5}>
       <Paper sx={{ p: 3, borderRadius: 5 }}>
-        <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" spacing={2} sx={{ mb: 2 }}>
+        <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mb: 2, justifyContent: "space-between" }}>
           <Box>
             <Typography variant="h6">{campaign.name}</Typography>
             <Typography variant="body2" color="text.secondary">{campaign.description}</Typography>

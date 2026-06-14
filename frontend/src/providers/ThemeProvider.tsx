@@ -281,16 +281,18 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
                 boxShadow: `0 0 0 4px ${tokens.focusRing}`,
               },
             },
-            containedPrimary: {
-              background: `linear-gradient(135deg, ${tokens.primary}, #14b8a6)`,
-              boxShadow: isDark
-                ? "0 12px 30px rgba(15, 118, 110, 0.28)"
-                : "0 12px 30px rgba(15, 118, 110, 0.2)",
-              "&:hover": {
-                background: `linear-gradient(135deg, ${tokens.primaryHover}, #0d9488)`,
+            contained: {
+              "&.MuiButton-colorPrimary": {
+                background: `linear-gradient(135deg, ${tokens.primary}, #14b8a6)`,
                 boxShadow: isDark
-                  ? "0 16px 38px rgba(15, 118, 110, 0.34)"
-                  : "0 16px 38px rgba(15, 118, 110, 0.26)",
+                  ? "0 12px 30px rgba(15, 118, 110, 0.28)"
+                  : "0 12px 30px rgba(15, 118, 110, 0.2)",
+                "&:hover": {
+                  background: `linear-gradient(135deg, ${tokens.primaryHover}, #0d9488)`,
+                  boxShadow: isDark
+                    ? "0 16px 38px rgba(15, 118, 110, 0.34)"
+                    : "0 16px 38px rgba(15, 118, 110, 0.26)",
+                },
               },
             },
             outlined: {

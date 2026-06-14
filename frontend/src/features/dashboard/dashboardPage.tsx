@@ -82,7 +82,7 @@ export default function DashboardPage() {
 
         <Paper sx={{ p: { xs: 3, md: 5 }, mb: 4, borderRadius: 6, position: "relative", overflow: "hidden" }}>
           <Box sx={{ position: "absolute", inset: 0, background: "radial-gradient(circle at top left, rgba(37,99,235,.22), transparent 22rem), radial-gradient(circle at bottom right, rgba(20,184,166,.18), transparent 20rem)", pointerEvents: "none" }} />
-          <Stack direction={{ xs: "column", lg: "row" }} spacing={3} alignItems={{ xs: "stretch", lg: "center" }} justifyContent="space-between" sx={{ position: "relative", minWidth: 0 }}>
+          <Stack direction={{ xs: "column", lg: "row" }} spacing={3} sx={{ position: "relative", minWidth: 0, alignItems: { xs: "stretch", lg: "center" }, justifyContent: "space-between" }}>
             <Box sx={{ minWidth: 0, maxWidth: 720 }}>
               <Chip label="Framework360 Command Center" color="primary" sx={{ mb: 2 }} />
               <Typography variant="h3" sx={{ fontSize: { xs: 38, md: 56 }, lineHeight: 1.04, mb: 2 }}>
@@ -122,7 +122,7 @@ export default function DashboardPage() {
                 const score = clampScore(framework.score);
                 return (
                   <Box key={framework.code}>
-                    <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.75, minWidth: 0 }}>
+                    <Stack direction="row" sx={{ mb: 0.75, minWidth: 0, justifyContent: "space-between" }}>
                       <Typography variant="body2" sx={{ fontWeight: 800 }} noWrap>{framework.name}</Typography>
                       <Typography variant="body2" color="text.secondary">{score}%</Typography>
                     </Stack>
@@ -139,7 +139,7 @@ export default function DashboardPage() {
             <Stack spacing={1.5}>
               {(dashboard?.aiRecommendations || []).slice(0, 5).map((item) => (
                 <Box key={item.title} sx={{ p: 2, borderRadius: 3, bgcolor: "surface.level2", minWidth: 0 }}>
-                  <Stack direction="row" justifyContent="space-between" spacing={1}>
+                  <Stack direction="row" spacing={1} sx={{ justifyContent: "space-between" }}>
                     <Typography variant="subtitle2">{item.title}</Typography>
                     <Chip label={item.priority} size="small" color={item.priority === "HIGH" ? "error" : item.priority === "MEDIUM" ? "warning" : "primary"} />
                   </Stack>
@@ -151,7 +151,7 @@ export default function DashboardPage() {
           </Paper>
         </Box>
 
-        <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" alignItems={{ xs: "flex-start", md: "center" }} spacing={2} sx={{ mb: 2.5 }}>
+        <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mb: 2.5, justifyContent: "space-between", alignItems: { xs: "flex-start", md: "center" } }}>
           <Box sx={{ minWidth: 0 }}>
             <Typography variant="h5">{t("dashboard.frameworks")}</Typography>
             <Typography variant="body2" color="text.secondary">Continue assessments, review readiness, or add another compliance framework.</Typography>
@@ -164,7 +164,7 @@ export default function DashboardPage() {
             const score = clampScore(framework.score);
             return (
               <Paper key={framework.code} onClick={() => navigate(`/frameworks/${framework.code}`)} sx={{ p: 3, borderRadius: 5, cursor: "pointer", minWidth: 0 }}>
-                <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={2}>
+                <Stack direction="row" spacing={2} sx={{ justifyContent: "space-between", alignItems: "flex-start" }}>
                   <Box sx={{ minWidth: 0 }}>
                     <Typography variant="h6" noWrap>{framework.name}</Typography>
                     {framework.category && <Typography variant="body2" color="text.secondary">{framework.category}</Typography>}

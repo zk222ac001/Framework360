@@ -24,7 +24,7 @@ export default function LandingPage() {
     <Box sx={{ minHeight: "100vh", color: "text.primary" }}>
       <Box sx={{ px: { xs: 2, md: 6 }, py: { xs: 7, md: 11 }, position: "relative", overflow: "hidden" }}>
         <Box sx={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 12% 18%, rgba(37, 99, 235, 0.2), transparent 28rem), radial-gradient(circle at 84% 8%, rgba(20, 184, 166, 0.18), transparent 26rem)", pointerEvents: "none" }} />
-        <Stack direction={{ xs: "column", lg: "row" }} spacing={6} alignItems="center" sx={{ position: "relative", maxWidth: 1240, mx: "auto" }}>
+        <Stack direction={{ xs: "column", lg: "row" }} spacing={6} sx={{ position: "relative", maxWidth: 1240, mx: "auto", alignItems: "center" }}>
           <Box sx={{ flex: 1 }}>
             <Chip label="Compliance command center for modern teams" color="primary" sx={{ mb: 2 }} />
             <Typography variant="h1" sx={{ fontSize: { xs: 44, md: 72 }, lineHeight: 0.95, mb: 3 }}>
@@ -41,7 +41,7 @@ export default function LandingPage() {
 
           <Paper sx={{ flex: 1, width: "100%", p: 3, borderRadius: 7, overflow: "hidden" }}>
             <Stack spacing={2.5}>
-              <Stack direction="row" justifyContent="space-between" alignItems="center">
+              <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center" }}>
                 <Box>
                   <Typography variant="overline" color="text.secondary">Executive overview</Typography>
                   <Typography variant="h4">87% ready</Typography>
