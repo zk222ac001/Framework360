@@ -4,7 +4,7 @@ function getCookieOptions(rememberMe = false) {
   const options = {
     httpOnly: true,
     secure: isProd,
-    sameSite: "lax",
+    sameSite: isProd ? "none" : "lax",
     path: "/",
   };
 
@@ -17,7 +17,7 @@ function getCookieOptions(rememberMe = false) {
 
 const COOKIE_NAME =
   process.env.NODE_ENV === "production"
-    ? "__Host-becompliant_access"
+    ? "__Secure-becompliant_access"
     : "becompliant_access";
 
 function setAuthCookie(res, token, rememberMe = false) {
