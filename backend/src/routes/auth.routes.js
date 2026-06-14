@@ -30,6 +30,18 @@ function hashToken(token) {
   return crypto.createHash('sha256').update(token).digest('hex');
 }
 
+function buildPasswordResetResponse(token) {
+  const response = {
+    message: 'If an account exists, password reset instructions have been prepared.',
+  };
+
+  if (process.env.NODE_ENV !== 'production' && process.env.EXPOSE_DEV_RESET_TOKEN === 'true') {
+    response.resetToken = token;
+  }
+
+  return response;
+}
+
 router.post('/forgot-password', validate(forgotPasswordSchema), async (req, res) => {
   try {
     const email = normalizeEmail(req.body.email);
@@ -67,10 +79,7 @@ router.post('/forgot-password', validate(forgotPasswordSchema), async (req, res)
         metadata: { email: user.email },
       });
 
-      return res.json({
-        message: 'If an account exists, password reset instructions have been prepared.',
-        resetToken: token,
-      });
+      return res.json(buildPasswordResetResponse(token));
     }
 
     return res.json({
