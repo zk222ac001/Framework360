@@ -1,8 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Typography from "@mui/material/Typography";
 import PublicLayout from "../layouts/publicLayout";
 import PrivateLayout from "../layouts/privateLayout";
 import LandingPage from "../features/landing/landingPage";
+import FeaturesPage from "../features/marketing/FeaturesPage";
+import PricingPage from "../features/marketing/PricingPage";
+import AboutPage from "../features/marketing/AboutPage";
 import DashboardPage from "../features/dashboard/dashboardPage";
 import LoginPage from "../features/auth/loginPage";
 import RequestDemoPage from "../features/auth/requestDemoPage";
@@ -30,18 +32,6 @@ import AiComplianceCopilotPage from "../features/copilot/AiComplianceCopilotPage
 import VendorRiskCenterPage from "../features/vendorRisk/VendorRiskCenterPage";
 import EvidenceCampaignsPage from "../features/evidenceCampaigns/EvidenceCampaignsPage";
 import ProtectedRoute from "../components/ProtectedRoute";
-
-function PricingPage() {
-  return <Typography>Pricing page</Typography>;
-}
-
-function FeaturesPage() {
-  return <Typography>Features page</Typography>;
-}
-
-function AboutPage() {
-  return <Typography>About page</Typography>;
-}
 
 const router = createBrowserRouter([
   {
