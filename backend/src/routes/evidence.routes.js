@@ -11,6 +11,13 @@ const router = express.Router();
 
 router.use(requireAuth);
 
+function safeDownloadFilename(filename, fallbackPath) {
+  const fallback = path.basename(fallbackPath || "evidence-file");
+  return String(filename || fallback)
+    .replace(/[\r\n"]/g, "_")
+    .replace(/[\\/]/g, "_");
+}
+
 router.get("/evidence", async (req, res) => {
   try {
     const companyId = req.user.companyId;
@@ -306,11 +313,10 @@ router.get("/evidence/:id/file", async (req, res) => {
     if (!fs.existsSync(absolutePath)) {
       return res.status(404).json({
         error: "File not found",
-        path: absolutePath,
       });
     }
 
-    const fileName = evidence.filename || path.basename(absolutePath);
+    const fileName = safeDownloadFilename(evidence.filename, absolutePath);
     const isPdf =
       evidence.fileType === "application/pdf" ||
       fileName.toLowerCase().endsWith(".pdf");
