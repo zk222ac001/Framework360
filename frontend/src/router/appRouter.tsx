@@ -5,6 +5,7 @@ import LandingPage from "../features/landing/landingPage";
 import FeaturesPage from "../features/marketing/FeaturesPage";
 import PricingPage from "../features/marketing/PricingPage";
 import AboutPage from "../features/marketing/AboutPage";
+import ContactPage from "../features/marketing/ContactPage";
 import DashboardPage from "../features/dashboard/dashboardPage";
 import LoginPage from "../features/auth/loginPage";
 import RequestDemoPage from "../features/auth/requestDemoPage";
@@ -42,6 +43,7 @@ const router = createBrowserRouter([
       { path: "features", element: <FeaturesPage /> },
       { path: "pricing", element: <PricingPage /> },
       { path: "about", element: <AboutPage /> },
+      { path: "contact", element: <ContactPage /> },
       { path: "login", element: <LoginPage /> },
       { path: "forgot-password", element: <ForgotPasswordPage /> },
       { path: "reset-password", element: <ResetPasswordPage /> },
