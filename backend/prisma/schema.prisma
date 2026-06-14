@@ -168,6 +168,41 @@ enum DependencyType {
   OTHER
 }
 
+enum CommercialStatus {
+  TRIAL
+  ACTIVE
+  PAST_DUE
+  SUSPENDED
+  CANCELLED
+  LICENSED
+}
+
+enum PolicyStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  ARCHIVED
+}
+
+enum AccessReviewStatus {
+  OPEN
+  IN_REVIEW
+  COMPLETED
+}
+
+enum AccessReviewDecision {
+  PENDING
+  APPROVED
+  REVOKE
+  NEEDS_CHANGE
+}
+
+enum NotificationStatus {
+  UNREAD
+  READ
+  ARCHIVED
+}
+
 model Company {
   id                Int                          @id @default(autoincrement())
   name              String                       @map("navn")
@@ -184,6 +219,11 @@ model Company {
   systems           SystemAsset[]
   businessProcesses BusinessProcess[]
   dependencies      Dependency[]
+  commercialProfile CommercialProfile?
+  policies          Policy[]
+  accessReviews     AccessReview[]
+  notifications     Notification[]
+  trustCenter       TrustCenterProfile?
   createdAt         DateTime                     @default(now())
   updatedAt         DateTime                     @updatedAt
 
@@ -245,6 +285,10 @@ model User {
   requirementAnswers   FrameworkRequirementAnswer[]
   evidenceUploads      FrameworkEvidence[]
   assignedTasks        Task[]
+  ownedPolicies        Policy[]                     @relation("PolicyOwner")
+  approvedPolicies     Policy[]                     @relation("PolicyApprover")
+  accessReviewItems    AccessReviewItem[]           @relation("AccessReviewSubject")
+  assignedNotifications Notification[]              @relation("NotificationAssignee")
   createdAt            DateTime                     @default(now())
   updatedAt            DateTime                     @updatedAt
   systemAssets         SystemAsset[]
@@ -345,6 +389,7 @@ model FrameworkRequirement {
   isActive            Boolean                      @default(true)
   answers             FrameworkRequirementAnswer[]
   tasks               Task[]
+  policies            Policy[]
   createdAt           DateTime                     @default(now())
   updatedAt           DateTime                     @updatedAt
 
@@ -529,4 +574,127 @@ model Dependency {
   @@index([companyId])
   @@index([sourceType, sourceId])
   @@index([targetType, targetId])
+}
+
+model CommercialProfile {
+  id              Int              @id @default(autoincrement())
+  companyId       Int              @unique
+  status          CommercialStatus @default(TRIAL)
+  plan            String           @default("trial")
+  trialEndsAt     DateTime?
+  seatsLimit      Int?
+  storageLimitMb  Int?
+  licenseKeyHash  String?
+  billingProvider String?
+  providerRef     String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model Policy {
+  id            Int          @id @default(autoincrement())
+  companyId     Int
+  title         String
+  category      String?
+  status        PolicyStatus @default(DRAFT)
+  version       String       @default("1.0")
+  content       String?
+  ownerUserId   Int?
+  approverUserId Int?
+  requirementId Int?
+  reviewDueAt   DateTime?
+  approvedAt    DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  company     Company               @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  owner       User?                 @relation("PolicyOwner", fields: [ownerUserId], references: [id], onDelete: SetNull)
+  approver    User?                 @relation("PolicyApprover", fields: [approverUserId], references: [id], onDelete: SetNull)
+  requirement FrameworkRequirement? @relation(fields: [requirementId], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
+  @@index([status])
+  @@index([reviewDueAt])
+}
+
+model TrustCenterProfile {
+  id             Int      @id @default(autoincrement())
+  companyId      Int      @unique
+  isPublished    Boolean  @default(false)
+  publicSlug     String?  @unique
+  securityContact String?
+  summary        String?
+  ndaRequired    Boolean  @default(true)
+  showFrameworks Boolean  @default(true)
+  showVendors    Boolean  @default(false)
+  showReports    Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+model AccessReview {
+  id          Int                @id @default(autoincrement())
+  companyId   Int
+  systemId    Int?
+  title       String
+  description String?
+  status      AccessReviewStatus @default(OPEN)
+  dueDate     DateTime?
+  completedAt DateTime?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  company Company            @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  system  SystemAsset?       @relation(fields: [systemId], references: [id], onDelete: SetNull)
+  items   AccessReviewItem[]
+
+  @@index([companyId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+model AccessReviewItem {
+  id             Int                  @id @default(autoincrement())
+  accessReviewId Int
+  userId         Int?
+  subjectName    String
+  subjectEmail   String?
+  accessLevel    String?
+  decision       AccessReviewDecision @default(PENDING)
+  reviewerNote   String?
+  decidedAt      DateTime?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  accessReview AccessReview @relation(fields: [accessReviewId], references: [id], onDelete: Cascade)
+  user         User?        @relation("AccessReviewSubject", fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([accessReviewId])
+  @@index([decision])
+}
+
+model Notification {
+  id               Int                @id @default(autoincrement())
+  companyId        Int
+  assignedToUserId Int?
+  type             String
+  title            String
+  message          String?
+  status           NotificationStatus @default(UNREAD)
+  dueAt            DateTime?
+  readAt           DateTime?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  company    Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  assignedTo User?   @relation("NotificationAssignee", fields: [assignedToUserId], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
+  @@index([assignedToUserId])
+  @@index([status])
+  @@index([dueAt])
 }
