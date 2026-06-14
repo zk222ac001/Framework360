@@ -531,6 +531,7 @@ model SystemAsset {
   company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
   ownerUser User?   @relation(fields: [ownerUserId], references: [id], onDelete: SetNull)
   vendor    Vendor? @relation(fields: [vendorId], references: [id], onDelete: SetNull)
+  accessReviews AccessReview[]
 
   @@index([companyId])
   @@index([vendorId])
@@ -653,6 +654,7 @@ model AccessReview {
   items   AccessReviewItem[]
 
   @@index([companyId])
+  @@index([systemId])
   @@index([status])
   @@index([dueDate])
 }
