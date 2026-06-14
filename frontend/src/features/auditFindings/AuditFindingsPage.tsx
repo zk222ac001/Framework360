@@ -37,7 +37,7 @@ function Metric({ label, value, helper }: { label: string; value: number; helper
 function FindingCard({ finding, onStatus }: { finding: AuditFinding; onStatus: (id: number, status: AuditFindingStatus) => void }) {
   return (
     <Paper sx={{ p: 2.5, borderRadius: 4, minWidth: 0 }}>
-      <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" spacing={2}>
+      <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ justifyContent: "space-between" }}>
         <Box sx={{ minWidth: 0 }}>
           <Stack direction="row" spacing={1} sx={{ mb: 1, flexWrap: "wrap" }}>
             <Chip label={finding.priority} size="small" color={priorityColor(finding.priority)} />
@@ -132,7 +132,7 @@ export default function AuditFindingsPage() {
 
       <Paper sx={{ p: 3, borderRadius: 5, mb: 3 }}>
         <Typography variant="h6" gutterBottom>Create finding</Typography>
-        <Stack direction={{ xs: "column", lg: "row" }} spacing={2} alignItems={{ xs: "stretch", lg: "flex-start" }}>
+        <Stack direction={{ xs: "column", lg: "row" }} spacing={2} sx={{ alignItems: { xs: "stretch", lg: "flex-start" } }}>
           <TextField label="Finding title" value={title} onChange={(event) => setTitle(event.target.value)} fullWidth />
           <TextField label="Description" value={description} onChange={(event) => setDescription(event.target.value)} fullWidth />
           <TextField select label="Priority" value={priority} onChange={(event) => setPriority(event.target.value as AuditFindingPriority)} sx={{ minWidth: 160 }}>
