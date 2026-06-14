@@ -23,7 +23,7 @@ function priorityColor(priority: string) {
 function CopilotCard({ title, description, priority }: { title: string; description: string; priority: string }) {
   return (
     <Paper sx={{ p: 2.5, borderRadius: 4, minWidth: 0 }}>
-      <Stack direction="row" justifyContent="space-between" spacing={2} sx={{ mb: 1 }}>
+      <Stack direction="row" spacing={2} sx={{ mb: 1, justifyContent: "space-between" }}>
         <Typography variant="subtitle1" sx={{ fontWeight: 900 }}>{title}</Typography>
         <Chip label={priority} size="small" color={priorityColor(priority)} />
       </Stack>
@@ -58,7 +58,7 @@ function ControlRecommendations({ actions }: { actions: DashboardTopAction[] }) 
         {!actions.length && <Typography variant="body2" color="text.secondary">No recommendations yet.</Typography>}
         {actions.slice(0, 6).map((action) => (
           <Box key={`${action.assessmentId}-${action.requirementId}`} sx={{ p: 2, borderRadius: 3, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider" }}>
-            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1, flexWrap: "wrap" }}>
+            <Stack direction="row" spacing={1} sx={{ mb: 1, flexWrap: "wrap", alignItems: "center" }}>
               <Chip label={action.priority} size="small" color={priorityColor(action.priority)} />
               <Typography variant="caption" color="text.secondary">{action.framework} - {action.section}</Typography>
             </Stack>
@@ -91,7 +91,7 @@ function EvidenceSuggestions({ actions }: { actions: DashboardTopAction[] }) {
         {!suggestions.length && <Typography variant="body2" color="text.secondary">No missing evidence suggestions right now.</Typography>}
         {suggestions.map((item) => (
           <Box key={item.key} sx={{ p: 2, borderRadius: 3, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider" }}>
-            <Stack direction="row" justifyContent="space-between" spacing={2} sx={{ mb: 1 }}>
+            <Stack direction="row" spacing={2} sx={{ mb: 1, justifyContent: "space-between" }}>
               <Typography variant="body2" sx={{ fontWeight: 900 }}>{item.framework}</Typography>
               <Chip label={item.priority} size="small" color={priorityColor(item.priority)} />
             </Stack>
