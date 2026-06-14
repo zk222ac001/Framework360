@@ -21,7 +21,7 @@ export default function PublicFooter() {
           <Typography variant="h6" gutterBottom>Framework360</Typography>
           <Typography color="text.secondary">Compliance management for frameworks, evidence, vendors and audit readiness.</Typography>
         </Box>
-        <Stack direction="row" spacing={2} useFlexGap flexWrap="wrap" sx={{ alignItems: "center" }}>
+        <Stack direction="row" spacing={2} useFlexGap sx={{ alignItems: "center", flexWrap: "wrap" }}>
           {links.map((link) => (
             <Link key={link.to} component={RouterLink} to={link.to} underline="none" color="text.secondary">{link.label}</Link>
           ))}
