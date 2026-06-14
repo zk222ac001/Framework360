@@ -51,7 +51,7 @@ export default function FeaturesPage() {
           <Paper key={feature.title} sx={{ p: 3.5, borderRadius: 5, height: "100%" }}>
             <Typography variant="h5" gutterBottom>{feature.title}</Typography>
             <Typography color="text.secondary" sx={{ mb: 3 }}>{feature.description}</Typography>
-            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap">
+            <Stack direction="row" spacing={1} useFlexGap sx={{ flexWrap: "wrap" }}>
               {feature.items.map((item) => <Chip key={item} label={item} variant="outlined" />)}
             </Stack>
           </Paper>
