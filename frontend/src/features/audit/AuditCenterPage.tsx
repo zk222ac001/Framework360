@@ -30,7 +30,7 @@ function EvidenceRequestTracker({ actions }: { actions: DashboardTopAction[] }) 
 
   return (
     <Paper sx={{ p: 3, borderRadius: 5 }}>
-      <Stack direction={{ xs: "column", md: "row" }} justifyContent="space-between" spacing={2} sx={{ mb: 2 }}>
+      <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mb: 2, justifyContent: "space-between" }}>
         <Box>
           <Typography variant="h6">Evidence request tracker</Typography>
           <Typography variant="body2" color="text.secondary">Controls that need supporting documentation before audit review.</Typography>
@@ -41,7 +41,7 @@ function EvidenceRequestTracker({ actions }: { actions: DashboardTopAction[] }) 
         {!missingEvidence.length && <Typography variant="body2" color="text.secondary">No missing evidence requests right now.</Typography>}
         {missingEvidence.slice(0, 8).map((action) => (
           <Box key={`${action.assessmentId}-${action.requirementId}`} sx={{ p: 2, borderRadius: 3, bgcolor: "surface.level2", border: "1px solid", borderColor: "divider" }}>
-            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.75 }}>
+            <Stack direction="row" spacing={1} sx={{ mb: 0.75, alignItems: "center" }}>
               <Chip label={action.priority} size="small" color={action.priority === "HIGH" ? "error" : action.priority === "MEDIUM" ? "warning" : "primary"} />
               <Typography variant="caption" color="text.secondary">{action.framework} - {action.section}</Typography>
             </Stack>
@@ -79,9 +79,9 @@ function AuditPackageGenerator({ dashboard }: { dashboard: DashboardResponse }) 
       </Typography>
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       <Stack spacing={1.5} sx={{ mb: 3 }}>
-        <Stack direction="row" justifyContent="space-between"><Typography variant="body2" color="text.secondary">Frameworks</Typography><Typography variant="body2" sx={{ fontWeight: 800 }}>{dashboard.frameworks.length}</Typography></Stack>
-        <Stack direction="row" justifyContent="space-between"><Typography variant="body2" color="text.secondary">Evidence files</Typography><Typography variant="body2" sx={{ fontWeight: 800 }}>{dashboard.evidenceAnalytics?.totalEvidence || 0}</Typography></Stack>
-        <Stack direction="row" justifyContent="space-between"><Typography variant="body2" color="text.secondary">Open gaps</Typography><Typography variant="body2" sx={{ fontWeight: 800 }}>{dashboard.overall?.totalGaps || 0}</Typography></Stack>
+        <Stack direction="row" sx={{ justifyContent: "space-between" }}><Typography variant="body2" color="text.secondary">Frameworks</Typography><Typography variant="body2" sx={{ fontWeight: 800 }}>{dashboard.frameworks.length}</Typography></Stack>
+        <Stack direction="row" sx={{ justifyContent: "space-between" }}><Typography variant="body2" color="text.secondary">Evidence files</Typography><Typography variant="body2" sx={{ fontWeight: 800 }}>{dashboard.evidenceAnalytics?.totalEvidence || 0}</Typography></Stack>
+        <Stack direction="row" sx={{ justifyContent: "space-between" }}><Typography variant="body2" color="text.secondary">Open gaps</Typography><Typography variant="body2" sx={{ fontWeight: 800 }}>{dashboard.overall?.totalGaps || 0}</Typography></Stack>
       </Stack>
       <Button variant="contained" fullWidth onClick={handleDownload} disabled={isDownloading}>
         {isDownloading ? "Preparing package..." : "Download audit package"}
@@ -140,7 +140,7 @@ export default function AuditCenterPage() {
       </Stack>
 
       <Paper sx={{ p: 3, borderRadius: 5, mb: 3 }}>
-        <Stack direction={{ xs: "column", md: "row" }} spacing={3} alignItems={{ xs: "stretch", md: "center" }}>
+        <Stack direction={{ xs: "column", md: "row" }} spacing={3} sx={{ alignItems: { xs: "stretch", md: "center" } }}>
           <Box sx={{ flex: 1 }}>
             <Typography variant="h6" gutterBottom>Audit readiness progress</Typography>
             <Typography variant="body2" color="text.secondary">Use this snapshot to decide whether the organization is ready for an external review.</Typography>
