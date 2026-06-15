@@ -21,7 +21,7 @@ function createTransporter() {
 }
 
 function appUrl(path = '/') {
-  const baseUrl = process.env.APP_BASE_URL || process.env.CORS_ORIGIN || 'http://localhost:5173';
+  const baseUrl = process.env.APP_BASE_URL || process.env.FRONTEND_URL || process.env.CORS_ORIGIN || 'http://localhost:5173';
   return `${baseUrl.replace(/\/$/, '')}${path}`;
 }
 
@@ -38,14 +38,15 @@ async function sendMail({ to, subject, text, html }) {
   return { sent: true, skipped: false, messageId: result.messageId || null };
 }
 
-async function sendAccountActivatedEmail({ to, firstName }) {
+async function sendAccountActivatedEmail({ to, firstName, setupUrl }) {
   const loginUrl = appUrl('/login');
+  const actionUrl = setupUrl || loginUrl;
   const name = firstName || 'there';
   const subject = 'Your Framework360 account is ready';
-  const text = `Hello ${name},\n\nYour Framework360 account has been activated.\n\nSign in here: ${loginUrl}\n\nRegards,\nFramework360 Team`;
-  const html = `<p>Hello ${name},</p><p>Your Framework360 account has been activated.</p><p>Sign in here: <a href="${loginUrl}">${loginUrl}</a></p><p>Regards,<br />Framework360 Team</p>`;
+  const text = `Hello ${name},\n\nYour Framework360 account has been activated.\n\nSet your password and sign in here: ${actionUrl}\n\nThis link expires in 1 hour.\n\nRegards,\nFramework360 Team`;
+  const html = `<p>Hello ${name},</p><p>Your Framework360 account has been activated.</p><p><a href="${actionUrl}">Set your password and sign in</a></p><p>This link expires in 1 hour.</p><p>Regards,<br />Framework360 Team</p>`;
 
   return sendMail({ to, subject, text, html });
 }
 
-module.exports = { isMailConfigured, sendMail, sendAccountActivatedEmail };
+module.exports = { isMailConfigured, sendMail, sendAccountActivatedEmail, appUrl };
