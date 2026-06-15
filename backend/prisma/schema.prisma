@@ -182,6 +182,7 @@ model Company {
   dependencies        Dependency[]
   auditFindings       AuditFinding[]
   campaigns           EvidenceCampaign[]
+  ssoDomains          SsoDomain[]
 }
 
 model CompanyFramework {
