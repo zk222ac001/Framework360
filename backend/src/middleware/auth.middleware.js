@@ -7,8 +7,19 @@ function getBearerToken(authHeader) {
   return authHeader.slice(7);
 }
 
+function normalizeDecodedUser(decoded) {
+  const userId = decoded.userId || decoded.id;
+
+  return {
+    ...decoded,
+    id: userId,
+    userId,
+  };
+}
+
 function requireAuth(req, res, next) {
   const cookieToken =
+    req.cookies?.['__Secure-becompliant_access'] ||
     req.cookies?.['__Host-becompliant_access'] ||
     req.cookies?.becompliant_access ||
     req.cookies?.accessToken;
@@ -21,7 +32,7 @@ function requireAuth(req, res, next) {
   }
 
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = normalizeDecodedUser(jwt.verify(token, process.env.JWT_SECRET));
     return next();
   } catch {
     return res.status(401).json({ error: 'Invalid or expired session' });
