@@ -120,9 +120,12 @@ router.post(
       }
 
       if (demoRequest.status === "ACTIVATED" || demoRequest.createdUser) {
-        return res
-          .status(409)
-          .json({ error: "Demo request is already activated" });
+        return res.json({
+          user: demoRequest.createdUser,
+          activationEmail: { sent: false, skipped: true },
+          alreadyActivated: true,
+          message: "Demo request is already activated",
+        });
       }
 
       const existingUser = await prisma.user.findUnique({
@@ -130,8 +133,23 @@ router.post(
       });
 
       if (existingUser) {
-        return res.status(409).json({
-          error: "A user with this email already exists",
+        const updatedRequest = await prisma.demoRequest.update({
+          where: { id },
+          data: {
+            status: "ACTIVATED",
+            companyId: existingUser.companyId || demoRequest.companyId,
+            createdUserId: existingUser.id,
+          },
+          include: {
+            createdUser: true,
+          },
+        });
+
+        return res.json({
+          user: updatedRequest.createdUser,
+          activationEmail: { sent: false, skipped: true },
+          alreadyActivated: true,
+          message: "A user with this email already exists. The demo request has been marked as activated.",
         });
       }
 
