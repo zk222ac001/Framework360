@@ -183,6 +183,7 @@ model Company {
   auditFindings       AuditFinding[]
   campaigns           EvidenceCampaign[]
   ssoDomains          SsoDomain[]
+  demoRequests        DemoRequest[]
 }
 
 model CompanyFramework {
@@ -196,33 +197,34 @@ model CompanyFramework {
 }
 
 model User {
-  id                  String         @id @default(cuid())
-  firstName           String
-  lastName            String
-  email               String         @unique
-  password            String?
-  role                UserRole       @default(CUSTOMER_ADMIN)
-  isActive            Boolean        @default(true)
-  mustChangePassword  Boolean        @default(false)
-  onboardingCompleted Boolean        @default(false)
-  authProvider        AuthProvider   @default(LOCAL)
-  providerId          String?
-  lastLogin           DateTime?
-  createdAt           DateTime       @default(now())
-  updatedAt           DateTime       @updatedAt
-  companyId           String?
-  company             Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
-  evidence            Evidence[]
-  tasks               Task[]
-  auditLogs           AuditLog[]
-  invitations         Invitation[]
-  reports             Report[]
-  comments            Comment[]
-  ssoDomainsVerified  SsoDomain[]    @relation("SsoDomainVerifiedBy")
-  auditFindingsOwned  AuditFinding[] @relation("FindingOwner")
-  campaignAssignments CampaignAssignment[]
-  approvalRequests    ApprovalRequest[] @relation("ApprovalRequester")
-  approvalDecisions   ApprovalRequest[] @relation("ApprovalApprover")
+  id                    String         @id @default(cuid())
+  firstName             String
+  lastName              String
+  email                 String         @unique
+  password              String?
+  role                  UserRole       @default(CUSTOMER_ADMIN)
+  isActive              Boolean        @default(true)
+  mustChangePassword    Boolean        @default(false)
+  onboardingCompleted   Boolean        @default(false)
+  authProvider          AuthProvider   @default(LOCAL)
+  providerId            String?
+  lastLogin             DateTime?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @updatedAt
+  companyId             String?
+  company               Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  evidence              Evidence[]
+  tasks                 Task[]
+  auditLogs             AuditLog[]
+  invitations           Invitation[]
+  reports               Report[]
+  comments              Comment[]
+  ssoDomainsVerified    SsoDomain[]    @relation("SsoDomainVerifiedBy")
+  auditFindingsOwned    AuditFinding[] @relation("FindingOwner")
+  campaignAssignments   CampaignAssignment[]
+  approvalRequests      ApprovalRequest[] @relation("ApprovalRequester")
+  approvalDecisions     ApprovalRequest[] @relation("ApprovalApprover")
+  activatedDemoRequests DemoRequest[]  @relation("DemoRequestCreatedUser")
 }
 
 model Invitation {
@@ -455,6 +457,24 @@ model ApprovalRequest {
   evidence    Evidence       @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
   requestedBy User?          @relation("ApprovalRequester", fields: [requestedById], references: [id], onDelete: SetNull)
   approver    User?          @relation("ApprovalApprover", fields: [approverId], references: [id], onDelete: SetNull)
+}
+
+model DemoRequest {
+  id            Int      @id @default(autoincrement())
+  email         String
+  firstName     String
+  lastName      String
+  companyName   String
+  jobTitle      String?
+  country       String?
+  status        String   @default("PENDING")
+  companyId     String?
+  createdUserId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  company     Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  createdUser User?    @relation("DemoRequestCreatedUser", fields: [createdUserId], references: [id], onDelete: SetNull)
 }
 
 model EmailLog {
