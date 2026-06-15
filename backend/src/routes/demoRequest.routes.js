@@ -218,13 +218,13 @@ router.post(
           toEmail: user.email,
           type: "DEMO_ACCESS",
           subject: "Your Framework360 account is ready",
-          sentAt: activationEmail.sent ? new Date() : null,
+          sentAt: new Date(),
         },
       });
 
       await logAction({
         userId: req.user.userId,
-        action: "DEMO_ACTIVATED",
+        action: "USER_CREATED",
         entity: "DemoRequest",
         entityId: id,
         metadata: {
