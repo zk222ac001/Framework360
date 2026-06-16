@@ -3,85 +3,86 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-async function createUser({
+async function upsertCompany({ companyName, cvr, sector = "IT", country = "DK" }) {
+  if (!companyName || !cvr) return null;
+
+  return prisma.company.upsert({
+    where: { cvr },
+    update: { name: companyName, sector, country },
+    create: { name: companyName, cvr, sector, country },
+  });
+}
+
+async function createUserIfMissing({
   firstName,
   lastName,
   email,
   password,
-  role = "USER",
+  role = "CUSTOMER_ADMIN",
   companyName,
   cvr,
   sector = "IT",
   country = "DK",
 }) {
+  const existingUser = await prisma.user.findUnique({ where: { email } });
+
+  if (existingUser) {
+    console.log(`Seed skipped existing user: ${email}. Existing password was not changed.`);
+    return existingUser;
+  }
+
+  const company = await upsertCompany({ companyName, cvr, sector, country });
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const company =
-    companyName && cvr
-      ? await prisma.company.upsert({
-          where: { cvr },
-          update: {
-            name: companyName,
-            sector,
-            country,
-          },
-          create: {
-            name: companyName,
-            cvr,
-            sector,
-            country,
-          },
-        })
-      : null;
-
-  await prisma.user.upsert({
-    where: { email },
-    update: {
-      firstName,
-      lastName,
-      password: hashedPassword,
-      role,
-      isActive: true,
-      mustChangePassword: false,
-      onboardingCompleted: true,
-      companyId: company?.id,
-    },
-    create: {
+  const user = await prisma.user.create({
+    data: {
       firstName,
       lastName,
       email,
       password: hashedPassword,
       role,
       isActive: true,
-      mustChangePassword: false,
+      mustChangePassword: true,
       onboardingCompleted: true,
       companyId: company?.id,
     },
   });
+
+  console.log(`Seed created user: ${email}`);
+  return user;
 }
 
 async function main() {
-  await createUser({
+  const adminEmail = process.env.PROD_ADMIN_EMAIL || "admin@eucompliance.dk";
+  const adminPassword = process.env.PROD_ADMIN_PASSWORD;
+
+  if (!adminPassword) {
+    throw new Error("PROD_ADMIN_PASSWORD is required for first production bootstrap. Add it in Render Environment.");
+  }
+
+  await createUserIfMissing({
     firstName: "Platform",
     lastName: "Admin",
-    email: "admin@eucompliance.dk",
-    password: process.env.PROD_ADMIN_PASSWORD || "ChangeThisStrongPassword123!",
+    email: adminEmail,
+    password: adminPassword,
     role: "PLATFORM_ADMIN",
   });
 
-  await createUser({
-    firstName: "Maria",
-    lastName: "Nielsen",
-    email: "maria.nielsen@northwind-demo.dk",
-    password: process.env.PROD_DEMO_PASSWORD || "ChangeThisDemoPassword123!",
-    role: "CUSTOMER_ADMIN",
-    companyName: "Northwind Compliance ApS",
-    cvr: "11223344",
-    sector: "IT",
-    country: "DK",
-  });
+  if (process.env.SEED_DEMO_USER === "true") {
+    await createUserIfMissing({
+      firstName: "Maria",
+      lastName: "Nielsen",
+      email: "maria.nielsen@northwind-demo.dk",
+      password: process.env.PROD_DEMO_PASSWORD || "ChangeThisDemoPassword123!",
+      role: "CUSTOMER_ADMIN",
+      companyName: "Northwind Compliance ApS",
+      cvr: "11223344",
+      sector: "IT",
+      country: "DK",
+    });
+  }
 
-  console.log("Prod seed færdig");
+  console.log("Prod seed faerdig");
 }
 
 main()
