@@ -53,6 +53,7 @@ router.post('/forgot-password', validate(forgotPasswordSchema), async (req, res)
       const secretHash = hashToken(token);
       const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
       const resetUrl = appUrl(`/reset-password?token=${token}`);
+      let emailResult = { sent: false, skipped: true, reason: 'Email send was not attempted' };
 
       await prisma.invitation.create({
         data: {
@@ -63,12 +64,21 @@ router.post('/forgot-password', validate(forgotPasswordSchema), async (req, res)
         },
       });
 
-      const emailResult = await sendMail({
-        to: user.email,
-        subject: 'Reset your Framework360 password',
-        text: `Hello ${user.firstName || 'there'},\n\nUse this secure link to reset your Framework360 password:\n\n${resetUrl}\n\nThis link expires in 1 hour.\n\nIf you did not request this, you can ignore this email.\n\nRegards,\nFramework360 Team`,
-        html: `<p>Hello ${user.firstName || 'there'},</p><p>Use this secure link to reset your Framework360 password:</p><p><a href="${resetUrl}">Reset your password</a></p><p>This link expires in 1 hour.</p><p>If you did not request this, you can ignore this email.</p><p>Regards,<br />Framework360 Team</p>`,
-      });
+      try {
+        emailResult = await sendMail({
+          to: user.email,
+          subject: 'Reset your Framework360 password',
+          text: `Hello ${user.firstName || 'there'},\n\nUse this secure link to reset your Framework360 password:\n\n${resetUrl}\n\nThis link expires in 1 hour.\n\nIf you did not request this, you can ignore this email.\n\nRegards,\nFramework360 Team`,
+          html: `<p>Hello ${user.firstName || 'there'},</p><p>Use this secure link to reset your Framework360 password:</p><p><a href="${resetUrl}">Reset your password</a></p><p>This link expires in 1 hour.</p><p>If you did not request this, you can ignore this email.</p><p>Regards,<br />Framework360 Team</p>`,
+        });
+      } catch (emailError) {
+        emailResult = {
+          sent: false,
+          skipped: false,
+          reason: emailError.message,
+        };
+        console.error('POST /auth/forgot-password email error:', emailError);
+      }
 
       await prisma.emailLog.create({
         data: {
