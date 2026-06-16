@@ -73,6 +73,11 @@ export default function AdminPage() {
     }
   };
 
+  const copyTemporaryPassword = async () => {
+    if (!activationResult?.temporaryPassword) return;
+    await navigator.clipboard.writeText(activationResult.temporaryPassword);
+  };
+
   // Show fullscreen loader while requests are loading.
   if (loading) {
     return (
@@ -99,8 +104,50 @@ export default function AdminPage() {
 
       {activationResult && (
         <Alert severity="success" sx={{ mb: 2 }}>
-          {t("admin.activation")} <strong>{activationResult.user.email}</strong>
-          : <strong>{activationResult.temporaryPassword}</strong>
+          <Stack spacing={1}>
+            <Typography variant="body1">
+              Demo request activated for{" "}
+              <strong>{activationResult.user.email}</strong>.
+            </Typography>
+
+            {activationResult.temporaryPassword ? (
+              <>
+                <Typography variant="body2">
+                  Copy this temporary password now and send it to the user. It
+                  will not be shown again. Ask the user to change it immediately
+                  after first login.
+                </Typography>
+                <Box
+                  component="code"
+                  sx={{
+                    display: "block",
+                    p: 1.5,
+                    borderRadius: 1,
+                    bgcolor: "rgba(255,255,255,0.12)",
+                    fontSize: "1.1rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.04em",
+                  }}
+                >
+                  {activationResult.temporaryPassword}
+                </Box>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={copyTemporaryPassword}
+                  sx={{ alignSelf: "flex-start" }}
+                >
+                  Copy password
+                </Button>
+              </>
+            ) : (
+              <Typography variant="body2">
+                The account is already activated. For security, the original
+                temporary password cannot be shown again. Ask the user to use
+                Forgot password if needed.
+              </Typography>
+            )}
+          </Stack>
         </Alert>
       )}
 
