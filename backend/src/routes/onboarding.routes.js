@@ -174,7 +174,7 @@ router.post(
           efternavn: demoRequest.efternavn,
           email: demoRequest.email.toLowerCase(),
           password: hashedPassword,
-          rolle: "DEMO_USER",
+          rolle: "EVIDENCE_CONTRIBUTOR",
           erAktiv: true,
           mustChangePassword: true,
           virksomhedId: virksomhed.id,

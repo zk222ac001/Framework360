@@ -36,9 +36,9 @@ export function formatRole(role?: UserRole | string | null) {
   const labels: Record<string, string> = {
     PLATFORM_ADMIN: "Platform admin",
     CUSTOMER_ADMIN: "Company admin",
-    ADMIN: "Admin",
-    USER: "User",
-    DEMO_USER: "Demo user",
+    COMPLIANCE_MANAGER: "Compliance manager",
+    EVIDENCE_CONTRIBUTOR: "Evidence contributor",
+    AUDITOR: "Auditor",
   };
 
   return labels[role || ""] || formatEnumLabel(role);

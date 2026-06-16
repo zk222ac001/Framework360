@@ -103,10 +103,10 @@ describe('Company settings', () => {
     expect(res.body.country).toBe('Denmark');
   });
 
-  it('should prevent USER from updating company settings', async () => {
+  it('should prevent evidence contributors from updating company settings', async () => {
     const { cookies } = await createUserWithCompany({
       email: 'normaluser@test.dk',
-      role: 'USER',
+      role: 'EVIDENCE_CONTRIBUTOR',
     });
 
     const res = await request(app)

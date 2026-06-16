@@ -4,9 +4,9 @@
 export type UserRole =
   | "PLATFORM_ADMIN"
   | "CUSTOMER_ADMIN"
-  | "ADMIN"
-  | "USER"
-  | "DEMO_USER";
+  | "COMPLIANCE_MANAGER"
+  | "EVIDENCE_CONTRIBUTOR"
+  | "AUDITOR";
 
 export type AuthCompany = {
   id: number;

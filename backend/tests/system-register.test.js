@@ -224,10 +224,10 @@ describe('System register MVP', () => {
     expect(listRes.body.dependencies).toHaveLength(1);
   });
 
-  it('should prevent USER from creating resources but allow reading', async () => {
+  it('should prevent evidence contributors from creating resources but allow reading', async () => {
     const { cookies } = await createUserWithCompany({
       email: 'readonly@test.dk',
-      role: 'USER',
+      role: 'EVIDENCE_CONTRIBUTOR',
     });
 
     const createRes = await request(app)

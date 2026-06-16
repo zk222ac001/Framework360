@@ -43,6 +43,10 @@ function buildPasswordResetResponse(token) {
   return response;
 }
 
+function canCreatePasswordReset(user) {
+  return Boolean(user?.isActive && user.authProvider === 'LOCAL');
+}
+
 async function createPasswordResetInvitation(user) {
   const token = crypto.randomBytes(32).toString('hex');
   const secretHash = hashToken(token);
@@ -67,7 +71,7 @@ router.post('/forgot-password', validate(forgotPasswordSchema), async (req, res)
     const email = normalizeEmail(req.body.email);
     const user = await prisma.user.findUnique({ where: { email } });
 
-    if (user && user.password) {
+    if (canCreatePasswordReset(user)) {
       const { token, resetUrl } = await createPasswordResetInvitation(user);
       let emailResult = { sent: false, skipped: true, reason: 'Email send was not attempted' };
 

@@ -167,4 +167,91 @@ describe('Auth', () => {
     expect(reusedTokenRes.statusCode).toBe(400);
     expect(reusedTokenRes.body.error).toBe('Invalid or expired reset token');
   });
+
+  it('should generate a reset token for a normal local user role', async () => {
+    process.env.EXPOSE_DEV_RESET_TOKEN = 'true';
+
+    const hashedPassword = await bcrypt.hash('normalpass123', 10);
+
+    await prisma.user.create({
+      data: {
+        firstName: 'Normal',
+        lastName: 'User',
+        email: 'normal@test.dk',
+        password: hashedPassword,
+        role: 'EVIDENCE_CONTRIBUTOR',
+        authProvider: 'LOCAL',
+        isActive: true,
+      },
+    });
+
+    const forgotRes = await request(app)
+      .post('/auth/forgot-password')
+      .send({ email: 'normal@test.dk' });
+
+    expect(forgotRes.statusCode).toBe(200);
+    expect(forgotRes.body.resetToken).toBeTruthy();
+  });
+
+  it('should generate a reset token for a passwordless local user', async () => {
+    process.env.EXPOSE_DEV_RESET_TOKEN = 'true';
+
+    await prisma.user.create({
+      data: {
+        firstName: 'Invited',
+        lastName: 'User',
+        email: 'invited@test.dk',
+        password: null,
+        role: 'EVIDENCE_CONTRIBUTOR',
+        authProvider: 'LOCAL',
+        isActive: true,
+      },
+    });
+
+    const forgotRes = await request(app)
+      .post('/auth/forgot-password')
+      .send({ email: 'invited@test.dk' });
+
+    expect(forgotRes.statusCode).toBe(200);
+    expect(forgotRes.body.resetToken).toBeTruthy();
+
+    const resetRes = await request(app)
+      .post('/auth/reset-password')
+      .send({
+        token: forgotRes.body.resetToken,
+        newPassword: 'invitedpass123',
+      });
+
+    expect(resetRes.statusCode).toBe(200);
+
+    const loginRes = await request(app)
+      .post('/auth/login')
+      .send({ email: 'invited@test.dk', password: 'invitedpass123' });
+
+    expect(loginRes.statusCode).toBe(200);
+  });
+
+  it('should not generate a reset token for an SSO-only user', async () => {
+    process.env.EXPOSE_DEV_RESET_TOKEN = 'true';
+
+    await prisma.user.create({
+      data: {
+        firstName: 'Sso',
+        lastName: 'User',
+        email: 'sso@test.dk',
+        password: null,
+        role: 'EVIDENCE_CONTRIBUTOR',
+        authProvider: 'GOOGLE',
+        providerId: 'google-user-id',
+        isActive: true,
+      },
+    });
+
+    const forgotRes = await request(app)
+      .post('/auth/forgot-password')
+      .send({ email: 'sso@test.dk' });
+
+    expect(forgotRes.statusCode).toBe(200);
+    expect(forgotRes.body.resetToken).toBeUndefined();
+  });
 });

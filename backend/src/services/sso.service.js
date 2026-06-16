@@ -40,7 +40,7 @@ async function findOrCreateSsoUser({
       password: null,
       authProvider: provider,
       providerId,
-      role: 'USER',
+      role: 'EVIDENCE_CONTRIBUTOR',
       isActive: true,
       mustChangePassword: false,
       onboardingCompleted: false,
