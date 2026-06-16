@@ -113,4 +113,58 @@ describe('Auth', () => {
     expect(me.statusCode).toBe(200);
     expect(me.body.user.email).toBe('simon2@test.dk');
   });
+
+  it('should reset a password with a valid reset token', async () => {
+    process.env.EXPOSE_DEV_RESET_TOKEN = 'true';
+
+    await request(app).post('/auth/register').send({
+      firstName: 'Reset',
+      lastName: 'Tester',
+      email: 'reset@test.dk',
+      password: 'oldpass123',
+      companyName: 'Reset Test ApS',
+      sector: 'IT',
+      country: 'DK',
+    });
+
+    const forgotRes = await request(app)
+      .post('/auth/forgot-password')
+      .send({ email: 'reset@test.dk' });
+
+    expect(forgotRes.statusCode).toBe(200);
+    expect(forgotRes.body.message).toBe('If an account exists, password reset instructions have been prepared.');
+    expect(forgotRes.body.resetToken).toBeTruthy();
+
+    const resetRes = await request(app)
+      .post('/auth/reset-password')
+      .send({
+        token: forgotRes.body.resetToken,
+        newPassword: 'newpass123',
+      });
+
+    expect(resetRes.statusCode).toBe(200);
+    expect(resetRes.body.message).toBe('Password reset successful');
+
+    const oldLoginRes = await request(app)
+      .post('/auth/login')
+      .send({ email: 'reset@test.dk', password: 'oldpass123' });
+
+    expect(oldLoginRes.statusCode).toBe(401);
+
+    const newLoginRes = await request(app)
+      .post('/auth/login')
+      .send({ email: 'reset@test.dk', password: 'newpass123' });
+
+    expect(newLoginRes.statusCode).toBe(200);
+
+    const reusedTokenRes = await request(app)
+      .post('/auth/reset-password')
+      .send({
+        token: forgotRes.body.resetToken,
+        newPassword: 'anotherpass123',
+      });
+
+    expect(reusedTokenRes.statusCode).toBe(400);
+    expect(reusedTokenRes.body.error).toBe('Invalid or expired reset token');
+  });
 });

@@ -98,7 +98,7 @@ Country: DK
 ```text
 Email: demo@test.dk
 Password: Test1234
-Role: DEMO_USER
+Role: CUSTOMER_ADMIN
 Company: Demo Company
 CVR: 87654321
 Sector: IT

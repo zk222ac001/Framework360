@@ -56,6 +56,13 @@ async function main() {
     },
   });
 
+  if (!prisma.frameworkDefinition || !prisma.frameworkSection || !prisma.frameworkRequirement) {
+    console.warn(
+      "Framework seed skipped: current Prisma client does not expose framework definition models."
+    );
+    return;
+  }
+
   const frameworks = loadAllFrameworkFiles();
 
   for (const frameworkData of frameworks) {

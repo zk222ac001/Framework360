@@ -1,4 +1,19 @@
 services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: framework360
+      POSTGRES_USER: framework360
+      POSTGRES_PASSWORD: framework360
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U framework360 -d framework360"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
   frontend:
     build:
       context: .
@@ -24,8 +39,16 @@ services:
       - /app/node_modules
     environment:
       NODE_ENV: development
-      DATABASE_URL: "file:/app/prisma/dev.db"
+      DATABASE_URL: "postgresql://framework360:framework360@postgres:5432/framework360?schema=public"
       JWT_SECRET: "dev-secret-change-me"
       CORS_ORIGIN: "http://localhost:25173"
+      APP_BASE_URL: "http://localhost:25173"
+      EXPOSE_DEV_RESET_TOKEN: "true"
     command: sh -c "npm run docker:dev"
+    depends_on:
+      postgres:
+        condition: service_healthy
     restart: unless-stopped
+
+volumes:
+  postgres_data:
