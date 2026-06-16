@@ -43,26 +43,33 @@ function buildPasswordResetResponse(token) {
   return response;
 }
 
+async function createPasswordResetInvitation(user) {
+  const token = crypto.randomBytes(32).toString('hex');
+  const secretHash = hashToken(token);
+  const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+  const resetUrl = appUrl(`/reset-password?token=${token}`);
+
+  const invitation = await prisma.invitation.create({
+    data: {
+      userId: user.id,
+      email: user.email,
+      type: 'PASSWORD_RESET',
+      secretHash,
+      expiresAt,
+    },
+  });
+
+  return { token, resetUrl, invitation };
+}
+
 router.post('/forgot-password', validate(forgotPasswordSchema), async (req, res) => {
   try {
     const email = normalizeEmail(req.body.email);
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (user && user.password) {
-      const token = crypto.randomBytes(32).toString('hex');
-      const secretHash = hashToken(token);
-      const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
-      const resetUrl = appUrl(`/reset-password?token=${token}`);
+      const { token, resetUrl } = await createPasswordResetInvitation(user);
       let emailResult = { sent: false, skipped: true, reason: 'Email send was not attempted' };
-
-      await prisma.invitation.create({
-        data: {
-          userId: user.id,
-          type: 'PASSWORD_RESET',
-          secretHash,
-          expiresAt,
-        },
-      });
 
       try {
         emailResult = await sendMail({
@@ -95,7 +102,7 @@ router.post('/forgot-password', validate(forgotPasswordSchema), async (req, res)
         action: 'PASSWORD_RESET_REQUESTED',
         entity: 'User',
         entityId: user.id,
-        metadata: { email: user.email, emailResult },
+        metadata: { email: user.email, emailResult, manualResetAvailable: true },
       });
 
       return res.json(buildPasswordResetResponse(token));
