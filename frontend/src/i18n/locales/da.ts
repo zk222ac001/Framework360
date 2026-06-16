@@ -115,6 +115,7 @@ const da = {
       errors: {
         emailRequired: "Email er påkrævet",
         invalidEmail: "Indtast en gyldig emailadresse",
+        companyEmailRequired: "Brug venligst din firma-emailadresse",
         firstNameRequired: "Fornavn er påkrævet",
         lastNameRequired: "Efternavn er påkrævet",
         companyNameRequired: "Virksomhedsnavn er påkrævet",

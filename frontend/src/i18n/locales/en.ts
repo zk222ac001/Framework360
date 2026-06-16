@@ -115,6 +115,7 @@ const en = {
       errors: {
         emailRequired: "Email is required",
         invalidEmail: "Please enter a valid email address",
+        companyEmailRequired: "Please use your company email address",
         firstNameRequired: "First name is required",
         lastNameRequired: "Last name is required",
         companyNameRequired: "Company name is required",

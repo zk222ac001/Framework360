@@ -10,6 +10,7 @@ import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import { submitDemoRequest } from "../../api/demoRequest";
 import type { DemoRequestFormValues } from "../../types/demoRequest";
+import { isCompanyEmail } from "../../utils/companyEmail";
 // Public demo request page for potential customers.
 
 // Shared select option structure for dropdown fields.
@@ -110,6 +111,8 @@ export default function RequestDemoPage() {
       newErrors.email = t("auth.requestDemo.errors.emailRequired");
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
       newErrors.email = t("auth.requestDemo.errors.invalidEmail");
+    } else if (!isCompanyEmail(values.email)) {
+      newErrors.email = t("auth.requestDemo.errors.companyEmailRequired");
     }
 
     if (!values.firstName.trim()) {

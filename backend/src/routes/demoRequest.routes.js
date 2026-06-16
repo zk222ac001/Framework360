@@ -18,6 +18,7 @@ const {
   normalizeCompanyName,
   normalizeNullableString,
 } = require("../utils/normalizeInput");
+const { isCompanyEmail } = require("../utils/companyEmail");
 
 const router = express.Router();
 
@@ -48,12 +49,30 @@ router.post("/", validate(createDemoRequestSchema), async (req, res) => {
     const normalizedJobTitle = normalizeNullableString(jobTitle);
     const normalizedCountry = normalizeNullableString(country);
 
-    const existing = await prisma.demoRequest.findFirst({
-      where: {
-        email: normalizedEmail,
-        status: { in: ["PENDING", "EMAILED"] },
-      },
-    });
+    if (!isCompanyEmail(normalizedEmail)) {
+      return res.status(400).json({
+        error: "Please use your company email address",
+      });
+    }
+
+    const [registeredUser, existing] = await Promise.all([
+      prisma.user.findUnique({
+        where: { email: normalizedEmail },
+        select: { id: true },
+      }),
+      prisma.demoRequest.findFirst({
+        where: {
+          email: normalizedEmail,
+          status: { in: ["PENDING", "EMAILED"] },
+        },
+      }),
+    ]);
+
+    if (registeredUser) {
+      return res.status(409).json({
+        error: "This email is already registered in the system",
+      });
+    }
 
     if (existing) {
       return res.status(409).json({
