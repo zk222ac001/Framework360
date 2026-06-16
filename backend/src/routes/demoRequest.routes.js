@@ -12,7 +12,6 @@ const {
   updateDemoRequestStatusSchema,
 } = require("../validators/demoRequest.validator");
 const { logAction } = require("../utils/audit");
-const { sendAccountActivatedEmail } = require("../services/mail.service");
 const {
   normalizeEmail,
   normalizeName,
@@ -22,8 +21,19 @@ const {
 
 const router = express.Router();
 
-function shouldExposeDevTemporaryPassword() {
-  return process.env.NODE_ENV !== "production" && process.env.EXPOSE_DEV_TEMPORARY_PASSWORD === "true";
+function generateTemporaryPassword() {
+  const upper = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const lower = "abcdefghijkmnopqrstuvwxyz";
+  const digits = "23456789";
+  const symbols = "!@#$%";
+  const all = `${upper}${lower}${digits}${symbols}`;
+  const required = [upper, lower, digits, symbols].map((chars) => chars[Math.floor(Math.random() * chars.length)]);
+
+  while (required.length < 14) {
+    required.push(all[Math.floor(Math.random() * all.length)]);
+  }
+
+  return required.sort(() => Math.random() - 0.5).join("");
 }
 
 router.post("/", validate(createDemoRequestSchema), async (req, res) => {
@@ -122,9 +132,8 @@ router.post(
       if (demoRequest.status === "ACTIVATED" || demoRequest.createdUser) {
         return res.json({
           user: demoRequest.createdUser,
-          activationEmail: { sent: false, skipped: true },
           alreadyActivated: true,
-          message: "Demo request is already activated",
+          message: "Demo request is already activated. For security, the original temporary password cannot be shown again. Ask the user to use Forgot password if needed.",
         });
       }
 
@@ -147,13 +156,12 @@ router.post(
 
         return res.json({
           user: updatedRequest.createdUser,
-          activationEmail: { sent: false, skipped: true },
           alreadyActivated: true,
-          message: "A user with this email already exists. The demo request has been marked as activated.",
+          message: "A user with this email already exists. The demo request has been marked as activated. Use Forgot password if the user needs a new password.",
         });
       }
 
-      const temporaryPassword = Math.random().toString(36).slice(-10);
+      const temporaryPassword = generateTemporaryPassword();
       const hashedPassword = await bcrypt.hash(temporaryPassword, 10);
 
       let company = demoRequest.company;
@@ -202,22 +210,12 @@ router.post(
         },
       });
 
-      let activationEmail = { sent: false, skipped: true };
-      try {
-        activationEmail = await sendAccountActivatedEmail({
-          to: user.email,
-          firstName: user.firstName,
-        });
-      } catch (emailError) {
-        activationEmail = { sent: false, skipped: false };
-      }
-
       await prisma.emailLog.create({
         data: {
           userId: user.id,
           toEmail: user.email,
-          type: "DEMO_ACCESS",
-          subject: "Your Framework360 account is ready",
+          type: "DEMO_ACCESS_MANUAL_PASSWORD",
+          subject: "Demo access credentials generated for manual delivery",
           sentAt: new Date(),
         },
       });
@@ -230,16 +228,15 @@ router.post(
         metadata: {
           createdUserId: user.id,
           email: user.email,
-          activationEmail,
+          deliveryMode: "MANUAL_PASSWORD_SHOWN_TO_PLATFORM_ADMIN_ONCE",
         },
       });
 
-      const response = { user, activationEmail };
-      if (shouldExposeDevTemporaryPassword()) {
-        response.temporaryPassword = temporaryPassword;
-      }
-
-      return res.status(201).json(response);
+      return res.status(201).json({
+        user,
+        temporaryPassword,
+        message: "Demo request activated. Copy this temporary password now; it will not be shown again. Tell the user to change it immediately after login or use Forgot password.",
+      });
     } catch (error) {
       console.error("POST /demo-requests/:id/activate error:", error);
 
