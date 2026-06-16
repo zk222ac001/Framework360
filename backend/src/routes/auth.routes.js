@@ -8,6 +8,7 @@ const { validate } = require('../middleware/validate.middleware');
 const { getFrameworksFromSector } = require('../utils/frameworkMapping');
 const { logAction } = require('../utils/audit');
 const { setAuthCookie, clearAuthCookie } = require('../utils/cookies');
+const { sendMail, appUrl } = require('../services/mail.service');
 const {
   normalizeEmail,
   normalizeName,
@@ -51,6 +52,7 @@ router.post('/forgot-password', validate(forgotPasswordSchema), async (req, res)
       const token = crypto.randomBytes(32).toString('hex');
       const secretHash = hashToken(token);
       const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+      const resetUrl = appUrl(`/reset-password?token=${token}`);
 
       await prisma.invitation.create({
         data: {
@@ -59,6 +61,13 @@ router.post('/forgot-password', validate(forgotPasswordSchema), async (req, res)
           secretHash,
           expiresAt,
         },
+      });
+
+      const emailResult = await sendMail({
+        to: user.email,
+        subject: 'Reset your Framework360 password',
+        text: `Hello ${user.firstName || 'there'},\n\nUse this secure link to reset your Framework360 password:\n\n${resetUrl}\n\nThis link expires in 1 hour.\n\nIf you did not request this, you can ignore this email.\n\nRegards,\nFramework360 Team`,
+        html: `<p>Hello ${user.firstName || 'there'},</p><p>Use this secure link to reset your Framework360 password:</p><p><a href="${resetUrl}">Reset your password</a></p><p>This link expires in 1 hour.</p><p>If you did not request this, you can ignore this email.</p><p>Regards,<br />Framework360 Team</p>`,
       });
 
       await prisma.emailLog.create({
@@ -76,7 +85,7 @@ router.post('/forgot-password', validate(forgotPasswordSchema), async (req, res)
         action: 'PASSWORD_RESET_REQUESTED',
         entity: 'User',
         entityId: user.id,
-        metadata: { email: user.email },
+        metadata: { email: user.email, emailResult },
       });
 
       return res.json(buildPasswordResetResponse(token));
