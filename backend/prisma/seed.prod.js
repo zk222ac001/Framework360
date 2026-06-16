@@ -27,9 +27,19 @@ async function createUserIfMissing({
   const existingUser = await prisma.user.findUnique({ where: { email } });
 
   if (existingUser) {
-    console.log(`Seed skipped existing user: ${email}. Existing password was not changed.`);
+  if (role === "PLATFORM_ADMIN" && existingUser.mustChangePassword) {
+    await prisma.user.update({
+      where: { email },
+      data: { mustChangePassword: false },
+    });
+
+    console.log(`Seed cleared temporary-password flag for platform admin: ${email}. Password was not changed.`);
     return existingUser;
   }
+
+  console.log(`Seed skipped existing user: ${email}. Existing password was not changed.`);
+  return existingUser;
+}
 
   const company = await upsertCompany({ companyName, cvr, sector, country });
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -42,7 +52,7 @@ async function createUserIfMissing({
       password: hashedPassword,
       role,
       isActive: true,
-      mustChangePassword: true,
+      mustChangePassword: role !== "PLATFORM_ADMIN",
       onboardingCompleted: true,
       companyId: company?.id,
     },
@@ -53,7 +63,7 @@ async function createUserIfMissing({
 }
 
 async function main() {
-  const adminEmail = process.env.PROD_ADMIN_EMAIL || "admin@eucompliance.dk";
+  const adminEmail = process.env.PROD_ADMIN_EMAIL || "admin@framework360.dk";
   const adminPassword = process.env.PROD_ADMIN_PASSWORD;
 
   if (!adminPassword) {
