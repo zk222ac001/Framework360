@@ -59,67 +59,58 @@ async function createFrameworkWithAssessment({
   code = 'ISO27001',
   requirementWeight = 3,
 } = {}) {
-  const framework = await prisma.frameworkDefinition.create({
-    data: {
-      code,
-      name: code,
-      description: 'Test framework',
-      category: 'Test',
-      isActive: true,
-      sections: {
-        create: [
-          {
-            title: 'Security controls',
-            description: 'Test section',
-            order: 1,
-            weight: 1,
-            requirements: {
-              create: [
-                {
-                  question: 'Is MFA enabled?',
-                  description: 'MFA should be enabled.',
-                  reference: 'TEST-1',
-                  implementationGuide: 'Enable MFA for all users.',
-                  exampleEvidence: 'Screenshot of MFA policy.',
-                  riskIfMissing: 'Account takeover risk.',
-                  order: 1,
-                  weight: requirementWeight,
-                  isRequired: true,
-                  isActive: true,
-                },
-              ],
-            },
-          },
-        ],
+  const assessment = await prisma.companyFramework.upsert({
+    where: {
+      companyId_framework: {
+        companyId,
+        framework: code,
       },
     },
-    include: {
-      sections: {
-        include: {
-          requirements: true,
-        },
-      },
+    update: { enabled: true },
+    create: {
+      companyId,
+      framework: code,
+      enabled: true,
     },
   });
 
-  const assessment = await prisma.companyFrameworkAssessment.create({
+  const control = await prisma.control.create({
     data: {
       companyId,
-      frameworkDefinitionId: framework.id,
-      status: 'IN_PROGRESS',
-      score: 0,
+      framework: code,
+      controlId: `${code}-TEST-1`,
+      title: 'Is MFA enabled?',
+      description: 'MFA should be enabled.',
+      riskLevel: requirementWeight >= 3 ? 'HIGH' : 'MEDIUM',
+      status: 'NOT_STARTED',
     },
   });
 
-  const requirement = framework.sections[0].requirements[0];
+  const requirement = {
+    ...control,
+    question: control.title,
+    reference: control.controlId,
+  };
 
-  const answer = await prisma.frameworkRequirementAnswer.create({
-    data: {
-      assessmentId: assessment.id,
-      requirementId: requirement.id,
-      status: 'UNANSWERED',
-    },
-  });
+  const framework = {
+    id: code,
+    code,
+    name: code,
+    sections: [
+      {
+        id: `${code}-controls`,
+        title: 'Security controls',
+        requirements: [requirement],
+      },
+    ],
+  };
+
+  const answer = {
+    id: requirement.id,
+    assessmentId: assessment.id,
+    requirementId: requirement.id,
+    status: 'UNANSWERED',
+  };
 
   return {
     framework,

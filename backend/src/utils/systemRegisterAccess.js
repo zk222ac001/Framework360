@@ -29,13 +29,12 @@ function requireWriteAccess(req, res) {
 }
 
 function parsePositiveId(value) {
-  const id = Number(value);
-
-  if (!Number.isInteger(id) || id <= 0) {
+  if (value === undefined || value === null) {
     return null;
   }
 
-  return id;
+  const id = String(value).trim();
+  return id.length ? id : null;
 }
 
 function mapDateFields(data, fields) {

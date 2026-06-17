@@ -1,6 +1,8 @@
 const { z } = require('zod');
 
 const criticalityEnum = z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']);
+const recordIdSchema = z.union([z.string().min(1), z.number().int().positive()])
+  .transform((value) => String(value));
 
 const systemAssetTypeEnum = z.enum([
   'APPLICATION',
@@ -57,7 +59,7 @@ const vendorSchema = z.object({
   hasSla: z.boolean().optional(),
   hasSecurityReview: z.boolean().optional(),
   country: z.string().max(100).optional().nullable(),
-  reviewDate: z.string().datetime().optional().nullable(),
+  reviewDate: z.string().min(1).optional().nullable(),
 }).strict();
 
 const updateVendorSchema = vendorSchema.partial().refine(
@@ -71,8 +73,8 @@ const systemAssetSchema = z.object({
   type: systemAssetTypeEnum.optional(),
   criticality: criticalityEnum.optional(),
   ownerDepartment: z.string().max(150).optional().nullable(),
-  ownerUserId: z.number().int().positive().optional().nullable(),
-  vendorId: z.number().int().positive().optional().nullable(),
+  ownerUserId: recordIdSchema.optional().nullable(),
+  vendorId: recordIdSchema.optional().nullable(),
   containsPersonalData: z.boolean().optional(),
   containsSensitiveData: z.boolean().optional(),
   internetExposed: z.boolean().optional(),
@@ -106,9 +108,9 @@ const updateBusinessProcessSchema = businessProcessSchema.partial().refine(
 
 const dependencySchema = z.object({
   sourceType: dependencyNodeTypeEnum,
-  sourceId: z.number().int().positive(),
+  sourceId: recordIdSchema,
   targetType: dependencyNodeTypeEnum,
-  targetId: z.number().int().positive(),
+  targetId: recordIdSchema,
   dependencyType: dependencyTypeEnum.optional(),
   isCritical: z.boolean().optional(),
   failureImpact: z.string().max(1000).optional().nullable(),

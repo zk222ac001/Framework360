@@ -1,27 +1,7 @@
-const fs = require("fs");
-const path = require("path");
 const bcrypt = require("bcrypt");
 const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
-
-function loadFrameworkFile(filename) {
-  const filePath = path.join(__dirname, "seed-data", filename);
-  return JSON.parse(fs.readFileSync(filePath, "utf8"));
-}
-
-function loadAllFrameworkFiles() {
-  const seedDir = path.join(__dirname, "seed-data");
-
-  if (!fs.existsSync(seedDir)) {
-    return [];
-  }
-
-  return fs
-    .readdirSync(seedDir)
-    .filter((file) => file.endsWith(".json"))
-    .map((file) => loadFrameworkFile(file));
-}
 
 async function main() {
   const adminEmail =
@@ -56,95 +36,7 @@ async function main() {
     },
   });
 
-  if (!prisma.frameworkDefinition || !prisma.frameworkSection || !prisma.frameworkRequirement) {
-    console.warn(
-      "Framework seed skipped: current Prisma client does not expose framework definition models."
-    );
-    return;
-  }
-
-  const frameworks = loadAllFrameworkFiles();
-
-  for (const frameworkData of frameworks) {
-    await seedFramework(frameworkData);
-  }
-
-  console.log("Seed færdig");
-}
-
-async function seedFramework(frameworkData) {
-  const framework = await prisma.frameworkDefinition.upsert({
-    where: { code: frameworkData.code },
-    update: {
-      name: frameworkData.name,
-      description: frameworkData.description,
-      category: frameworkData.category,
-      isActive: true,
-    },
-    create: {
-      code: frameworkData.code,
-      name: frameworkData.name,
-      description: frameworkData.description,
-      category: frameworkData.category,
-      isActive: true,
-    },
-  });
-
-  for (const sectionData of frameworkData.sections) {
-    const section = await prisma.frameworkSection.upsert({
-      where: {
-        frameworkDefinitionId_order: {
-          frameworkDefinitionId: framework.id,
-          order: sectionData.order,
-        },
-      },
-      update: {
-        title: sectionData.title,
-        description: sectionData.description,
-        weight: sectionData.weight,
-      },
-      create: {
-        frameworkDefinitionId: framework.id,
-        title: sectionData.title,
-        description: sectionData.description,
-        order: sectionData.order,
-        weight: sectionData.weight,
-      },
-    });
-
-    for (const requirementData of sectionData.requirements) {
-      await prisma.frameworkRequirement.upsert({
-        where: {
-          sectionId_order: {
-            sectionId: section.id,
-            order: requirementData.order,
-          },
-        },
-        update: {
-          question: requirementData.question,
-          description: requirementData.description,
-          reference: requirementData.reference,
-          implementationGuide: requirementData.implementationGuide,
-          exampleEvidence: requirementData.exampleEvidence,
-          riskIfMissing: requirementData.riskIfMissing,
-          weight: requirementData.weight,
-          isActive: true,
-        },
-        create: {
-          sectionId: section.id,
-          question: requirementData.question,
-          description: requirementData.description,
-          reference: requirementData.reference,
-          implementationGuide: requirementData.implementationGuide,
-          exampleEvidence: requirementData.exampleEvidence,
-          riskIfMissing: requirementData.riskIfMissing,
-          order: requirementData.order,
-          weight: requirementData.weight,
-          isActive: true,
-        },
-      });
-    }
-  }
+  console.log("Seed complete");
 }
 
 main()

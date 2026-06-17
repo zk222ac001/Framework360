@@ -1,8 +1,19 @@
 const express = require("express");
+
 const prisma = require("../db");
 const { requireAuth } = require("../middleware/auth.middleware");
 
 const router = express.Router();
+
+const FRAMEWORK_NAMES = {
+  NIS2: "NIS2",
+  DORA: "DORA",
+  ISO27001: "ISO 27001",
+  GDPR: "GDPR",
+  SOC2: "SOC 2",
+  CIS18: "CIS Controls v8",
+  NIST_CSF: "NIST CSF",
+};
 
 function requireCompany(req, res) {
   if (!req.user?.companyId) {
@@ -18,19 +29,25 @@ function daysFromNow(days) {
   return date;
 }
 
-function mapActionToRequest(action, index) {
-  const hasEvidence = Boolean(action.evidence && action.evidence.length > 0);
+function mapControlToRequest(control, index) {
+  const hasEvidence = Boolean(control.evidence && control.evidence.length > 0);
+  const isOpen = control.status !== "IMPLEMENTED" && control.status !== "NOT_APPLICABLE";
+
   return {
-    id: `${action.id}-${index}`,
-    answerId: action.id,
-    title: action.requirement?.question || "Evidence request",
-    framework: action.assessment?.frameworkDefinition?.name || "Framework",
-    section: action.requirement?.section?.title || "General",
-    owner: action.answeredBy ? `${action.answeredBy.firstName} ${action.answeredBy.lastName}`.trim() : "Control owner",
-    status: hasEvidence ? "COLLECTED" : "REQUESTED",
-    priority: action.status === "NO" ? "HIGH" : action.status === "PARTIAL" ? "MEDIUM" : "LOW",
+    id: `${control.id}-${index}`,
+    answerId: control.id,
+    title: control.title || "Evidence request",
+    framework: FRAMEWORK_NAMES[control.framework] || control.framework || "Framework",
+    section: "Controls",
+    owner: control.owner || "Control owner",
+    status: hasEvidence && !isOpen ? "COLLECTED" : hasEvidence ? "REQUESTED" : "REQUESTED",
+    priority: control.status === "NOT_STARTED" || control.riskLevel === "HIGH" || control.riskLevel === "CRITICAL"
+      ? "HIGH"
+      : control.status === "IN_PROGRESS"
+        ? "MEDIUM"
+        : "LOW",
     dueDate: daysFromNow(index + 7).toISOString(),
-    suggestedEvidence: action.requirement?.exampleEvidence || "Policy, procedure, screenshot, system export, report, attestation, or vendor documentation",
+    suggestedEvidence: "Policy, procedure, screenshot, system export, report, attestation, or vendor documentation",
   };
 }
 
@@ -39,22 +56,25 @@ router.get("/evidence-campaigns", requireAuth, async (req, res, next) => {
     const companyId = requireCompany(req, res);
     if (!companyId) return;
 
-    const answers = await prisma.frameworkRequirementAnswer.findMany({
+    const controls = await prisma.control.findMany({
       where: {
-        assessment: { companyId },
-        status: { in: ["NO", "PARTIAL", "UNANSWERED"] },
+        companyId,
+        OR: [
+          { status: { in: ["NOT_STARTED", "IN_PROGRESS"] } },
+          { evidence: { none: {} } },
+        ],
       },
       include: {
         evidence: true,
-        answeredBy: true,
-        assessment: { include: { frameworkDefinition: true } },
-        requirement: { include: { section: true } },
       },
-      orderBy: { updatedAt: "desc" },
+      orderBy: [
+        { riskLevel: "desc" },
+        { updatedAt: "desc" },
+      ],
       take: 50,
     });
 
-    const requests = answers.map(mapActionToRequest);
+    const requests = controls.map(mapControlToRequest);
     const summary = {
       total: requests.length,
       requested: requests.filter((item) => item.status === "REQUESTED").length,
@@ -88,10 +108,10 @@ router.post("/evidence-campaigns/remind", requireAuth, async (req, res, next) =>
 
     await prisma.auditLog.create({
       data: {
-        userId: req.user?.userId || null,
+        userId: req.user?.userId || req.user?.id || null,
         action: "EVIDENCE_CAMPAIGN_REMINDER_SENT",
         entity: "EvidenceCampaign",
-        metadata: JSON.stringify({ companyId, requestId: req.body?.requestId || null }),
+        metadata: { companyId, requestId: req.body?.requestId || null },
       },
     });
 

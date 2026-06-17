@@ -38,8 +38,7 @@ describe('Auto tasks', () => {
 
     const tasks = await prisma.task.findMany({
       where: {
-        assessmentId: assessment.id,
-        requirementId: requirement.id,
+        controlId: requirement.id,
       },
     });
 
@@ -78,8 +77,7 @@ describe('Auto tasks', () => {
 
     const task = await prisma.task.findFirst({
       where: {
-        assessmentId: assessment.id,
-        requirementId: requirement.id,
+        controlId: requirement.id,
       },
     });
 
@@ -101,8 +99,7 @@ describe('Auto tasks', () => {
     await prisma.task.create({
       data: {
         companyId: company.id,
-        assessmentId: assessment.id,
-        requirementId: requirement.id,
+        controlId: requirement.id,
         title: requirement.question,
         description: 'Fix it',
         priority: 'HIGH',
@@ -128,8 +125,7 @@ describe('Auto tasks', () => {
 
     const task = await prisma.task.findFirst({
       where: {
-        assessmentId: assessment.id,
-        requirementId: requirement.id,
+        controlId: requirement.id,
       },
     });
 

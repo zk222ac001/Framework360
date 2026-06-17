@@ -1,15 +1,19 @@
 const { z } = require('zod');
 
-const taskStatusEnum = z.enum(['OPEN', 'IN_PROGRESS', 'DONE']);
-const taskPriorityEnum = z.enum(['LOW', 'MEDIUM', 'HIGH']);
+const taskStatusEnum = z.enum(['OPEN', 'IN_PROGRESS', 'BLOCKED', 'DONE']);
+const taskPriorityEnum = z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']);
+const recordIdSchema = z.union([z.string().min(1), z.number().int().positive()])
+  .transform((value) => String(value));
 
 const createTaskSchema = z.object({
-  assessmentId: z.number().int().positive().optional().nullable(),
-  requirementId: z.number().int().positive().optional().nullable(),
+  controlId: recordIdSchema.optional().nullable(),
+  assessmentId: recordIdSchema.optional().nullable(),
+  requirementId: recordIdSchema.optional().nullable(),
   title: z.string().min(1, 'Task title is required'),
   description: z.string().optional().nullable(),
   priority: taskPriorityEnum.optional(),
-  assignedToUserId: z.number().int().positive().optional().nullable(),
+  assignedToId: recordIdSchema.optional().nullable(),
+  assignedToUserId: recordIdSchema.optional().nullable(),
   dueDate: z.string().datetime().optional().nullable(),
 });
 
@@ -18,7 +22,9 @@ const updateTaskSchema = z.object({
   description: z.string().optional().nullable(),
   status: taskStatusEnum.optional(),
   priority: taskPriorityEnum.optional(),
-  assignedToUserId: z.number().int().positive().optional().nullable(),
+  controlId: recordIdSchema.optional().nullable(),
+  assignedToId: recordIdSchema.optional().nullable(),
+  assignedToUserId: recordIdSchema.optional().nullable(),
   dueDate: z.string().datetime().optional().nullable(),
 });
 

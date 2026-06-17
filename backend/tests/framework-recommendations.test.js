@@ -47,43 +47,8 @@ async function createUserWithCompany({
   };
 }
 
-async function createFrameworks() {
-  const frameworks = [
-    ['GDPR', 'GDPR', 'EU Law'],
-    ['DORA', 'DORA', 'EU Law'],
-    ['NIS2', 'NIS2', 'EU Law'],
-    ['ISO27001', 'ISO 27001', 'Standard'],
-    ['D_MAERKET', 'D-mærket', 'Trust Mark'],
-    ['PCI_DSS', 'PCI DSS', 'Standard'],
-    ['AI_ACT', 'EU AI Act', 'EU Law'],
-    ['SOC2', 'SOC 2', 'Standard'],
-    ['CER', 'CER', 'EU Law'],
-  ];
-
-  for (const [code, name, category] of frameworks) {
-    await prisma.frameworkDefinition.upsert({
-      where: { code },
-      create: {
-        code,
-        name,
-        category,
-        description: `${name} description`,
-        isActive: true,
-      },
-      update: {
-        name,
-        category,
-        description: `${name} description`,
-        isActive: true,
-      },
-    });
-  }
-}
-
 describe('Framework recommendations', () => {
   it('should return grouped recommendations for finance company', async () => {
-    await createFrameworks();
-
     const { cookies } = await createUserWithCompany({
       email: 'finance-recommend@test.dk',
       sector: 'FINANCE',
@@ -108,8 +73,6 @@ describe('Framework recommendations', () => {
   });
 
   it('should use scope answers in recommendations', async () => {
-    await createFrameworks();
-
     const { cookies } = await createUserWithCompany({
       email: 'scope-recommend@test.dk',
       sector: 'RETAIL',

@@ -2,7 +2,7 @@ export type AuditFindingStatus = "OPEN" | "IN_PROGRESS" | "DONE";
 export type AuditFindingPriority = "LOW" | "MEDIUM" | "HIGH";
 
 export type AuditFinding = {
-  id: number;
+  id: string;
   title: string;
   description?: string | null;
   status: AuditFindingStatus;

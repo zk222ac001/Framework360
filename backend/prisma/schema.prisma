@@ -31,10 +31,22 @@ enum Framework {
   NIS2
   DORA
   ISO27001
+  ISO27002
+  ISO27701
+  ISO22301
+  ISO42001
   GDPR
   SOC2
   CIS18
+  CIS_CONTROLS
   NIST_CSF
+  AI_ACT
+  CRA
+  DATA_ACT
+  EIDAS
+  CER
+  PCI_DSS
+  TISAX
 }
 
 enum UserRole {
@@ -120,6 +132,19 @@ enum AuditAction {
   TASK_UPDATED
   TASK_COMPLETED
   REPORT_GENERATED
+  EVIDENCE_DELETED
+  EVIDENCE_CAMPAIGN_REMINDER_SENT
+  DEMO_ACTIVATED
+  EXECUTIVE_REPORT_GENERATED
+  ASSESSMENT_REPORT_GENERATED
+  SSO_LOGIN_SUCCESS
+  ADMIN_FRAMEWORK_CREATED
+  ADMIN_FRAMEWORK_UPDATED
+  ADMIN_FRAMEWORK_SECTION_CREATED
+  ADMIN_FRAMEWORK_SECTION_UPDATED
+  ADMIN_FRAMEWORK_REQUIREMENT_CREATED
+  ADMIN_FRAMEWORK_REQUIREMENT_UPDATED
+  ADMIN_FRAMEWORK_REQUIREMENT_SOFT_DELETED
 }
 
 enum SsoProvider {
@@ -184,6 +209,27 @@ model Company {
   campaigns           EvidenceCampaign[]
   ssoDomains          SsoDomain[]
   demoRequests        DemoRequest[]
+  scope               CompanyScope?
+}
+
+model CompanyScope {
+  id                             String    @id @default(cuid())
+  companyId                      String    @unique
+  employeeCount                  String    @default("UNKNOWN")
+  processesPersonalData          Boolean   @default(false)
+  handlesSensitiveData           Boolean   @default(false)
+  acceptsCardPayments            Boolean   @default(false)
+  usesAiSystems                  Boolean   @default(false)
+  servesFinancialCustomers       Boolean   @default(false)
+  isDigitalServiceProvider       Boolean   @default(false)
+  operatesCriticalInfrastructure Boolean   @default(false)
+  hasEuCustomers                 Boolean   @default(false)
+  usesCloudProviders             Boolean   @default(false)
+  hasCriticalSuppliers           Boolean   @default(false)
+  completedAt                    DateTime?
+  createdAt                      DateTime  @default(now())
+  updatedAt                      DateTime  @updatedAt
+  company                        Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
 
 model CompanyFramework {
@@ -197,34 +243,35 @@ model CompanyFramework {
 }
 
 model User {
-  id                    String         @id @default(cuid())
+  id                    String               @id @default(cuid())
   firstName             String
   lastName              String
-  email                 String         @unique
+  email                 String               @unique
   password              String?
-  role                  UserRole       @default(CUSTOMER_ADMIN)
-  isActive              Boolean        @default(true)
-  mustChangePassword    Boolean        @default(false)
-  onboardingCompleted   Boolean        @default(false)
-  authProvider          AuthProvider   @default(LOCAL)
+  role                  UserRole             @default(CUSTOMER_ADMIN)
+  isActive              Boolean              @default(true)
+  mustChangePassword    Boolean              @default(false)
+  onboardingCompleted   Boolean              @default(false)
+  authProvider          AuthProvider         @default(LOCAL)
   providerId            String?
   lastLogin             DateTime?
-  createdAt             DateTime       @default(now())
-  updatedAt             DateTime       @updatedAt
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
   companyId             String?
-  company               Company?       @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  company               Company?             @relation(fields: [companyId], references: [id], onDelete: SetNull)
   evidence              Evidence[]
   tasks                 Task[]
   auditLogs             AuditLog[]
   invitations           Invitation[]
   reports               Report[]
   comments              Comment[]
-  ssoDomainsVerified    SsoDomain[]    @relation("SsoDomainVerifiedBy")
-  auditFindingsOwned    AuditFinding[] @relation("FindingOwner")
+  ssoDomainsVerified    SsoDomain[]          @relation("SsoDomainVerifiedBy")
+  auditFindingsOwned    AuditFinding[]       @relation("FindingOwner")
   campaignAssignments   CampaignAssignment[]
-  approvalRequests      ApprovalRequest[] @relation("ApprovalRequester")
-  approvalDecisions     ApprovalRequest[] @relation("ApprovalApprover")
-  activatedDemoRequests DemoRequest[]  @relation("DemoRequestCreatedUser")
+  approvalRequests      ApprovalRequest[]    @relation("ApprovalRequester")
+  approvalDecisions     ApprovalRequest[]    @relation("ApprovalApprover")
+  activatedDemoRequests DemoRequest[]        @relation("DemoRequestCreatedUser")
+  ownedSystems          System[]             @relation("SystemOwnerUser")
 }
 
 model Invitation {
@@ -242,62 +289,64 @@ model Invitation {
 }
 
 model Control {
-  id                 String           @id @default(cuid())
-  companyId          String
-  framework          Framework
-  controlId          String
-  title              String
-  description        String?
-  status             ControlStatus    @default(NOT_STARTED)
-  maturity           ControlMaturity?
-  owner              String?
-  dueDate            DateTime?
-  riskLevel          RiskLevel?
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  company            Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  evidence           Evidence[]
-  tasks              Task[]
-  auditFindings      AuditFinding[]
+  id            String           @id @default(cuid())
+  companyId     String
+  framework     Framework
+  controlId     String
+  title         String
+  description   String?
+  status        ControlStatus    @default(NOT_STARTED)
+  answerStatus  String           @default("UNANSWERED")
+  answerNote    String?
+  maturity      ControlMaturity?
+  owner         String?
+  dueDate       DateTime?
+  riskLevel     RiskLevel?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  company       Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  evidence      Evidence[]
+  tasks         Task[]
+  auditFindings AuditFinding[]
 
   @@unique([companyId, framework, controlId])
 }
 
 model Evidence {
-  id          String         @id @default(cuid())
-  companyId   String
-  controlId   String?
-  uploadedById String?
-  title       String
-  description String?
-  filePath    String?
-  fileType    String?
-  fileSize    Int?
-  status      EvidenceStatus @default(DRAFT)
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  company     Company        @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  control     Control?       @relation(fields: [controlId], references: [id], onDelete: SetNull)
-  uploadedBy  User?          @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
-  comments    Comment[]
+  id               String            @id @default(cuid())
+  companyId        String
+  controlId        String?
+  uploadedById     String?
+  title            String
+  description      String?
+  filePath         String?
+  fileType         String?
+  fileSize         Int?
+  status           EvidenceStatus    @default(DRAFT)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  company          Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  control          Control?          @relation(fields: [controlId], references: [id], onDelete: SetNull)
+  uploadedBy       User?             @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  comments         Comment[]
   approvalRequests ApprovalRequest[]
 }
 
 model Task {
-  id          String       @id @default(cuid())
-  companyId   String
-  controlId   String?
+  id           String       @id @default(cuid())
+  companyId    String
+  controlId    String?
   assignedToId String?
-  title       String
-  description String?
-  status      TaskStatus   @default(OPEN)
-  priority    TaskPriority @default(MEDIUM)
-  dueDate     DateTime?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  company     Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  control     Control?     @relation(fields: [controlId], references: [id], onDelete: SetNull)
-  assignedTo  User?        @relation(fields: [assignedToId], references: [id], onDelete: SetNull)
+  title        String
+  description  String?
+  status       TaskStatus   @default(OPEN)
+  priority     TaskPriority @default(MEDIUM)
+  dueDate      DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  company      Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  control      Control?     @relation(fields: [controlId], references: [id], onDelete: SetNull)
+  assignedTo   User?        @relation(fields: [assignedToId], references: [id], onDelete: SetNull)
 }
 
 model AuditLog {
@@ -314,24 +363,24 @@ model AuditLog {
 }
 
 model Report {
-  id        String   @id @default(cuid())
-  companyId String
+  id          String   @id @default(cuid())
+  companyId   String
   createdById String?
-  title     String
-  type      String
-  filePath  String?
-  createdAt DateTime @default(now())
-  createdBy User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  title       String
+  type        String
+  filePath    String?
+  createdAt   DateTime @default(now())
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
 }
 
 model Comment {
-  id          String   @id @default(cuid())
-  evidenceId  String
-  userId      String?
-  body        String
-  createdAt   DateTime @default(now())
-  evidence    Evidence @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
-  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id         String   @id @default(cuid())
+  evidenceId String
+  userId     String?
+  body       String
+  createdAt  DateTime @default(now())
+  evidence   Evidence @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
 
 model SsoDomain {
@@ -348,75 +397,114 @@ model SsoDomain {
 }
 
 model Vendor {
-  id          String   @id @default(cuid())
-  companyId   String
-  name        String
-  service     String?
-  riskLevel   RiskLevel?
-  owner       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  dependencies Dependency[]
+  id                 String       @id @default(cuid())
+  companyId          String
+  name               String
+  description        String?
+  website            String?
+  contactEmail       String?
+  service            String?
+  riskLevel          RiskLevel?
+  criticality        RiskLevel    @default(MEDIUM)
+  isCriticalSupplier Boolean      @default(false)
+  hasDpa             Boolean      @default(false)
+  hasSla             Boolean      @default(false)
+  hasSecurityReview  Boolean      @default(false)
+  country            String?
+  reviewDate         DateTime?
+  owner              String?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+  company            Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  systems            System[]
+  dependencies       Dependency[]
 }
 
 model System {
-  id          String   @id @default(cuid())
-  companyId   String
-  name        String
-  description String?
-  owner       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  dependencies Dependency[]
+  id                    String       @id @default(cuid())
+  companyId             String
+  name                  String
+  description           String?
+  type                  String       @default("OTHER")
+  status                String       @default("ACTIVE")
+  criticality           RiskLevel    @default(MEDIUM)
+  owner                 String?
+  ownerDepartment       String?
+  ownerUserId           String?
+  vendorId              String?
+  containsPersonalData  Boolean      @default(false)
+  containsSensitiveData Boolean      @default(false)
+  internetExposed       Boolean      @default(false)
+  mfaEnabled            Boolean      @default(false)
+  backupEnabled         Boolean      @default(false)
+  loggingEnabled        Boolean      @default(false)
+  monitoringEnabled     Boolean      @default(false)
+  rtoMinutes            Int?
+  rpoMinutes            Int?
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+  company               Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  vendor                Vendor?      @relation(fields: [vendorId], references: [id], onDelete: SetNull)
+  ownerUser             User?        @relation("SystemOwnerUser", fields: [ownerUserId], references: [id], onDelete: SetNull)
+  dependencies          Dependency[]
 }
 
 model BusinessProcess {
-  id          String   @id @default(cuid())
-  companyId   String
-  name        String
-  description String?
-  owner       String?
-  criticality RiskLevel?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  dependencies Dependency[]
+  id                          String       @id @default(cuid())
+  companyId                   String
+  name                        String
+  description                 String?
+  owner                       String?
+  ownerDepartment             String?
+  criticality                 RiskLevel    @default(MEDIUM)
+  maxTolerableDowntimeMinutes Int?
+  manualWorkaroundAvailable   Boolean      @default(false)
+  createdAt                   DateTime     @default(now())
+  updatedAt                   DateTime     @updatedAt
+  company                     Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  dependencies                Dependency[]
 }
 
 model Dependency {
-  id                String           @id @default(cuid())
-  companyId          String
-  vendorId           String?
-  systemId           String?
-  businessProcessId  String?
-  dependencyType     String
-  description        String?
-  riskLevel          RiskLevel?
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  company            Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  vendor             Vendor?          @relation(fields: [vendorId], references: [id], onDelete: SetNull)
-  system             System?          @relation(fields: [systemId], references: [id], onDelete: SetNull)
-  businessProcess    BusinessProcess? @relation(fields: [businessProcessId], references: [id], onDelete: SetNull)
+  id                        String           @id @default(cuid())
+  companyId                 String
+  sourceType                String?
+  sourceId                  String?
+  targetType                String?
+  targetId                  String?
+  vendorId                  String?
+  systemId                  String?
+  businessProcessId         String?
+  dependencyType            String           @default("OTHER")
+  description               String?
+  riskLevel                 RiskLevel?
+  isCritical                Boolean          @default(false)
+  failureImpact             String?
+  manualWorkaroundAvailable Boolean          @default(false)
+  notes                     String?
+  createdAt                 DateTime         @default(now())
+  updatedAt                 DateTime         @updatedAt
+  company                   Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  vendor                    Vendor?          @relation(fields: [vendorId], references: [id], onDelete: SetNull)
+  system                    System?          @relation(fields: [systemId], references: [id], onDelete: SetNull)
+  businessProcess           BusinessProcess? @relation(fields: [businessProcessId], references: [id], onDelete: SetNull)
 }
 
 model AuditFinding {
-  id              String          @id @default(cuid())
-  companyId       String
-  controlId       String?
-  ownerId         String?
-  title           String
-  description     String?
-  severity        FindingSeverity @default(MEDIUM)
-  status          FindingStatus   @default(OPEN)
-  dueDate         DateTime?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  company         Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  control         Control?        @relation(fields: [controlId], references: [id], onDelete: SetNull)
-  owner           User?           @relation("FindingOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  id          String          @id @default(cuid())
+  companyId   String
+  controlId   String?
+  ownerId     String?
+  title       String
+  description String?
+  severity    FindingSeverity @default(MEDIUM)
+  status      FindingStatus   @default(OPEN)
+  dueDate     DateTime?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  company     Company         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  control     Control?        @relation(fields: [controlId], references: [id], onDelete: SetNull)
+  owner       User?           @relation("FindingOwner", fields: [ownerId], references: [id], onDelete: SetNull)
 }
 
 model EvidenceCampaign {
@@ -433,30 +521,30 @@ model EvidenceCampaign {
 }
 
 model CampaignAssignment {
-  id             String           @id @default(cuid())
-  campaignId     String
-  assigneeId     String?
-  controlId      String?
-  status         EvidenceStatus   @default(DRAFT)
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  campaign       EvidenceCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
-  assignee       User?            @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
+  id         String           @id @default(cuid())
+  campaignId String
+  assigneeId String?
+  controlId  String?
+  status     EvidenceStatus   @default(DRAFT)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  campaign   EvidenceCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  assignee   User?            @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
 }
 
 model ApprovalRequest {
-  id          String         @id @default(cuid())
-  evidenceId  String
+  id            String         @id @default(cuid())
+  evidenceId    String
   requestedById String?
-  approverId  String?
-  status      ApprovalStatus @default(PENDING)
-  comment     String?
-  decidedAt   DateTime?
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  evidence    Evidence       @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
-  requestedBy User?          @relation("ApprovalRequester", fields: [requestedById], references: [id], onDelete: SetNull)
-  approver    User?          @relation("ApprovalApprover", fields: [approverId], references: [id], onDelete: SetNull)
+  approverId    String?
+  status        ApprovalStatus @default(PENDING)
+  comment       String?
+  decidedAt     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  evidence      Evidence       @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+  requestedBy   User?          @relation("ApprovalRequester", fields: [requestedById], references: [id], onDelete: SetNull)
+  approver      User?          @relation("ApprovalApprover", fields: [approverId], references: [id], onDelete: SetNull)
 }
 
 model DemoRequest {
@@ -478,10 +566,10 @@ model DemoRequest {
 }
 
 model EmailLog {
-  id        String   @id @default(cuid())
-  userId    String?
-  toEmail   String
-  type      String
-  subject   String
-  sentAt    DateTime @default(now())
+  id      String   @id @default(cuid())
+  userId  String?
+  toEmail String
+  type    String
+  subject String
+  sentAt  DateTime @default(now())
 }

@@ -90,12 +90,8 @@ router.post('/seed-files/:code/import', async (req, res) => {
       return res.status(404).json({ error: 'Seed file not found' });
     }
 
-    const framework = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    const result = await importFramework(framework);
-
-    return res.json({
-      message: 'Framework imported to database',
-      result,
+    return res.status(501).json({
+      error: 'Framework seed import is not available in the current schema',
     });
   } catch (error) {
     console.error('POST /admin/seed-files/:code/import error:', error);
@@ -106,98 +102,5 @@ router.post('/seed-files/:code/import', async (req, res) => {
     });
   }
 });
-
-async function importFramework(framework) {
-  const frameworkDefinition = await prisma.frameworkDefinition.upsert({
-    where: { code: framework.code },
-    update: {
-      name: framework.name,
-      description: framework.description || null,
-      category: framework.category || null,
-      isActive: true,
-    },
-    create: {
-      code: framework.code,
-      name: framework.name,
-      description: framework.description || null,
-      category: framework.category || null,
-      isActive: true,
-    },
-  });
-
-  for (const section of framework.sections) {
-    const dbSection = await prisma.frameworkSection.upsert({
-      where: {
-        frameworkDefinitionId_order: {
-          frameworkDefinitionId: frameworkDefinition.id,
-          order: section.order,
-        },
-      },
-      update: {
-        title: section.title,
-        description: section.description || null,
-        weight: section.weight || 1,
-      },
-      create: {
-        frameworkDefinitionId: frameworkDefinition.id,
-        title: section.title,
-        description: section.description || null,
-        order: section.order,
-        weight: section.weight || 1,
-      },
-    });
-
-    for (const requirement of section.requirements) {
-      await prisma.frameworkRequirement.upsert({
-        where: {
-          sectionId_order: {
-            sectionId: dbSection.id,
-            order: requirement.order,
-          },
-        },
-        update: {
-          question: requirement.question,
-          description: requirement.description || null,
-          reference: requirement.reference || null,
-          implementationGuide: requirement.implementationGuide || null,
-          exampleEvidence: requirement.exampleEvidence || null,
-          riskIfMissing: requirement.riskIfMissing || null,
-          weight: requirement.weight || 1,
-          isRequired:
-            typeof requirement.isRequired === 'boolean'
-              ? requirement.isRequired
-              : true,
-          isActive: true,
-        },
-        create: {
-          sectionId: dbSection.id,
-          question: requirement.question,
-          description: requirement.description || null,
-          reference: requirement.reference || null,
-          implementationGuide: requirement.implementationGuide || null,
-          exampleEvidence: requirement.exampleEvidence || null,
-          riskIfMissing: requirement.riskIfMissing || null,
-          order: requirement.order,
-          weight: requirement.weight || 1,
-          isRequired:
-            typeof requirement.isRequired === 'boolean'
-              ? requirement.isRequired
-              : true,
-          isActive: true,
-        },
-      });
-    }
-  }
-
-  return {
-    frameworkId: frameworkDefinition.id,
-    code: frameworkDefinition.code,
-    sections: framework.sections.length,
-    requirements: framework.sections.reduce(
-      (sum, section) => sum + section.requirements.length,
-      0
-    ),
-  };
-}
 
 module.exports = router;

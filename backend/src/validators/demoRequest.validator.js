@@ -9,11 +9,14 @@ const createDemoRequestSchema = z.object({
   country: z.string().optional().nullable(),
 });
 
+const updateDemoRequestSchema = createDemoRequestSchema;
+
 const updateDemoRequestStatusSchema = z.object({
   status: z.enum(['PENDING', 'EMAILED', 'ACTIVATED', 'EXPIRED', 'REJECTED']),
 });
 
 module.exports = {
   createDemoRequestSchema,
+  updateDemoRequestSchema,
   updateDemoRequestStatusSchema,
 };

@@ -9,6 +9,7 @@ const {
 const { validate } = require("../middleware/validate.middleware");
 const {
   createDemoRequestSchema,
+  updateDemoRequestSchema,
   updateDemoRequestStatusSchema,
 } = require("../validators/demoRequest.validator");
 const { logAction } = require("../utils/audit");
@@ -35,6 +36,12 @@ function generateTemporaryPassword() {
   }
 
   return required.sort(() => Math.random() - 0.5).join("");
+}
+
+function parseDemoRequestId(value) {
+  const id = Number(value);
+
+  return Number.isInteger(id) && id > 0 ? id : null;
 }
 
 router.post("/", validate(createDemoRequestSchema), async (req, res) => {
@@ -123,6 +130,170 @@ router.get("/", requireAuth, requirePlatformAdmin, async (req, res) => {
     });
   }
 });
+
+router.patch(
+  "/:id",
+  requireAuth,
+  requirePlatformAdmin,
+  validate(updateDemoRequestSchema),
+  async (req, res) => {
+    try {
+      const id = parseDemoRequestId(req.params.id);
+
+      if (!id) {
+        return res.status(400).json({ error: "Invalid id" });
+      }
+
+      const { email, firstName, lastName, companyName, jobTitle, country } =
+        req.body;
+
+      const normalizedEmail = normalizeEmail(email);
+      const normalizedFirstName = normalizeName(firstName);
+      const normalizedLastName = normalizeName(lastName);
+      const normalizedCompanyName = normalizeCompanyName(companyName);
+      const normalizedJobTitle = normalizeNullableString(jobTitle);
+      const normalizedCountry = normalizeNullableString(country);
+
+      if (!isCompanyEmail(normalizedEmail)) {
+        return res.status(400).json({
+          error: "Please use your company email address",
+        });
+      }
+
+      const current = await prisma.demoRequest.findUnique({
+        where: { id },
+        include: {
+          company: true,
+          createdUser: true,
+        },
+      });
+
+      if (!current) {
+        return res.status(404).json({ error: "Demo request not found" });
+      }
+
+      const [registeredUser, existingActiveRequest] = await Promise.all([
+        prisma.user.findUnique({
+          where: { email: normalizedEmail },
+          select: { id: true },
+        }),
+        prisma.demoRequest.findFirst({
+          where: {
+            id: { not: id },
+            email: normalizedEmail,
+            status: { in: ["PENDING", "EMAILED"] },
+          },
+          select: { id: true },
+        }),
+      ]);
+
+      if (registeredUser && registeredUser.id !== current.createdUserId) {
+        return res.status(409).json({
+          error: "This email is already registered in the system",
+        });
+      }
+
+      if (existingActiveRequest) {
+        return res.status(409).json({
+          error: "An active demo request already exists for this email",
+        });
+      }
+
+      const updated = await prisma.$transaction(async (tx) => {
+        const demoRequest = await tx.demoRequest.update({
+          where: { id },
+          data: {
+            email: normalizedEmail,
+            firstName: normalizedFirstName,
+            lastName: normalizedLastName,
+            companyName: normalizedCompanyName,
+            jobTitle: normalizedJobTitle,
+            country: normalizedCountry,
+          },
+        });
+
+        if (current.createdUserId) {
+          await tx.user.update({
+            where: { id: current.createdUserId },
+            data: {
+              email: normalizedEmail,
+              firstName: normalizedFirstName,
+              lastName: normalizedLastName,
+            },
+          });
+        }
+
+        if (current.companyId) {
+          await tx.company.update({
+            where: { id: current.companyId },
+            data: {
+              name: normalizedCompanyName,
+              country: normalizedCountry,
+            },
+          });
+        }
+
+        return demoRequest;
+      });
+
+      return res.json(updated);
+    } catch (error) {
+      console.error("PATCH /demo-requests/:id error:", error);
+
+      return res.status(500).json({
+        error: "Internal server error",
+        message: error.message,
+      });
+    }
+  },
+);
+
+router.delete(
+  "/:id",
+  requireAuth,
+  requirePlatformAdmin,
+  async (req, res) => {
+    try {
+      const id = parseDemoRequestId(req.params.id);
+
+      if (!id) {
+        return res.status(400).json({ error: "Invalid id" });
+      }
+
+      const demoRequest = await prisma.demoRequest.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          createdUserId: true,
+        },
+      });
+
+      if (!demoRequest) {
+        return res.status(404).json({ error: "Demo request not found" });
+      }
+
+      await prisma.$transaction(async (tx) => {
+        await tx.demoRequest.delete({ where: { id } });
+
+        if (demoRequest.createdUserId) {
+          await tx.user.delete({ where: { id: demoRequest.createdUserId } });
+        }
+      });
+
+      return res.json({
+        deleted: true,
+        deletedUser: Boolean(demoRequest.createdUserId),
+      });
+    } catch (error) {
+      console.error("DELETE /demo-requests/:id error:", error);
+
+      return res.status(500).json({
+        error: "Internal server error",
+        message: error.message,
+      });
+    }
+  },
+);
 
 router.post(
   "/:id/activate",

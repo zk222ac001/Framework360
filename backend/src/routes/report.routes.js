@@ -44,9 +44,9 @@ router.get('/reports/executive', requireAuth, async (req, res) => {
 
 router.get('/assessments/:id/report', requireAuth, async (req, res) => {
   try {
-    const assessmentId = Number(req.params.id);
+    const assessmentId = String(req.params.id || '').trim();
 
-    if (!Number.isInteger(assessmentId) || assessmentId <= 0) {
+    if (!assessmentId) {
       return res.status(400).json({ error: 'Invalid assessment id' });
     }
 
@@ -61,43 +61,19 @@ router.get('/assessments/:id/report', requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'User has no company' });
     }
 
-    const assessment = await prisma.companyFrameworkAssessment.findUnique({
-      where: { id: assessmentId },
-      include: {
-        company: true,
-        frameworkDefinition: {
-          include: {
-            sections: {
-              orderBy: { order: 'asc' },
-              include: {
-                requirements: {
-                  where: { isActive: true },
-                  orderBy: { order: 'asc' },
-                },
-              },
-            },
-          },
-        },
-        answers: {
-          include: {
-            evidence: true,
-          },
-        },
-      },
+    const assessment = await buildControlAssessmentReportPayload({
+      companyId: user.companyId,
+      assessmentId,
     });
 
     if (!assessment) {
       return res.status(404).json({ error: 'Assessment not found' });
     }
 
-    if (assessment.companyId !== user.companyId) {
-      return res.status(403).json({ error: 'No access to this assessment' });
-    }
-
     await logAction({
       userId: req.user.userId,
-      action: 'ASSESSMENT_REPORT_GENERATED',
-      entity: 'CompanyFrameworkAssessment',
+      action: 'REPORT_GENERATED',
+      entity: 'CompanyFramework',
       entityId: assessment.id,
       metadata: {
         framework: assessment.frameworkDefinition.code,
@@ -120,12 +96,13 @@ async function buildExecutiveReportPayload(companyId) {
     where: { id: companyId },
     include: {
       vendors: true,
-      assessments: {
+      frameworks: true,
+      controls: {
         include: {
-          frameworkDefinition: true,
-          answers: { include: { evidence: true } },
+          evidence: true,
         },
       },
+      tasks: true,
     },
   });
 
@@ -133,23 +110,34 @@ async function buildExecutiveReportPayload(companyId) {
     throw new Error('Company not found');
   }
 
-  const frameworks = company.assessments.map((assessment) => {
-    const evidenceCount = assessment.answers.reduce(
-      (sum, answer) => sum + (answer.evidence?.length || 0),
+  const frameworks = company.frameworks.map((framework) => {
+    const controls = company.controls.filter(
+      (control) => control.framework === framework.framework
+    );
+    const evidenceCount = controls.reduce(
+      (sum, control) => sum + (control.evidence?.length || 0),
       0
     );
-    const answeredCount = assessment.answers.filter(
-      (answer) => answer.status !== 'UNANSWERED'
+    const answeredCount = controls.filter(
+      (control) => control.status !== 'NOT_STARTED'
     ).length;
-    const totalCount = assessment.answers.length || 1;
+    const totalCount = controls.length || 1;
+    const score = controls.length
+      ? Math.round(
+          controls.reduce((sum, control) => sum + getControlScore(control.status), 0) /
+            controls.length
+        )
+      : 0;
 
     return {
-      code: assessment.frameworkDefinition.code,
-      name: assessment.frameworkDefinition.name,
-      score: Math.round(assessment.score || 0),
-      status: assessment.status,
-      gapsCount: assessment.answers.filter((answer) =>
-        ['NO', 'PARTIAL', 'UNANSWERED'].includes(answer.status)
+      code: framework.framework,
+      name: getFrameworkName(framework.framework),
+      score,
+      status: controls.length && controls.every((control) =>
+        ['IMPLEMENTED', 'NOT_APPLICABLE'].includes(control.status)
+      ) ? 'COMPLETED' : 'IN_PROGRESS',
+      gapsCount: controls.filter((control) =>
+        !['IMPLEMENTED', 'NOT_APPLICABLE'].includes(control.status)
       ).length,
       evidenceCount,
       progressPercentage: Math.round((answeredCount / totalCount) * 100),
@@ -166,15 +154,15 @@ async function buildExecutiveReportPayload(companyId) {
     .map((vendor) => ({
       id: vendor.id,
       name: vendor.name,
-      criticality: vendor.criticality || 'MEDIUM',
-      riskScore: getCriticalityScore(vendor.criticality || 'MEDIUM'),
+      criticality: vendor.criticality || vendor.riskLevel || 'MEDIUM',
+      riskScore: getCriticalityScore(vendor.criticality || vendor.riskLevel || 'MEDIUM'),
     }))
     .sort((a, b) => b.riskScore - a.riskScore)
     .slice(0, 5);
 
   const vendorMatrix = { critical: 0, high: 0, medium: 0, low: 0 };
   for (const vendor of company.vendors) {
-    const score = getCriticalityScore(vendor.criticality || 'MEDIUM');
+    const score = getCriticalityScore(vendor.criticality || vendor.riskLevel || 'MEDIUM');
     if (score >= 90) vendorMatrix.critical += 1;
     else if (score >= 70) vendorMatrix.high += 1;
     else if (score >= 40) vendorMatrix.medium += 1;
@@ -218,6 +206,108 @@ async function buildExecutiveReportPayload(companyId) {
       priority: action.priority,
     })),
   };
+}
+
+async function buildControlAssessmentReportPayload({ companyId, assessmentId }) {
+  const companyFramework = await prisma.companyFramework.findFirst({
+    where: {
+      id: assessmentId,
+      companyId,
+    },
+    include: {
+      company: true,
+    },
+  });
+
+  if (!companyFramework) return null;
+
+  const controls = await prisma.control.findMany({
+    where: {
+      companyId,
+      framework: companyFramework.framework,
+    },
+    include: {
+      evidence: true,
+    },
+    orderBy: {
+      controlId: 'asc',
+    },
+  });
+
+  const score = controls.length
+    ? Math.round(
+        controls.reduce((sum, control) => sum + getControlScore(control.status), 0) /
+          controls.length
+      )
+    : 0;
+
+  return {
+    id: companyFramework.id,
+    companyId,
+    company: companyFramework.company,
+    score,
+    status: controls.length && controls.every((control) =>
+      ['IMPLEMENTED', 'NOT_APPLICABLE'].includes(control.status)
+    ) ? 'COMPLETED' : 'IN_PROGRESS',
+    frameworkDefinition: {
+      code: companyFramework.framework,
+      name: getFrameworkName(companyFramework.framework),
+      sections: [
+        {
+          id: `${companyFramework.framework}-controls`,
+          title: `${getFrameworkName(companyFramework.framework)} controls`,
+          requirements: controls.map((control, index) => ({
+            id: control.id,
+            question: control.title,
+            reference: control.controlId,
+            description: control.description,
+            implementationGuide: control.description,
+            exampleEvidence: 'Policy, procedure, screenshot, system export, report, attestation, or vendor documentation',
+            riskIfMissing: control.riskLevel ? `${control.riskLevel} risk if missing` : null,
+            order: index + 1,
+          })),
+        },
+      ],
+    },
+    answers: controls.map((control) => ({
+      id: control.id,
+      requirementId: control.id,
+      status: control.answerStatus || controlStatusToAnswerStatus(control.status),
+      note: control.answerNote || null,
+      evidence: control.evidence.map((evidence) => ({
+        ...evidence,
+        filename: evidence.title,
+        size: evidence.fileSize,
+      })),
+    })),
+  };
+}
+
+function getFrameworkName(code) {
+  const names = {
+    NIS2: 'NIS2',
+    DORA: 'DORA',
+    ISO27001: 'ISO 27001',
+    GDPR: 'GDPR',
+    SOC2: 'SOC 2',
+    CIS18: 'CIS Controls v8',
+    NIST_CSF: 'NIST CSF',
+  };
+
+  return names[code] || code;
+}
+
+function getControlScore(status) {
+  if (status === 'IMPLEMENTED' || status === 'NOT_APPLICABLE') return 100;
+  if (status === 'IN_PROGRESS') return 50;
+  return 0;
+}
+
+function controlStatusToAnswerStatus(status) {
+  if (status === 'IMPLEMENTED') return 'YES';
+  if (status === 'NOT_APPLICABLE') return 'NOT_APPLICABLE';
+  if (status === 'IN_PROGRESS') return 'PARTIAL';
+  return 'UNANSWERED';
 }
 
 function getCriticalityScore(criticality) {

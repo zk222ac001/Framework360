@@ -19,7 +19,7 @@ router.use(requireAuth);
 
 async function nodeExists({ companyId, type, id }) {
   if (type === 'SYSTEM') {
-    return prisma.systemAsset.findFirst({ where: { id, companyId } });
+    return prisma.system.findFirst({ where: { id, companyId } });
   }
 
   if (type === 'VENDOR') {

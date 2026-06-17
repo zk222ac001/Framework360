@@ -2,9 +2,49 @@ const express = require('express');
 
 const prisma = require('../db');
 const { requireAuth } = require('../middleware/auth.middleware');
-const { calculateAssessmentScore } = require('../utils/scoreAssessment');
 
 const router = express.Router();
+
+const FRAMEWORK_CATALOG = {
+  NIS2: {
+    name: 'NIS2',
+    category: 'EU law',
+    description: 'EU cybersecurity requirements for essential and important entities.',
+  },
+  DORA: {
+    name: 'DORA',
+    category: 'EU law',
+    description: 'Digital operational resilience requirements for financial entities.',
+  },
+  ISO27001: {
+    name: 'ISO 27001',
+    category: 'Certification',
+    description: 'Information security management system controls and governance.',
+  },
+  GDPR: {
+    name: 'GDPR',
+    category: 'EU law',
+    description: 'EU personal data protection and privacy compliance requirements.',
+  },
+  SOC2: {
+    name: 'SOC 2',
+    category: 'Certification',
+    description: 'Trust services criteria for security, availability and confidentiality.',
+  },
+  CIS18: {
+    name: 'CIS Controls v8',
+    category: 'Security controls',
+    description: 'Prioritized cybersecurity safeguards for practical risk reduction.',
+  },
+  NIST_CSF: {
+    name: 'NIST CSF',
+    category: 'Security framework',
+    description: 'Cybersecurity framework for identifying, protecting, detecting, responding and recovering.',
+  },
+};
+
+const LAW_FRAMEWORK_CODES = ['GDPR', 'NIS2', 'DORA'];
+const CERTIFICATE_FRAMEWORK_CODES = ['ISO27001', 'SOC2', 'CIS18', 'NIST_CSF'];
 
 router.get('/me', requireAuth, async (req, res) => {
   try {
@@ -56,29 +96,18 @@ router.get('/dashboard', requireAuth, async (req, res) => {
             systems: true,
             dependencies: true,
             businessProcesses: true,
-            tasks: true,
-            assessments: {
+            tasks: {
               include: {
-                frameworkDefinition: {
-                  include: {
-                    sections: {
-                      orderBy: { order: 'asc' },
-                      include: {
-                        requirements: {
-                          where: { isActive: true },
-                          orderBy: { order: 'asc' },
-                        },
-                      },
-                    },
-                  },
-                },
-                answers: {
-                  include: {
-                    evidence: true,
-                  },
-                },
+                assignedTo: true,
+                control: true,
               },
             },
+            controls: {
+              include: {
+                evidence: true,
+              },
+            },
+            evidence: true,
           },
         },
       },
@@ -94,105 +123,44 @@ router.get('/dashboard', requireAuth, async (req, res) => {
       });
     }
 
-    const frameworkCards = user.company.assessments.map((assessment) => {
-      const { score, progressPercentage, answeredCount, totalCount } =
-        calculateAssessmentScore(assessment);
-
-      const gaps = getAssessmentGaps(assessment);
-
-      return {
-        assessmentId: assessment.id,
-        code: assessment.frameworkDefinition.code,
-        name: assessment.frameworkDefinition.name,
-        category: assessment.frameworkDefinition.category,
-        description: assessment.frameworkDefinition.description,
-        score,
-        progressPercentage,
-        answeredCount,
-        totalCount,
-        status: assessment.status,
-        gapsCount: gaps.length,
-        completedAt: assessment.completedAt,
-        createdAt: assessment.createdAt,
-        updatedAt: assessment.updatedAt,
-      };
-    });
-
+    const company = user.company;
+    const controls = company.controls || [];
+    const evidence = company.evidence || [];
+    const tasks = company.tasks || [];
+    const frameworkCards = buildFrameworkCards(company.frameworks || [], controls);
     const overallScore = average(frameworkCards.map((item) => item.score));
-
-    const lawFrameworkCodes = [
-      'GDPR',
-      'NIS2',
-      'DORA',
-      'AI_ACT',
-      'CRA',
-      'DATA_ACT',
-      'EIDAS',
-      'CER',
-    ];
-
-    const certificateFrameworkCodes = [
-      'ISO27001',
-      'ISO27002',
-      'ISO27701',
-      'ISO22301',
-      'ISO42001',
-      'SOC2',
-      'CIS_CONTROLS',
-      'NIST_CSF',
-      'PCI_DSS',
-      'TISAX',
-    ];
-
     const lawScore = average(
       frameworkCards
-        .filter((item) => lawFrameworkCodes.includes(item.code))
-        .map((item) => item.score)
+        .filter((item) => LAW_FRAMEWORK_CODES.includes(item.code))
+        .map((item) => item.score),
     );
-
     const certificateScore = average(
       frameworkCards
-        .filter((item) => certificateFrameworkCodes.includes(item.code))
-        .map((item) => item.score)
+        .filter((item) => CERTIFICATE_FRAMEWORK_CODES.includes(item.code))
+        .map((item) => item.score),
     );
-
     const completedFrameworks = frameworkCards.filter(
-      (item) => item.status === 'COMPLETED'
+      (item) => item.status === 'COMPLETED',
     ).length;
-
     const totalGaps = frameworkCards.reduce(
       (sum, item) => sum + item.gapsCount,
-      0
+      0,
     );
-
-    const allEvidence = user.company.assessments.flatMap((assessment) =>
-      assessment.answers.flatMap((answer) => answer.evidence || [])
-    );
-
-    const topActions = user.company.assessments
-      .flatMap((assessment) => getAssessmentActions(assessment))
-      .sort((a, b) => b.priorityWeight - a.priorityWeight)
-      .slice(0, 8)
-      .map(({ priorityWeight, ...action }) => action);
-
-    const vendorRisk = buildVendorRisk(user.company.vendors || []);
-    const activity = buildActivityTimeline(
-      user.company.assessments,
-      allEvidence,
-      user.company.tasks || []
-    );
-    const evidenceAnalytics = buildEvidenceAnalytics(allEvidence, topActions);
+    const topActions = buildTopActions(tasks, controls);
+    const vendorRisk = buildVendorRisk(company.vendors || []);
+    const activity = buildActivityTimeline(frameworkCards, evidence, tasks);
+    const evidenceAnalytics = buildEvidenceAnalytics(evidence, topActions);
     const aiRecommendations = buildAiRecommendations(
       frameworkCards,
       topActions,
       vendorRisk,
-      evidenceAnalytics
+      evidenceAnalytics,
     );
     const interactiveAnalytics = buildInteractiveAnalytics(
       frameworkCards,
-      allEvidence,
+      evidence,
       vendorRisk,
-      user.company.vendors || []
+      company.vendors || [],
     );
 
     return res.json({
@@ -206,11 +174,11 @@ router.get('/dashboard', requireAuth, async (req, res) => {
         role: user.role,
       },
       company: {
-        id: user.company.id,
-        name: user.company.name,
-        cvr: user.company.cvr,
-        sector: user.company.sector,
-        country: user.company.country,
+        id: company.id,
+        name: company.name,
+        cvr: company.cvr,
+        sector: company.sector,
+        country: company.country,
       },
       overall: {
         averageScore: overallScore,
@@ -236,80 +204,118 @@ router.get('/dashboard', requireAuth, async (req, res) => {
   }
 });
 
-function getAssessmentGaps(assessment) {
-  const gaps = [];
-
-  for (const section of assessment.frameworkDefinition.sections) {
-    for (const requirement of section.requirements) {
-      const answer = assessment.answers.find(
-        (item) => item.requirementId === requirement.id
+function buildFrameworkCards(companyFrameworks, controls) {
+  return companyFrameworks
+    .filter((item) => item.enabled !== false)
+    .map((companyFramework) => {
+      const code = companyFramework.framework;
+      const metadata = FRAMEWORK_CATALOG[code] || {
+        name: code,
+        category: 'Framework',
+        description: null,
+      };
+      const frameworkControls = controls.filter(
+        (control) => control.framework === code,
       );
+      const totalCount = frameworkControls.length;
+      const answeredCount = frameworkControls.filter(
+        (control) => control.status !== 'NOT_STARTED',
+      ).length;
+      const gapsCount = frameworkControls.filter(
+        (control) =>
+          control.status !== 'IMPLEMENTED' &&
+          control.status !== 'NOT_APPLICABLE',
+      ).length;
+      const score = totalCount
+        ? average(frameworkControls.map((control) => getControlScore(control)))
+        : 0;
+      const progressPercentage = totalCount
+        ? Math.round((answeredCount / totalCount) * 100)
+        : 0;
+      const status =
+        totalCount > 0 && gapsCount === 0 ? 'COMPLETED' : 'IN_PROGRESS';
 
-      const status = answer?.status || 'UNANSWERED';
-
-      if (status === 'YES' || status === 'NOT_APPLICABLE') {
-        continue;
-      }
-
-      gaps.push({
-        requirementId: requirement.id,
+      return {
+        assessmentId: companyFramework.id,
+        code,
+        name: metadata.name,
+        category: metadata.category,
+        description: metadata.description,
+        score,
+        progressPercentage,
+        answeredCount,
+        totalCount,
         status,
-      });
-    }
-  }
-
-  return gaps;
+        gapsCount,
+        completedAt: status === 'COMPLETED' ? companyFramework.updatedAt : null,
+        createdAt: companyFramework.createdAt || null,
+        updatedAt: companyFramework.updatedAt || null,
+      };
+    });
 }
 
-function getAssessmentActions(assessment) {
-  const actions = [];
+function buildTopActions(tasks, controls) {
+  const taskActions = tasks
+    .filter((task) => task.status !== 'DONE')
+    .map((task) => ({
+      framework: task.control?.framework || 'GENERAL',
+      assessmentId: task.control?.id || task.id,
+      requirementId: task.control?.id || task.id,
+      section: task.control ? 'Control remediation' : 'Task',
+      title: task.title,
+      status: task.status,
+      priority: task.priority,
+      priorityWeight: getPriorityWeight(task.priority),
+      action: task.description || 'Review and close this remediation item.',
+      evidenceNeeded: task.control ? 'Attach evidence to the related control.' : null,
+      risk: task.control?.riskLevel || null,
+      hasEvidence: Boolean(task.control?.evidence?.length),
+    }));
 
-  for (const section of assessment.frameworkDefinition.sections) {
-    for (const requirement of section.requirements) {
-      const answer = assessment.answers.find(
-        (item) => item.requirementId === requirement.id
-      );
+  const controlActions = controls
+    .filter(
+      (control) =>
+        control.status !== 'IMPLEMENTED' &&
+        control.status !== 'NOT_APPLICABLE',
+    )
+    .map((control) => ({
+      framework: control.framework,
+      assessmentId: control.id,
+      requirementId: control.id,
+      section: 'Control',
+      title: control.title,
+      status: control.status,
+      priority: control.riskLevel || 'MEDIUM',
+      priorityWeight: getPriorityWeight(control.riskLevel || 'MEDIUM'),
+      action: control.description || 'Document, implement, and verify this control.',
+      evidenceNeeded: 'Upload evidence showing this control is implemented.',
+      risk: control.riskLevel || null,
+      hasEvidence: Boolean(control.evidence?.length),
+    }));
 
-      const status = answer?.status || 'UNANSWERED';
-
-      if (status === 'YES' || status === 'NOT_APPLICABLE') {
-        continue;
-      }
-
-      const priority = getPriority(requirement.weight);
-
-      actions.push({
-        framework: assessment.frameworkDefinition.code,
-        assessmentId: assessment.id,
-        requirementId: requirement.id,
-        section: section.title,
-        title: requirement.question,
-        status,
-        priority: priority.label,
-        priorityWeight: priority.weight,
-        action:
-          requirement.implementationGuide ||
-          'Document, implement, and verify this control.',
-        evidenceNeeded: requirement.exampleEvidence || null,
-        risk: requirement.riskIfMissing || null,
-        hasEvidence: (answer?.evidence?.length || 0) > 0,
-      });
-    }
-  }
-
-  return actions;
+  const seen = new Set();
+  return [...taskActions, ...controlActions]
+    .filter((action) => {
+      const key = `${action.framework}-${action.requirementId}-${action.title}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .sort((a, b) => b.priorityWeight - a.priorityWeight)
+    .slice(0, 8)
+    .map(({ priorityWeight, ...action }) => action);
 }
 
 function buildVendorRisk(vendors) {
   const buckets = { critical: 0, high: 0, medium: 0, low: 0 };
   const criticalVendors = vendors
     .map((vendor) => {
-      const criticality = vendor.criticality || 'MEDIUM';
+      const criticality = vendor.riskLevel || 'MEDIUM';
       const riskScore = getCriticalityScore(criticality);
       return {
         id: vendor.id,
         name: vendor.name,
-        category: vendor.category || null,
+        category: vendor.service || null,
         criticality,
         riskScore,
       };
@@ -336,29 +342,30 @@ function buildEvidenceAnalytics(evidence, topActions) {
     totalEvidence: evidence.length,
     missingEvidenceActions,
     recentUploads: evidence
+      .slice()
       .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
       .slice(0, 5)
       .map((item) => ({
         id: item.id,
-        filename: item.filename,
-        fileType: item.fileType,
-        size: item.size,
+        filename: item.title || item.filePath || 'Evidence file',
+        fileType: item.fileType || 'unknown',
+        size: item.fileSize || 0,
         createdAt: item.createdAt,
       })),
   };
 }
 
-function buildActivityTimeline(assessments, evidence, tasks) {
-  const assessmentEvents = assessments.map((assessment) => ({
+function buildActivityTimeline(frameworks, evidence, tasks) {
+  const frameworkEvents = frameworks.map((framework) => ({
     type: 'ASSESSMENT_UPDATED',
-    title: `${assessment.frameworkDefinition.name} assessment updated`,
-    description: `${assessment.status.replace('_', ' ').toLowerCase()} assessment`,
-    createdAt: assessment.updatedAt,
+    title: `${framework.name} framework updated`,
+    description: `${framework.status.replace('_', ' ').toLowerCase()} framework`,
+    createdAt: framework.updatedAt || framework.createdAt,
   }));
 
   const evidenceEvents = evidence.map((item) => ({
     type: 'EVIDENCE_UPLOADED',
-    title: `Evidence uploaded: ${item.filename}`,
+    title: `Evidence uploaded: ${item.title || item.filePath || 'Evidence file'}`,
     description: item.description || item.fileType,
     createdAt: item.createdAt,
   }));
@@ -370,7 +377,7 @@ function buildActivityTimeline(assessments, evidence, tasks) {
     createdAt: task.updatedAt,
   }));
 
-  return [...assessmentEvents, ...evidenceEvents, ...taskEvents]
+  return [...frameworkEvents, ...evidenceEvents, ...taskEvents]
     .filter((item) => item.createdAt)
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     .slice(0, 10);
@@ -416,22 +423,6 @@ function buildInteractiveAnalytics(frameworks, evidence, vendorRisk, vendors) {
   };
 }
 
-function getLastMonths(count) {
-  const now = new Date();
-  return Array.from({ length: count }).map((_, index) => {
-    const date = new Date(now.getFullYear(), now.getMonth() - (count - index - 1), 1);
-    return {
-      date,
-      label: date.toLocaleString('en-US', { month: 'short' }),
-    };
-  });
-}
-
-function isSameMonth(value, date) {
-  const parsed = new Date(value);
-  return parsed.getFullYear() === date.getFullYear() && parsed.getMonth() === date.getMonth();
-}
-
 function buildAiRecommendations(frameworks, topActions, vendorRisk, evidenceAnalytics) {
   const weakestFramework = [...frameworks].sort((a, b) => a.score - b.score)[0];
   const recommendations = [];
@@ -471,6 +462,19 @@ function buildAiRecommendations(frameworks, topActions, vendorRisk, evidenceAnal
   return recommendations.slice(0, 5);
 }
 
+function getControlScore(control) {
+  if (control.status === 'IMPLEMENTED' || control.status === 'NOT_APPLICABLE') return 100;
+  if (control.status === 'IN_PROGRESS') return 50;
+  return 0;
+}
+
+function getPriorityWeight(priority) {
+  if (priority === 'CRITICAL') return 4;
+  if (priority === 'HIGH') return 3;
+  if (priority === 'MEDIUM') return 2;
+  return 1;
+}
+
 function getCriticalityScore(criticality) {
   if (criticality === 'CRITICAL') return 95;
   if (criticality === 'HIGH') return 75;
@@ -478,23 +482,27 @@ function getCriticalityScore(criticality) {
   return 25;
 }
 
-function getPriority(weight) {
-  if (weight >= 3) {
-    return { label: 'HIGH', weight: 3 };
-  }
+function getLastMonths(count) {
+  const now = new Date();
+  return Array.from({ length: count }).map((_, index) => {
+    const date = new Date(now.getFullYear(), now.getMonth() - (count - index - 1), 1);
+    return {
+      date,
+      label: date.toLocaleString('en-US', { month: 'short' }),
+    };
+  });
+}
 
-  if (weight === 2) {
-    return { label: 'MEDIUM', weight: 2 };
-  }
-
-  return { label: 'LOW', weight: 1 };
+function isSameMonth(value, date) {
+  const parsed = new Date(value);
+  return parsed.getFullYear() === date.getFullYear() && parsed.getMonth() === date.getMonth();
 }
 
 function average(values) {
   if (!values.length) return 0;
 
   return Math.round(
-    values.reduce((sum, value) => sum + value, 0) / values.length
+    values.reduce((sum, value) => sum + value, 0) / values.length,
   );
 }
 

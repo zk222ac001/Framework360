@@ -31,8 +31,8 @@ function mapTaskToApproval(task) {
     updatedAt: task.updatedAt,
     owner: task.assignedTo ? `${task.assignedTo.firstName} ${task.assignedTo.lastName}`.trim() : "Unassigned",
     reviewer: "Compliance reviewer",
-    framework: task.assessment?.frameworkDefinition?.name || null,
-    requirement: task.requirement?.question || null,
+    framework: task.control?.framework || null,
+    requirement: task.control?.title || null,
   };
 }
 
@@ -45,8 +45,7 @@ router.get("/approvals", requireAuth, async (req, res, next) => {
       where: { companyId },
       include: {
         assignedTo: true,
-        requirement: true,
-        assessment: { include: { frameworkDefinition: true } },
+        control: true,
       },
       orderBy: [{ priority: "desc" }, { updatedAt: "desc" }],
     });
@@ -72,7 +71,7 @@ router.patch("/approvals/:id", requireAuth, async (req, res, next) => {
     const companyId = requireCompany(req, res);
     if (!companyId) return;
 
-    const id = Number(req.params.id);
+    const id = req.params.id;
     const existing = await prisma.task.findFirst({ where: { id, companyId } });
     if (!existing) return res.status(404).json({ message: "Approval item not found" });
 
@@ -84,18 +83,17 @@ router.patch("/approvals/:id", requireAuth, async (req, res, next) => {
       data: { status: taskStatus },
       include: {
         assignedTo: true,
-        requirement: true,
-        assessment: { include: { frameworkDefinition: true } },
+        control: true,
       },
     });
 
     await prisma.auditLog.create({
       data: {
         userId: req.user?.userId || null,
-        action: `APPROVAL_${decision || "REVIEW"}`,
+        action: "TASK_UPDATED",
         entity: "Task",
         entityId: task.id,
-        metadata: JSON.stringify({ note: note || null, taskStatus }),
+        metadata: { decision: decision || "REVIEW", note: note || null, taskStatus },
       },
     });
 

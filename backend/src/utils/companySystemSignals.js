@@ -10,7 +10,7 @@ function textIncludesAny(value, words) {
 
 async function getCompanySystemSignals(companyId) {
   const [systems, vendors, dependencies, businessProcesses] = await Promise.all([
-    prisma.systemAsset.findMany({
+    prisma.system.findMany({
       where: { companyId },
     }),
     prisma.vendor.findMany({
@@ -29,19 +29,38 @@ async function getCompanySystemSignals(companyId) {
   const publicWebTypes = ['WEBSITE', 'API'];
   const saasTypes = ['SAAS', 'CLOUD_SERVICE'];
 
-  const hasPersonalDataSystems = systems.some((system) => system.containsPersonalData);
-  const hasSensitiveDataSystems = systems.some((system) => system.containsSensitiveData);
-
-  const hasCriticalSystems = systems.some((system) => system.criticality === 'CRITICAL');
-
-  const hasInternetExposedSystems = systems.some((system) => system.internetExposed);
-
-  const hasInternetExposedCriticalSystems = systems.some(
-    (system) => system.internetExposed && system.criticality === 'CRITICAL'
+  const hasPersonalDataSystems = systems.some(
+    (system) =>
+      system.containsPersonalData ||
+      textIncludesAny(system.name, ['personal data', 'customer', 'employee', 'user']) ||
+      textIncludesAny(system.description, ['personal data', 'customer', 'employee', 'user'])
   );
 
+  const hasSensitiveDataSystems = systems.some(
+    (system) =>
+      system.containsSensitiveData ||
+      textIncludesAny(system.name, ['sensitive', 'health', 'financial', 'payroll']) ||
+      textIncludesAny(system.description, ['sensitive', 'health', 'financial', 'payroll'])
+  );
+
+  const hasCriticalSystems = systems.some(
+    (system) =>
+      system.criticality === 'CRITICAL' ||
+      textIncludesAny(system.name, ['critical', 'production', 'core']) ||
+      textIncludesAny(system.description, ['critical', 'production', 'core'])
+  );
+
+  const hasInternetExposedSystems = systems.some(
+    (system) =>
+      system.internetExposed ||
+      textIncludesAny(system.name, ['website', 'api', 'portal', 'public']) ||
+      textIncludesAny(system.description, ['website', 'api', 'portal', 'public'])
+  );
+
+  const hasInternetExposedCriticalSystems =
+    hasInternetExposedSystems && hasCriticalSystems;
+
   const hasPaymentSystems = systems.some((system) =>
-    system.type === 'PAYMENT_SYSTEM' ||
     textIncludesAny(system.name, paymentWords) ||
     textIncludesAny(system.description, paymentWords)
   );
@@ -52,16 +71,32 @@ async function getCompanySystemSignals(companyId) {
   );
 
   const hasPublicWebSystems = systems.some((system) =>
-    system.internetExposed || publicWebTypes.includes(system.type)
+    system.internetExposed ||
+    publicWebTypes.some((type) => textIncludesAny(system.name, [type.toLowerCase()])) ||
+    publicWebTypes.some((type) => textIncludesAny(system.description, [type.toLowerCase()])) ||
+    textIncludesAny(system.name, ['website', 'api', 'public']) ||
+    textIncludesAny(system.description, ['website', 'api', 'public'])
   );
 
-  const hasSaasSystems = systems.some((system) => saasTypes.includes(system.type));
+  const hasSaasSystems = systems.some((system) =>
+    saasTypes.some((type) => textIncludesAny(system.name, [type.toLowerCase().replace('_', ' ')])) ||
+    saasTypes.some((type) => textIncludesAny(system.description, [type.toLowerCase().replace('_', ' ')])) ||
+    textIncludesAny(system.name, ['saas', 'cloud']) ||
+    textIncludesAny(system.description, ['saas', 'cloud'])
+  );
 
   const hasCriticalVendors = vendors.some(
-    (vendor) => vendor.criticality === 'CRITICAL' || vendor.isCriticalSupplier
+    (vendor) =>
+      vendor.riskLevel === 'CRITICAL' ||
+      vendor.criticality === 'CRITICAL' ||
+      vendor.isCriticalSupplier
   );
 
-  const hasCriticalDependencies = dependencies.some((dependency) => dependency.isCritical);
+  const hasCriticalDependencies = dependencies.some(
+    (dependency) =>
+      dependency.riskLevel === 'CRITICAL' ||
+      dependency.isCritical
+  );
 
   const hasCriticalBusinessProcesses = businessProcesses.some(
     (process) => process.criticality === 'CRITICAL'

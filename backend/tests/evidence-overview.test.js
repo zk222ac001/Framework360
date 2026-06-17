@@ -58,77 +58,55 @@ async function createAssessmentWithEvidence({
   frameworkCode = 'GDPR',
   evidenceFilename = 'policy.pdf',
 } = {}) {
-  const framework = await prisma.frameworkDefinition.create({
-    data: {
-      code: frameworkCode,
-      name: frameworkCode,
-      description: `${frameworkCode} description`,
-      category: 'EU Law',
-      isActive: true,
-    },
-  });
-
-  const section = await prisma.frameworkSection.create({
-    data: {
-      frameworkDefinitionId: framework.id,
-      title: 'Governance',
-      description: 'Governance section',
-      order: 1,
-      weight: 1,
-    },
-  });
-
-  const requirement = await prisma.frameworkRequirement.create({
-    data: {
-      sectionId: section.id,
-      question: 'Do you have a documented policy?',
-      description: 'Policy requirement',
-      reference: 'A.1',
-      order: 1,
-      weight: 1,
-      isRequired: true,
-      isActive: true,
-    },
-  });
-
-  const assessment = await prisma.companyFrameworkAssessment.create({
+  const assessment = await prisma.companyFramework.create({
     data: {
       companyId,
-      frameworkDefinitionId: framework.id,
+      framework: frameworkCode,
+      enabled: true,
+    },
+  });
+
+  const requirement = await prisma.control.create({
+    data: {
+      companyId,
+      framework: frameworkCode,
+      controlId: `${frameworkCode}-A-1`,
+      title: 'Do you have a documented policy?',
+      description: 'Policy requirement',
+      answerStatus: 'PARTIAL',
+      answerNote: 'Partially implemented',
       status: 'IN_PROGRESS',
-      score: 0,
     },
   });
 
-  const answer = await prisma.frameworkRequirementAnswer.create({
+  const evidence = await prisma.evidence.create({
     data: {
-      assessmentId: assessment.id,
-      requirementId: requirement.id,
-      status: 'PARTIAL',
-      note: 'Partially implemented',
-      answeredByUserId: userId,
-      answeredAt: new Date(),
-    },
-  });
-
-  const evidence = await prisma.frameworkEvidence.create({
-    data: {
-      answerId: answer.id,
-      filename: evidenceFilename,
+      companyId,
+      controlId: requirement.id,
+      title: evidenceFilename,
       filePath: `/uploads/${evidenceFilename}`,
       fileType: 'application/pdf',
-      size: 12345,
-      uploadedByUserId: userId,
+      fileSize: 12345,
+      uploadedById: userId,
       description: 'Uploaded policy evidence',
     },
   });
 
   return {
-    framework,
-    section,
+    framework: {
+      id: frameworkCode,
+      code: frameworkCode,
+    },
+    section: {
+      id: `${frameworkCode}-controls`,
+      title: `${frameworkCode} controls`,
+    },
     requirement,
     assessment,
-    answer,
+    answer: {
+      id: requirement.id,
+      status: 'PARTIAL',
+    },
     evidence,
   };
 }
@@ -166,12 +144,12 @@ describe('Evidence overview', () => {
     expect(item.requirement.question).toBe('Do you have a documented policy?');
 
     expect(item.section.id).toBe(created.section.id);
-    expect(item.section.title).toBe('Governance');
+    expect(item.section.title).toBe(created.section.title);
 
     expect(item.framework.id).toBe(created.framework.id);
     expect(item.framework.code).toBe('GDPR');
 
-    expect(item.assessment.id).toBe(created.assessment.id);
+    expect(item.assessment.id).toBe(created.requirement.id);
 
     expect(item.uploadedBy.id).toBe(user.id);
     expect(item.uploadedBy.email).toBe('evidence-overview@test.dk');

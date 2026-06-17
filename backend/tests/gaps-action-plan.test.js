@@ -19,13 +19,11 @@ describe('Gaps and action plan', () => {
       requirementWeight: 3,
     });
 
-    await prisma.frameworkRequirementAnswer.updateMany({
-      where: {
-        assessmentId: assessment.id,
-        requirementId: requirement.id,
-      },
+    await prisma.control.update({
+      where: { id: requirement.id },
       data: {
-        status: 'NO',
+        answerStatus: 'NO',
+        status: 'NOT_STARTED',
       },
     });
 
@@ -58,13 +56,11 @@ describe('Gaps and action plan', () => {
       code: 'DORA',
     });
 
-    await prisma.frameworkRequirementAnswer.updateMany({
-      where: {
-        assessmentId: assessment.id,
-        requirementId: requirement.id,
-      },
+    await prisma.control.update({
+      where: { id: requirement.id },
       data: {
-        status: 'YES',
+        answerStatus: 'YES',
+        status: 'IMPLEMENTED',
       },
     });
 

@@ -51,79 +51,8 @@ async function createUserWithCompany({
   };
 }
 
-async function seedFrameworks() {
-  const frameworks = [
-    {
-      code: 'GDPR',
-      name: 'GDPR',
-      description: 'General Data Protection Regulation',
-      category: 'PRIVACY',
-    },
-    {
-      code: 'ISO27001',
-      name: 'ISO 27001',
-      description: 'Information security management',
-      category: 'SECURITY',
-    },
-    {
-      code: 'NIS2',
-      name: 'NIS2',
-      description: 'Network and information security',
-      category: 'SECURITY',
-    },
-    {
-      code: 'PCI_DSS',
-      name: 'PCI DSS',
-      description: 'Payment card security',
-      category: 'SECURITY',
-    },
-    {
-      code: 'AI_ACT',
-      name: 'EU AI Act',
-      description: 'EU artificial intelligence regulation',
-      category: 'AI',
-    },
-    {
-      code: 'SOC2',
-      name: 'SOC 2',
-      description: 'Service organization controls',
-      category: 'SECURITY',
-    },
-    {
-      code: 'ISO22301',
-      name: 'ISO 22301',
-      description: 'Business continuity management',
-      category: 'CONTINUITY',
-    },
-    {
-      code: 'D_MAERKET',
-      name: 'D-mærket',
-      description: 'Responsible digital practices',
-      category: 'TRUST',
-    },
-  ];
-
-  for (const framework of frameworks) {
-    await prisma.frameworkDefinition.upsert({
-      where: { code: framework.code },
-      update: {
-        name: framework.name,
-        description: framework.description,
-        category: framework.category,
-        isActive: true,
-      },
-      create: {
-        ...framework,
-        isActive: true,
-      },
-    });
-  }
-}
-
 describe('Framework recommendations with system signals', () => {
   it('should use registered systems as recommendation signals', async () => {
-    await seedFrameworks();
-
     const { cookies } = await createUserWithCompany({
       email: 'system-signals@test.dk',
       sector: 'OTHER',
@@ -168,8 +97,6 @@ describe('Framework recommendations with system signals', () => {
   });
 
   it('should recommend AI Act when registered systems look AI-related', async () => {
-    await seedFrameworks();
-
     const { cookies } = await createUserWithCompany({
       email: 'ai-signals@test.dk',
       sector: 'OTHER',
@@ -198,8 +125,6 @@ describe('Framework recommendations with system signals', () => {
   });
 
   it('should use critical vendors and dependencies as recommendation signals', async () => {
-    await seedFrameworks();
-
     const { cookies } = await createUserWithCompany({
       email: 'vendor-dependency-signals@test.dk',
       sector: 'OTHER',

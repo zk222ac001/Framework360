@@ -23,9 +23,9 @@ function mapTaskToFinding(task) {
     createdAt: task.createdAt,
     updatedAt: task.updatedAt,
     owner: task.assignedTo ? `${task.assignedTo.firstName} ${task.assignedTo.lastName}`.trim() : "Unassigned",
-    framework: task.assessment?.frameworkDefinition?.name || null,
-    requirement: task.requirement?.question || null,
-    reference: task.requirement?.reference || null,
+    framework: task.control?.framework || null,
+    requirement: task.control?.title || null,
+    reference: task.control?.controlId || null,
   };
 }
 
@@ -38,8 +38,7 @@ router.get("/audit-findings", requireAuth, async (req, res, next) => {
       where: { companyId },
       include: {
         assignedTo: true,
-        requirement: true,
-        assessment: { include: { frameworkDefinition: true } },
+        control: true,
       },
       orderBy: [{ priority: "desc" }, { createdAt: "desc" }],
     });
@@ -78,16 +77,19 @@ router.post("/audit-findings", requireAuth, async (req, res, next) => {
         dueDate: dueDate ? new Date(dueDate) : null,
         status: "OPEN",
       },
-      include: { assignedTo: true, requirement: true, assessment: { include: { frameworkDefinition: true } } },
+      include: {
+        assignedTo: true,
+        control: true,
+      },
     });
 
     await prisma.auditLog.create({
       data: {
         userId: req.user?.userId || null,
-        action: "AUDIT_FINDING_CREATED",
+        action: "TASK_CREATED",
         entity: "Task",
         entityId: task.id,
-        metadata: JSON.stringify({ title: task.title, priority: task.priority }),
+        metadata: { title: task.title, priority: task.priority },
       },
     });
 
@@ -102,7 +104,7 @@ router.patch("/audit-findings/:id", requireAuth, async (req, res, next) => {
     const companyId = requireCompany(req, res);
     if (!companyId) return;
 
-    const id = Number(req.params.id);
+    const id = req.params.id;
     const existing = await prisma.task.findFirst({ where: { id, companyId } });
     if (!existing) return res.status(404).json({ message: "Finding not found" });
 
@@ -116,16 +118,19 @@ router.patch("/audit-findings/:id", requireAuth, async (req, res, next) => {
         ...(status ? { status } : {}),
         ...(dueDate !== undefined ? { dueDate: dueDate ? new Date(dueDate) : null } : {}),
       },
-      include: { assignedTo: true, requirement: true, assessment: { include: { frameworkDefinition: true } } },
+      include: {
+        assignedTo: true,
+        control: true,
+      },
     });
 
     await prisma.auditLog.create({
       data: {
         userId: req.user?.userId || null,
-        action: "AUDIT_FINDING_UPDATED",
+        action: "TASK_UPDATED",
         entity: "Task",
         entityId: task.id,
-        metadata: JSON.stringify({ status: task.status, priority: task.priority }),
+        metadata: { status: task.status, priority: task.priority },
       },
     });
 

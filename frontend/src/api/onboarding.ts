@@ -16,7 +16,7 @@ export async function submitCompanyOnboarding(
     method: "PATCH",
     body: JSON.stringify({
       name: payload.companyName,
-      cvr: payload.cvr || null,
+      cvr: payload.cvr,
       sector: payload.sector || null,
       country: payload.country || null,
     }),

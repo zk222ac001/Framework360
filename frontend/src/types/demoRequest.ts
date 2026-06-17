@@ -31,10 +31,15 @@ export type DemoRequestResponse = {
 
 export type ActivateDemoRequestResponse = {
   user: {
-    id: number;
+    id: string;
     email: string;
     firstName: string;
     lastName: string;
   };
   temporaryPassword: string;
+};
+
+export type DeleteDemoRequestResponse = {
+  deleted: boolean;
+  deletedUser: boolean;
 };

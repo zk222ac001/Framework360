@@ -56,7 +56,7 @@ router.get('/', async (req, res) => {
     const companyId = getCompanyId(req, res);
     if (!companyId) return;
 
-    const systems = await prisma.systemAsset.findMany({
+    const systems = await prisma.system.findMany({
       where: { companyId },
       orderBy: { name: 'asc' },
       include: {
@@ -96,7 +96,7 @@ router.post('/', validate(systemAssetSchema), async (req, res) => {
       return res.status(relationValidation.status).json({ error: relationValidation.error });
     }
 
-    const system = await prisma.systemAsset.create({
+    const system = await prisma.system.create({
       data: {
         companyId,
         ...req.body,
@@ -130,7 +130,7 @@ router.get('/graph', async (req, res) => {
     if (!companyId) return;
 
     const [systems, vendors, businessProcesses, dependencies] = await Promise.all([
-      prisma.systemAsset.findMany({ where: { companyId } }),
+      prisma.system.findMany({ where: { companyId } }),
       prisma.vendor.findMany({ where: { companyId } }),
       prisma.businessProcess.findMany({ where: { companyId } }),
       prisma.dependency.findMany({ where: { companyId } }),
@@ -217,7 +217,7 @@ router.get('/critical', async (req, res) => {
     const companyId = getCompanyId(req, res);
     if (!companyId) return;
 
-    const systems = await prisma.systemAsset.findMany({
+    const systems = await prisma.system.findMany({
       where: { companyId },
       include: {
         vendor: true,
@@ -267,7 +267,7 @@ router.get('/security-gaps', async (req, res) => {
     const companyId = getCompanyId(req, res);
     if (!companyId) return;
 
-    const systems = await prisma.systemAsset.findMany({
+    const systems = await prisma.system.findMany({
       where: { companyId },
       orderBy: { name: 'asc' },
     });
@@ -344,7 +344,7 @@ router.get('/continuity-gaps', async (req, res) => {
     const companyId = getCompanyId(req, res);
     if (!companyId) return;
 
-    const systems = await prisma.systemAsset.findMany({
+    const systems = await prisma.system.findMany({
       where: { companyId },
       orderBy: { name: 'asc' },
     });
@@ -428,7 +428,7 @@ router.get('/:id/impact', async (req, res) => {
     const id = parsePositiveId(req.params.id);
     if (!id) return res.status(400).json({ error: 'Invalid system id' });
 
-    const system = await prisma.systemAsset.findFirst({
+    const system = await prisma.system.findFirst({
       where: { id, companyId },
       include: {
         vendor: true,
@@ -501,7 +501,7 @@ router.get('/:id/impact', async (req, res) => {
           },
         },
       }),
-      prisma.systemAsset.findMany({
+      prisma.system.findMany({
         where: {
           companyId,
           id: {
@@ -586,7 +586,7 @@ router.get('/:id', async (req, res) => {
     const id = parsePositiveId(req.params.id);
     if (!id) return res.status(400).json({ error: 'Invalid system id' });
 
-    const system = await prisma.systemAsset.findFirst({
+    const system = await prisma.system.findFirst({
       where: { id, companyId },
       include: {
         vendor: true,
@@ -620,7 +620,7 @@ router.patch('/:id', validate(updateSystemAssetSchema), async (req, res) => {
     const id = parsePositiveId(req.params.id);
     if (!id) return res.status(400).json({ error: 'Invalid system id' });
 
-    const existing = await prisma.systemAsset.findFirst({
+    const existing = await prisma.system.findFirst({
       where: { id, companyId },
     });
 
@@ -636,7 +636,7 @@ router.patch('/:id', validate(updateSystemAssetSchema), async (req, res) => {
       return res.status(relationValidation.status).json({ error: relationValidation.error });
     }
 
-    const system = await prisma.systemAsset.update({
+    const system = await prisma.system.update({
       where: { id },
       data: req.body,
       include: {
@@ -669,13 +669,13 @@ router.delete('/:id', async (req, res) => {
     const id = parsePositiveId(req.params.id);
     if (!id) return res.status(400).json({ error: 'Invalid system id' });
 
-    const existing = await prisma.systemAsset.findFirst({
+    const existing = await prisma.system.findFirst({
       where: { id, companyId },
     });
 
     if (!existing) return res.status(404).json({ error: 'System not found' });
 
-    await prisma.systemAsset.delete({
+    await prisma.system.delete({
       where: { id },
     });
 

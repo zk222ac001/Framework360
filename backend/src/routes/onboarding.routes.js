@@ -18,6 +18,104 @@ const {
 const { getCompanySystemSignals } = require("../utils/companySystemSignals");
 const router = express.Router();
 
+const AVAILABLE_ONBOARDING_FRAMEWORKS = [
+  {
+    id: "NIS2",
+    code: "NIS2",
+    name: "NIS2",
+    description:
+      "EU cybersecurity requirements for essential and important entities.",
+    category: "Cybersecurity",
+  },
+  {
+    id: "DORA",
+    code: "DORA",
+    name: "DORA",
+    description:
+      "Digital operational resilience requirements for financial entities.",
+    category: "Financial services",
+  },
+  {
+    id: "ISO27001",
+    code: "ISO27001",
+    name: "ISO 27001",
+    description:
+      "Information security management system controls and governance.",
+    category: "Information security",
+  },
+  {
+    id: "GDPR",
+    code: "GDPR",
+    name: "GDPR",
+    description:
+      "EU personal data protection and privacy compliance requirements.",
+    category: "Privacy",
+  },
+  {
+    id: "SOC2",
+    code: "SOC2",
+    name: "SOC 2",
+    description:
+      "Trust services criteria for security, availability and confidentiality.",
+    category: "Assurance",
+  },
+  {
+    id: "CIS18",
+    code: "CIS18",
+    name: "CIS Controls v8",
+    description:
+      "Prioritized cybersecurity safeguards for practical risk reduction.",
+    category: "Cybersecurity",
+  },
+  {
+    id: "NIST_CSF",
+    code: "NIST_CSF",
+    name: "NIST CSF",
+    description:
+      "Cybersecurity framework for identifying, protecting, detecting, responding and recovering.",
+    category: "Cybersecurity",
+  },
+  {
+    id: "PCI_DSS",
+    code: "PCI_DSS",
+    name: "PCI DSS",
+    description: "Payment card data security standard for cardholder data environments.",
+    category: "Payments",
+  },
+  {
+    id: "AI_ACT",
+    code: "AI_ACT",
+    name: "EU AI Act",
+    description: "EU requirements for responsible AI governance and risk management.",
+    category: "EU law",
+  },
+  {
+    id: "CER",
+    code: "CER",
+    name: "CER",
+    description: "EU critical entities resilience requirements.",
+    category: "EU law",
+  },
+  {
+    id: "ISO22301",
+    code: "ISO22301",
+    name: "ISO 22301",
+    description: "Business continuity management system standard.",
+    category: "Certification",
+  },
+  {
+    id: "ISO42001",
+    code: "ISO42001",
+    name: "ISO 42001",
+    description: "AI management system standard.",
+    category: "Certification",
+  },
+];
+
+const availableOnboardingFrameworkCodes = new Set(
+  AVAILABLE_ONBOARDING_FRAMEWORKS.map((framework) => framework.code),
+);
+
 function getUserId(req) {
   return req.user.id || req.user.userId;
 }
@@ -35,21 +133,21 @@ function requireCompany(req, res) {
 
 router.post("/", validate(createDemoRequestSchema), async (req, res) => {
   try {
-    const { email, fornavn, efternavn, firmanavn, jobtitel, land } = req.body;
+    const { email, firstName, lastName, companyName, jobTitle, country } = req.body;
 
     if (
       !email ||
       typeof email !== "string" ||
       !email.trim() ||
-      !fornavn ||
-      typeof fornavn !== "string" ||
-      !fornavn.trim() ||
-      !efternavn ||
-      typeof efternavn !== "string" ||
-      !efternavn.trim() ||
-      !firmanavn ||
-      typeof firmanavn !== "string" ||
-      !firmanavn.trim()
+      !firstName ||
+      typeof firstName !== "string" ||
+      !firstName.trim() ||
+      !lastName ||
+      typeof lastName !== "string" ||
+      !lastName.trim() ||
+      !companyName ||
+      typeof companyName !== "string" ||
+      !companyName.trim()
     ) {
       return res.status(400).json({
         error: "email, fornavn, efternavn og firmanavn er påkrævet",
@@ -74,14 +172,14 @@ router.post("/", validate(createDemoRequestSchema), async (req, res) => {
     const demoRequest = await prisma.demoRequest.create({
       data: {
         email: normalizedEmail,
-        fornavn: fornavn.trim(),
-        efternavn: efternavn.trim(),
-        firmanavn: firmanavn.trim(),
-        jobtitel:
-          typeof jobtitel === "string" && jobtitel.trim()
-            ? jobtitel.trim()
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        companyName: companyName.trim(),
+        jobTitle:
+          typeof jobTitle === "string" && jobTitle.trim()
+            ? jobTitle.trim()
             : null,
-        land: typeof land === "string" && land.trim() ? land.trim() : null,
+        country: typeof country === "string" && country.trim() ? country.trim() : null,
         status: "PENDING",
       },
     });
@@ -100,7 +198,7 @@ router.get("/", requireAuth, requirePlatformAdmin, async (req, res) => {
     const demoRequests = await prisma.demoRequest.findMany({
       orderBy: { createdAt: "desc" },
       include: {
-        virksomhed: true,
+        company: true,
         createdUser: true,
       },
     });
@@ -130,7 +228,7 @@ router.post(
         where: { id },
         include: {
           createdUser: true,
-          virksomhed: true,
+          company: true,
         },
       });
 
@@ -144,7 +242,7 @@ router.post(
           .json({ error: "Demo request er allerede aktiveret" });
       }
 
-      const existingUser = await prisma.bruger.findUnique({
+      const existingUser = await prisma.user.findUnique({
         where: { email: demoRequest.email.toLowerCase() },
       });
 
@@ -157,37 +255,37 @@ router.post(
       const temporaryPassword = Math.random().toString(36).slice(-10);
       const hashedPassword = await bcrypt.hash(temporaryPassword, 10);
 
-      let virksomhed = demoRequest.virksomhed;
+      let company = demoRequest.company;
 
-      if (!virksomhed) {
-        virksomhed = await prisma.virksomhed.create({
+      if (!company) {
+        company = await prisma.company.create({
           data: {
-            navn: demoRequest.firmanavn,
-            land: demoRequest.land || null,
+            name: demoRequest.companyName,
+            country: demoRequest.country || null,
           },
         });
       }
 
-      const user = await prisma.bruger.create({
+      const user = await prisma.user.create({
         data: {
-          fornavn: demoRequest.fornavn,
-          efternavn: demoRequest.efternavn,
+          firstName: demoRequest.firstName,
+          lastName: demoRequest.lastName,
           email: demoRequest.email.toLowerCase(),
           password: hashedPassword,
-          rolle: "EVIDENCE_CONTRIBUTOR",
-          erAktiv: true,
+          role: "EVIDENCE_CONTRIBUTOR",
+          isActive: true,
           mustChangePassword: true,
-          virksomhedId: virksomhed.id,
+          companyId: company.id,
         },
         select: {
           id: true,
-          fornavn: true,
-          efternavn: true,
+          firstName: true,
+          lastName: true,
           email: true,
-          rolle: true,
-          erAktiv: true,
+          role: true,
+          isActive: true,
           mustChangePassword: true,
-          virksomhedId: true,
+          companyId: true,
           createdAt: true,
         },
       });
@@ -196,7 +294,7 @@ router.post(
         where: { id },
         data: {
           status: "ACTIVATED",
-          virksomhedId: virksomhed.id,
+          companyId: company.id,
           createdUserId: user.id,
         },
       });
@@ -391,7 +489,6 @@ router.post("/frameworks", requireAuth, async (req, res) => {
       return;
     }
 
-    const userId = getUserId(req);
     const frameworkCodes = req.body.frameworkCodes;
 
     if (!Array.isArray(frameworkCodes) || frameworkCodes.length === 0) {
@@ -415,107 +512,40 @@ router.post("/frameworks", requireAuth, async (req, res) => {
       });
     }
 
-    const frameworkDefinitions = await prisma.frameworkDefinition.findMany({
-      where: {
-        code: {
-          in: uniqueFrameworkCodes,
-        },
-        isActive: true,
-      },
-      include: {
-        sections: {
-          include: {
-            requirements: {
-              where: { isActive: true },
-            },
-          },
-        },
-      },
-    });
+    const invalidFrameworks = uniqueFrameworkCodes.filter(
+      (code) => !availableOnboardingFrameworkCodes.has(code),
+    );
 
-    if (frameworkDefinitions.length !== uniqueFrameworkCodes.length) {
-      const foundCodes = frameworkDefinitions.map(
-        (framework) => framework.code,
-      );
-      const missingCodes = uniqueFrameworkCodes.filter(
-        (code) => !foundCodes.includes(code),
-      );
-
+    if (invalidFrameworks.length > 0) {
       return res.status(400).json({
         error: "One or more frameworks are invalid",
-        invalidFrameworks: missingCodes,
+        invalidFrameworks,
       });
     }
 
-    for (const frameworkDefinition of frameworkDefinitions) {
-      const assessment = await prisma.companyFrameworkAssessment.upsert({
-        where: {
-          companyId_frameworkDefinitionId: {
-            companyId,
-            frameworkDefinitionId: frameworkDefinition.id,
+    await prisma.$transaction(
+      uniqueFrameworkCodes.map((framework) =>
+        prisma.companyFramework.upsert({
+          where: {
+            companyId_framework: {
+              companyId,
+              framework,
+            },
           },
-        },
-        update: {},
-        create: {
-          companyId,
-          frameworkDefinitionId: frameworkDefinition.id,
-          status: "IN_PROGRESS",
-          score: 0,
-        },
-      });
-
-      await prisma.companyFramework.upsert({
-        where: {
-          companyId_framework: {
-            companyId,
-            framework: frameworkDefinition.code,
+          update: {
+            enabled: true,
           },
-        },
-        update: {},
-        create: {
-          companyId,
-          framework: frameworkDefinition.code,
-        },
-      });
-
-      const requirements = frameworkDefinition.sections.flatMap(
-        (section) => section.requirements,
-      );
-
-      if (requirements.length > 0) {
-        await prisma.$transaction(
-          requirements.map((requirement) =>
-            prisma.frameworkRequirementAnswer.upsert({
-              where: {
-                assessmentId_requirementId: {
-                  assessmentId: assessment.id,
-                  requirementId: requirement.id,
-                },
-              },
-              update: {},
-              create: {
-                assessmentId: assessment.id,
-                requirementId: requirement.id,
-                status: "UNANSWERED",
-              },
-            }),
-          ),
-        );
-      }
-
-      await logAction({
-        userId,
-        action: "ONBOARDING_FRAMEWORK_SELECTED",
-        entity: "CompanyFrameworkAssessment",
-        entityId: assessment.id,
-        metadata: {
-          framework: frameworkDefinition.code,
-        },
-      });
-    }
+          create: {
+            companyId,
+            framework,
+            enabled: true,
+          },
+        }),
+      ),
+    );
 
     const user = await prisma.user.update({
-      where: { id: userId },
+      where: { id: getUserId(req) },
       data: {
         onboardingCompleted: true,
       },
@@ -572,21 +602,12 @@ router.get("/recommended-frameworks", requireAuth, async (req, res) => {
       });
     }
 
-    const frameworks = await prisma.frameworkDefinition.findMany({
-      where: {
-        isActive: true,
-      },
-      orderBy: {
-        code: "asc",
-      },
-    });
-
     const systemSignals = await getCompanySystemSignals(companyId);
 
     const recommendations = buildFrameworkRecommendations({
       company,
       scope: company.scope,
-      frameworks,
+      frameworks: AVAILABLE_ONBOARDING_FRAMEWORKS,
       systemSignals,
     });
 

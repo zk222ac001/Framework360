@@ -24,6 +24,10 @@ type FormValues = {
 
 type FormErrors = Partial<Record<keyof FormValues, string>>;
 
+const companyNameMaxLength = 100;
+const companyNamePattern = /\p{L}/u;
+const cvrPattern = /^\d{8}$/;
+
 // Supported company sectors used for framework recommendations.
 const sectors = [
   "FINANCE",
@@ -99,15 +103,33 @@ export default function CompanyOnboardingPage() {
   // Validates required company onboarding fields.
   const validate = () => {
     const newErrors: FormErrors = {};
+    const companyName = values.companyName.trim();
+    const cvr = values.cvr.trim();
 
-    if (!values.companyName.trim()) {
+    if (!companyName) {
       newErrors.companyName = t(
         "onboarding.company.errors.companyNameRequired",
       );
+    } else if (companyName.length < 2) {
+      newErrors.companyName = t("onboarding.company.errors.companyNameTooShort");
+    } else if (companyName.length > companyNameMaxLength) {
+      newErrors.companyName = t("onboarding.company.errors.companyNameTooLong");
+    } else if (!companyNamePattern.test(companyName)) {
+      newErrors.companyName = t("onboarding.company.errors.invalidCompanyName");
+    }
+
+    if (!cvr) {
+      newErrors.cvr = t("onboarding.company.errors.cvrRequired");
+    } else if (!cvrPattern.test(cvr)) {
+      newErrors.cvr = t("onboarding.company.errors.invalidCvr");
     }
 
     if (!values.sector.trim()) {
       newErrors.sector = t("onboarding.company.errors.sectorRequired");
+    }
+
+    if (!values.country.trim()) {
+      newErrors.country = t("onboarding.company.errors.countryRequired");
     }
 
     return newErrors;
@@ -128,8 +150,8 @@ export default function CompanyOnboardingPage() {
       setIsSubmitting(true);
 
       await submitCompanyOnboarding({
-        companyName: values.companyName,
-        cvr: values.cvr,
+        companyName: values.companyName.trim(),
+        cvr: values.cvr.trim(),
         sector: values.sector,
         country: values.country,
       });
@@ -175,7 +197,12 @@ export default function CompanyOnboardingPage() {
             value={values.companyName}
             onChange={handleChange("companyName")}
             error={!!errors.companyName}
-            helperText={errors.companyName}
+            helperText={
+              errors.companyName || t("onboarding.company.helpers.companyName")
+            }
+            slotProps={{
+              htmlInput: { maxLength: companyNameMaxLength },
+            }}
             fullWidth
           />
 
@@ -183,6 +210,15 @@ export default function CompanyOnboardingPage() {
             label={t("onboarding.company.cvr")}
             value={values.cvr}
             onChange={handleChange("cvr")}
+            error={!!errors.cvr}
+            helperText={errors.cvr || t("onboarding.company.helpers.cvr")}
+            slotProps={{
+              htmlInput: {
+                inputMode: "numeric",
+                maxLength: 8,
+                pattern: "[0-9]*",
+              },
+            }}
             fullWidth
           />
 
@@ -209,6 +245,8 @@ export default function CompanyOnboardingPage() {
             fullWidth
             value={values.country}
             onChange={handleChange("country")}
+            error={!!errors.country}
+            helperText={errors.country}
           >
             <MenuItem value="">
               {t("onboarding.company.selectCountry")}

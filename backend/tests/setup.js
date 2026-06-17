@@ -15,14 +15,22 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
-  await safeDelete(prisma.frameworkEvidence);
-  await safeDelete(prisma.frameworkRequirementAnswer);
+  await safeDelete(prisma.approvalRequest);
+  await safeDelete(prisma.comment);
+  await safeDelete(prisma.campaignAssignment);
+  await safeDelete(prisma.evidenceCampaign);
+  await safeDelete(prisma.evidence);
   await safeDelete(prisma.task);
-  await safeDelete(prisma.companyFrameworkAssessment);
+  await safeDelete(prisma.auditFinding);
+  await safeDelete(prisma.control);
   await safeDelete(prisma.companyFramework);
-  await safeDelete(prisma.frameworkRequirement);
-  await safeDelete(prisma.frameworkSection);
-  await safeDelete(prisma.frameworkDefinition);
+  await safeDelete(prisma.companyScope);
+  await safeDelete(prisma.dependency);
+  await safeDelete(prisma.system);
+  await safeDelete(prisma.vendor);
+  await safeDelete(prisma.businessProcess);
+  await safeDelete(prisma.ssoDomain);
+  await safeDelete(prisma.report);
   await safeDelete(prisma.auditLog);
   await safeDelete(prisma.invitation);
   await safeDelete(prisma.emailLog);

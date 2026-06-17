@@ -36,6 +36,17 @@ const da = {
     activation: "Prøve anmodning aktiveret. Midlertidigt password for",
     country: "Land:",
     jobtitle: "Jobtitel:",
+    empty: "Ingen demoanmodninger endnu.",
+    editRequest: "Rediger bruger",
+    saveChanges: "Gem ændringer",
+    saving: "Gemmer...",
+    deleting: "Sletter...",
+    deleteUser: "Slet bruger",
+    updateSuccess: "Bruger opdateret.",
+    deleteSuccess: "Bruger slettet.",
+    deleteDialogTitle: "Slet bruger?",
+    deleteDialogBody: "Er du sikker på, at du vil slette {{name}} ({{email}})?",
+    deleteWarning: "Efter sletning kan du ikke gendanne denne bruger.",
   },
 
   auth: {
@@ -149,9 +160,19 @@ const da = {
       selectCountry: "Vælg et land",
       saving: "Gemmer...",
       complete: "Færdiggør onboarding",
+      helpers: {
+        companyName: "Brug det registrerede virksomhedsnavn.",
+        cvr: "Indtast præcis 8 cifre.",
+      },
       errors: {
         companyNameRequired: "Virksomhedsnavn er påkrævet",
+        companyNameTooShort: "Virksomhedsnavn skal være mindst 2 tegn",
+        companyNameTooLong: "Virksomhedsnavn må højst være 100 tegn",
+        invalidCompanyName: "Virksomhedsnavn skal indeholde bogstaver",
+        cvrRequired: "CVR er påkrævet",
+        invalidCvr: "CVR skal være præcis 8 cifre",
         sectorRequired: "Sektor er påkrævet",
+        countryRequired: "Land er påkrævet",
         saveFailed: "Kunne ikke gemme virksomhedsopsætning.",
       },
       countries: {

@@ -24,6 +24,27 @@ function canManageOwnCompany(user) {
   return isPlatformAdmin(user) || isCustomerAdmin(user);
 }
 
+function isUniqueCvrError(error) {
+  return (
+    error?.code === 'P2002' &&
+    Array.isArray(error?.meta?.target) &&
+    error.meta.target.includes('cvr')
+  );
+}
+
+function handleCompanyWriteError(error, res) {
+  if (isUniqueCvrError(error)) {
+    return res.status(409).json({
+      error: 'CVR is already registered to another company',
+    });
+  }
+
+  return res.status(500).json({
+    error: 'Internal server error',
+    message: error.message,
+  });
+}
+
 /**
  * GET /companies/me
  * Returns the authenticated user's own company.
@@ -115,10 +136,7 @@ router.patch('/me', requireAuth, validate(updateMyCompanySchema), async (req, re
   } catch (error) {
     console.error('PATCH /companies/me error:', error);
 
-    return res.status(500).json({
-      error: 'Internal server error',
-      message: error.message,
-    });
+    return handleCompanyWriteError(error, res);
   }
 });
 
@@ -220,10 +238,7 @@ router.post('/', requireAuth, validate(companySchema), async (req, res) => {
   } catch (error) {
     console.error('POST /companies error:', error);
 
-    return res.status(500).json({
-      error: 'Internal server error',
-      message: error.message,
-    });
+    return handleCompanyWriteError(error, res);
   }
 });
 
@@ -260,10 +275,7 @@ router.put('/:id', requireAuth, validate(companySchema), async (req, res) => {
   } catch (error) {
     console.error('PUT /companies/:id error:', error);
 
-    return res.status(500).json({
-      error: 'Internal server error',
-      message: error.message,
-    });
+    return handleCompanyWriteError(error, res);
   }
 });
 

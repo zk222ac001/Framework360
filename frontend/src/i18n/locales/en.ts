@@ -36,6 +36,17 @@ const en = {
     activation: "Demo request activated. Temporary password for",
     country: "Country:",
     jobtitle: "Job title:",
+    empty: "No demo requests yet.",
+    editRequest: "Edit user",
+    saveChanges: "Save changes",
+    saving: "Saving...",
+    deleting: "Deleting...",
+    deleteUser: "Delete user",
+    updateSuccess: "User updated.",
+    deleteSuccess: "User deleted.",
+    deleteDialogTitle: "Delete user?",
+    deleteDialogBody: "Are you sure you want to delete {{name}} ({{email}})?",
+    deleteWarning: "After deletion you cannot recover this user.",
   },
 
   auth: {
@@ -148,9 +159,19 @@ const en = {
       selectCountry: "Select a country",
       saving: "Saving...",
       complete: "Complete onboarding",
+      helpers: {
+        companyName: "Use the registered company name.",
+        cvr: "Enter exactly 8 digits.",
+      },
       errors: {
         companyNameRequired: "Company name is required",
+        companyNameTooShort: "Company name must be at least 2 characters",
+        companyNameTooLong: "Company name must be 100 characters or fewer",
+        invalidCompanyName: "Company name must include letters",
+        cvrRequired: "CVR is required",
+        invalidCvr: "CVR must be exactly 8 digits",
         sectorRequired: "Sector is required",
+        countryRequired: "Country is required",
         saveFailed: "Could not save company onboarding.",
       },
       countries: {

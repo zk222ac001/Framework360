@@ -3,7 +3,7 @@ export type ApprovalDecision = "APPROVE" | "REQUEST_CHANGES" | "REVIEW";
 export type ApprovalPriority = "LOW" | "MEDIUM" | "HIGH";
 
 export type ApprovalItem = {
-  id: number;
+  id: string;
   title: string;
   description?: string | null;
   status: ApprovalStatus;

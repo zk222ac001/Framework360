@@ -8,13 +8,14 @@ async function createUserWithCompany({
   email = 'admin@test.dk',
   role = 'CUSTOMER_ADMIN',
   companyName = 'Test Company ApS',
+  cvr = '12345678',
 } = {}) {
   const password = await bcrypt.hash('password123', 10);
 
   const company = await prisma.company.create({
     data: {
       name: companyName,
-      cvr: '12345678',
+      cvr,
       sector: 'IT',
       country: 'Denmark',
     },
@@ -101,6 +102,99 @@ describe('Company settings', () => {
     expect(res.body.name).toBe('Partially Updated APS');
     expect(res.body.cvr).toBe('12345678');
     expect(res.body.country).toBe('Denmark');
+  });
+
+  it('should reject invalid CVR when updating own company', async () => {
+    const { cookies } = await createUserWithCompany({
+      email: 'invalidcvr@test.dk',
+      role: 'CUSTOMER_ADMIN',
+    });
+
+    const res = await request(app)
+      .patch('/companies/me')
+      .set('Cookie', cookies)
+      .send({
+        cvr: 'abc123',
+      });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.details.fieldErrors.cvr).toContain(
+      'CVR must be exactly 8 digits',
+    );
+  });
+
+  it('should reject CVR already used by another company', async () => {
+    const first = await createUserWithCompany({
+      email: 'firstcvr@test.dk',
+      role: 'CUSTOMER_ADMIN',
+      cvr: '11111111',
+    });
+    const second = await createUserWithCompany({
+      email: 'secondcvr@test.dk',
+      role: 'CUSTOMER_ADMIN',
+      companyName: 'Second Company ApS',
+      cvr: '22222222',
+    });
+
+    const res = await request(app)
+      .patch('/companies/me')
+      .set('Cookie', second.cookies)
+      .send({
+        cvr: first.company.cvr,
+      });
+
+    expect(res.statusCode).toBe(409);
+    expect(res.body.error).toBe('CVR is already registered to another company');
+  });
+
+  it('should reject blank onboarding CVR payloads', async () => {
+    const { cookies } = await createUserWithCompany({
+      email: 'blankcvr@test.dk',
+      role: 'CUSTOMER_ADMIN',
+    });
+
+    const res = await request(app)
+      .patch('/companies/me')
+      .set('Cookie', cookies)
+      .send({
+        name: 'Valid Company ApS',
+        cvr: null,
+        sector: 'IT',
+        country: 'Denmark',
+      });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.details.fieldErrors.cvr).toBeDefined();
+  });
+
+  it('should reject blank onboarding sector and country payloads', async () => {
+    const { cookies } = await createUserWithCompany({
+      email: 'missingcompanyfields@test.dk',
+      role: 'CUSTOMER_ADMIN',
+    });
+
+    const sectorRes = await request(app)
+      .patch('/companies/me')
+      .set('Cookie', cookies)
+      .send({
+        name: 'Valid Company ApS',
+        sector: null,
+        country: 'Denmark',
+      });
+
+    const countryRes = await request(app)
+      .patch('/companies/me')
+      .set('Cookie', cookies)
+      .send({
+        name: 'Valid Company ApS',
+        sector: 'IT',
+        country: null,
+      });
+
+    expect(sectorRes.statusCode).toBe(400);
+    expect(sectorRes.body.details.fieldErrors.sector).toBeDefined();
+    expect(countryRes.statusCode).toBe(400);
+    expect(countryRes.body.details.fieldErrors.country).toBeDefined();
   });
 
   it('should prevent evidence contributors from updating company settings', async () => {

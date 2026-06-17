@@ -34,7 +34,7 @@ function Metric({ label, value, helper }: { label: string; value: number; helper
   );
 }
 
-function FindingCard({ finding, onStatus }: { finding: AuditFinding; onStatus: (id: number, status: AuditFindingStatus) => void }) {
+function FindingCard({ finding, onStatus }: { finding: AuditFinding; onStatus: (id: string, status: AuditFindingStatus) => void }) {
   return (
     <Paper sx={{ p: 2.5, borderRadius: 4, minWidth: 0 }}>
       <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ justifyContent: "space-between" }}>
@@ -95,7 +95,7 @@ export default function AuditFindingsPage() {
     }
   }
 
-  async function handleStatus(id: number, status: AuditFindingStatus) {
+  async function handleStatus(id: string, status: AuditFindingStatus) {
     setError(null);
     try {
       await updateAuditFinding(id, { status });

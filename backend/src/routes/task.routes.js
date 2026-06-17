@@ -7,11 +7,22 @@ const {
   createTaskSchema,
   updateTaskSchema,
 } = require('../validators/task.validator');
+
 const router = express.Router();
+
+function getUserId(req) {
+  return req.user.userId || req.user.id;
+}
+
+function parseRecordId(value) {
+  if (value === undefined || value === null) return null;
+  const id = String(value).trim();
+  return id.length ? id : null;
+}
 
 async function getUserCompanyId(req, res) {
   const user = await prisma.user.findUnique({
-    where: { id: req.user.userId },
+    where: { id: getUserId(req) },
     select: { companyId: true },
   });
 
@@ -23,25 +34,25 @@ async function getUserCompanyId(req, res) {
   return user.companyId;
 }
 
-async function validateTaskRelations({ companyId, assessmentId, assignedToUserId }) {
-  if (assessmentId) {
-    const assessment = await prisma.companyFrameworkAssessment.findFirst({
+async function validateTaskRelations({ companyId, controlId, assignedToId }) {
+  if (controlId) {
+    const control = await prisma.control.findFirst({
       where: {
-        id: assessmentId,
+        id: controlId,
         companyId,
       },
       select: { id: true },
     });
 
-    if (!assessment) {
-      return { ok: false, status: 400, error: 'Assessment does not belong to this company' };
+    if (!control) {
+      return { ok: false, status: 400, error: 'Control does not belong to this company' };
     }
   }
 
-  if (assignedToUserId) {
+  if (assignedToId) {
     const assignee = await prisma.user.findFirst({
       where: {
-        id: assignedToUserId,
+        id: assignedToId,
         companyId,
       },
       select: { id: true },
@@ -55,25 +66,34 @@ async function validateTaskRelations({ companyId, assessmentId, assignedToUserId
   return { ok: true };
 }
 
+function buildTaskData(body) {
+  const controlId = parseRecordId(body.controlId || body.requirementId);
+  const assignedToId = parseRecordId(body.assignedToId || body.assignedToUserId);
+
+  const data = {};
+
+  if (body.title !== undefined) data.title = body.title;
+  if (body.description !== undefined) data.description = body.description || null;
+  if (body.status !== undefined) data.status = body.status;
+  if (body.priority !== undefined) data.priority = body.priority;
+  if (body.dueDate !== undefined) data.dueDate = body.dueDate ? new Date(body.dueDate) : null;
+  if (body.controlId !== undefined || body.requirementId !== undefined) data.controlId = controlId;
+  if (body.assignedToId !== undefined || body.assignedToUserId !== undefined) data.assignedToId = assignedToId;
+
+  return { data, controlId, assignedToId };
+}
+
 router.post('/', requireAuth, validate(createTaskSchema), async (req, res) => {
   try {
-    const {
-      assessmentId,
-      requirementId,
-      title,
-      description,
-      priority,
-      dueDate,
-      assignedToUserId,
-    } = req.body;
-
     const companyId = await getUserCompanyId(req, res);
     if (!companyId) return;
 
+    const { data, controlId, assignedToId } = buildTaskData(req.body);
+
     const relationValidation = await validateTaskRelations({
       companyId,
-      assessmentId,
-      assignedToUserId,
+      controlId,
+      assignedToId,
     });
 
     if (!relationValidation.ok) {
@@ -83,24 +103,30 @@ router.post('/', requireAuth, validate(createTaskSchema), async (req, res) => {
     const task = await prisma.task.create({
       data: {
         companyId,
-        assessmentId: assessmentId || null,
-        requirementId: requirementId || null,
-        title,
-        description: description || null,
-        priority: priority || 'MEDIUM',
-        assignedToUserId: assignedToUserId || null,
-        dueDate: dueDate ? new Date(dueDate) : null,
+        title: data.title,
+        description: data.description || null,
+        priority: data.priority || 'MEDIUM',
+        controlId: controlId || null,
+        assignedToId: assignedToId || null,
+        dueDate: data.dueDate || null,
+      },
+      include: {
+        control: true,
+        assignedTo: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
       },
     });
 
     return res.status(201).json(task);
   } catch (error) {
     console.error('POST /tasks error:', error);
-
-    return res.status(500).json({
-      error: 'Internal server error',
-      message: error.message,
-    });
+    return res.status(500).json({ error: 'Internal server error', message: error.message });
   }
 });
 
@@ -112,12 +138,7 @@ router.get('/', requireAuth, async (req, res) => {
     const tasks = await prisma.task.findMany({
       where: { companyId },
       include: {
-        requirement: true,
-        assessment: {
-          include: {
-            frameworkDefinition: true,
-          },
-        },
+        control: true,
         assignedTo: {
           select: {
             id: true,
@@ -133,19 +154,14 @@ router.get('/', requireAuth, async (req, res) => {
     return res.json(tasks);
   } catch (error) {
     console.error('GET /tasks error:', error);
-
-    return res.status(500).json({
-      error: 'Internal server error',
-      message: error.message,
-    });
+    return res.status(500).json({ error: 'Internal server error', message: error.message });
   }
 });
 
 router.patch('/:id', requireAuth, validate(updateTaskSchema), async (req, res) => {
   try {
-    const id = Number(req.params.id);
-
-    if (!Number.isInteger(id) || id <= 0) {
+    const id = parseRecordId(req.params.id);
+    if (!id) {
       return res.status(400).json({ error: 'Invalid task id' });
     }
 
@@ -160,13 +176,14 @@ router.patch('/:id', requireAuth, validate(updateTaskSchema), async (req, res) =
       return res.status(404).json({ error: 'Task not found' });
     }
 
-    const nextAssessmentId = req.body.assessmentId !== undefined ? req.body.assessmentId : existingTask.assessmentId;
-    const nextAssignedToUserId = req.body.assignedToUserId !== undefined ? req.body.assignedToUserId : existingTask.assignedToUserId;
+    const { data, controlId, assignedToId } = buildTaskData(req.body);
+    const nextControlId = data.controlId !== undefined ? controlId : existingTask.controlId;
+    const nextAssignedToId = data.assignedToId !== undefined ? assignedToId : existingTask.assignedToId;
 
     const relationValidation = await validateTaskRelations({
       companyId,
-      assessmentId: nextAssessmentId,
-      assignedToUserId: nextAssignedToUserId,
+      controlId: nextControlId,
+      assignedToId: nextAssignedToId,
     });
 
     if (!relationValidation.ok) {
@@ -175,26 +192,24 @@ router.patch('/:id', requireAuth, validate(updateTaskSchema), async (req, res) =
 
     const task = await prisma.task.update({
       where: { id },
-      data: {
-        title: req.body.title,
-        description: req.body.description,
-        status: req.body.status,
-        priority: req.body.priority,
-        assessmentId: req.body.assessmentId,
-        requirementId: req.body.requirementId,
-        assignedToUserId: req.body.assignedToUserId,
-        dueDate: req.body.dueDate ? new Date(req.body.dueDate) : req.body.dueDate,
+      data,
+      include: {
+        control: true,
+        assignedTo: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
       },
     });
 
     return res.json(task);
   } catch (error) {
     console.error('PATCH /tasks/:id error:', error);
-
-    return res.status(500).json({
-      error: 'Internal server error',
-      message: error.message,
-    });
+    return res.status(500).json({ error: 'Internal server error', message: error.message });
   }
 });
 

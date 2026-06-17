@@ -36,7 +36,7 @@ function WorkflowMetric({ label, value, helper }: { label: string; value: string
   );
 }
 
-function ApprovalQueue({ items, onDecision }: { items: ApprovalItem[]; onDecision: (id: number, decision: ApprovalDecision) => void }) {
+function ApprovalQueue({ items, onDecision }: { items: ApprovalItem[]; onDecision: (id: string, decision: ApprovalDecision) => void }) {
   return (
     <Paper sx={{ p: 3, borderRadius: 5 }}>
       <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ mb: 2, justifyContent: "space-between" }}>
@@ -133,7 +133,7 @@ export default function WorkflowApprovalsApiPage() {
     return () => { isMounted = false; };
   }, []);
 
-  async function handleDecision(id: number, decision: ApprovalDecision) {
+  async function handleDecision(id: string, decision: ApprovalDecision) {
     setIsSaving(true);
     setError(null);
     try {

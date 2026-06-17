@@ -12,7 +12,7 @@ export function createAuditFinding(input: CreateAuditFindingInput) {
   });
 }
 
-export function updateAuditFinding(id: number, input: UpdateAuditFindingInput) {
+export function updateAuditFinding(id: string, input: UpdateAuditFindingInput) {
   return apiFetch<AuditFinding>(`/audit-findings/${id}`, {
     method: "PATCH",
     body: JSON.stringify(input),
