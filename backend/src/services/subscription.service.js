@@ -79,6 +79,54 @@ function getSubscriptionState(company, now = new Date()) {
   };
 }
 
+function buildExpiredSubscriptionWhere(now = new Date()) {
+  return {
+    subscriptionStatus: {
+      in: [
+        SUBSCRIPTION_STATUSES.TRIAL,
+        SUBSCRIPTION_STATUSES.ACTIVE,
+        SUBSCRIPTION_STATUSES.PAST_DUE,
+      ],
+    },
+    subscriptionRenewal: {
+      lt: now,
+    },
+  };
+}
+
+async function expireDueSubscriptions(prisma, now = new Date()) {
+  const where = buildExpiredSubscriptionWhere(now);
+  const companies = await prisma.company.findMany({
+    where,
+    select: {
+      id: true,
+      name: true,
+      subscriptionPlan: true,
+      subscriptionStatus: true,
+      subscriptionRenewal: true,
+    },
+  });
+
+  if (companies.length === 0) {
+    return { expiredCount: 0, companies: [] };
+  }
+
+  await prisma.company.updateMany({
+    where,
+    data: {
+      subscriptionStatus: SUBSCRIPTION_STATUSES.EXPIRED,
+    },
+  });
+
+  return {
+    expiredCount: companies.length,
+    companies: companies.map((company) => ({
+      ...company,
+      subscriptionStatus: SUBSCRIPTION_STATUSES.EXPIRED,
+    })),
+  };
+}
+
 module.exports = {
   DEFAULT_TRIAL_DAYS,
   SUBSCRIPTION_STATUSES,
@@ -87,4 +135,6 @@ module.exports = {
   getSubscriptionState,
   normalizeSubscriptionPlan,
   normalizeSubscriptionStatus,
+  buildExpiredSubscriptionWhere,
+  expireDueSubscriptions,
 };
