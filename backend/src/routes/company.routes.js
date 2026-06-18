@@ -45,6 +45,11 @@ function handleCompanyWriteError(error, res) {
   });
 }
 
+function parseRecordId(value) {
+  const id = String(value || '').trim();
+  return id.length ? id : null;
+}
+
 /**
  * GET /companies/me
  * Returns the authenticated user's own company.
@@ -183,9 +188,9 @@ router.get('/:id', requireAuth, async (req, res) => {
       });
     }
 
-    const id = Number(req.params.id);
+    const id = parseRecordId(req.params.id);
 
-    if (!Number.isInteger(id) || id <= 0) {
+    if (!id) {
       return res.status(400).json({ error: 'Invalid id' });
     }
 
@@ -254,10 +259,10 @@ router.put('/:id', requireAuth, validate(companySchema), async (req, res) => {
       });
     }
 
-    const id = Number(req.params.id);
+    const id = parseRecordId(req.params.id);
     const { name, cvr, sector, country } = req.body;
 
-    if (!Number.isInteger(id) || id <= 0) {
+    if (!id) {
       return res.status(400).json({ error: 'Invalid id' });
     }
 
@@ -291,9 +296,9 @@ router.delete('/:id', requireAuth, async (req, res) => {
       });
     }
 
-    const id = Number(req.params.id);
+    const id = parseRecordId(req.params.id);
 
-    if (!Number.isInteger(id) || id <= 0) {
+    if (!id) {
       return res.status(400).json({ error: 'Invalid id' });
     }
 

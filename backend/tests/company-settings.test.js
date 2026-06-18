@@ -227,4 +227,45 @@ describe('Company settings', () => {
     expect(res.statusCode).toBe(403);
     expect(res.body.error).toBe('You do not have permission to view all companies');
   });
+
+  it('should allow PLATFORM_ADMIN to manage companies by string id', async () => {
+    const target = await createUserWithCompany({
+      email: 'target-company@test.dk',
+      companyName: 'Target Company ApS',
+      cvr: '33333333',
+    });
+    const admin = await createUserWithCompany({
+      email: 'platform-company-admin@test.dk',
+      role: 'PLATFORM_ADMIN',
+      companyName: 'Platform Admin ApS',
+      cvr: '44444444',
+    });
+
+    const getRes = await request(app)
+      .get(`/companies/${target.company.id}`)
+      .set('Cookie', admin.cookies);
+
+    expect(getRes.statusCode).toBe(200);
+    expect(getRes.body.id).toBe(target.company.id);
+
+    const updateRes = await request(app)
+      .put(`/companies/${target.company.id}`)
+      .set('Cookie', admin.cookies)
+      .send({
+        name: 'Admin Updated Company ApS',
+        cvr: '55555555',
+        sector: 'IT',
+        country: 'Denmark',
+      });
+
+    expect(updateRes.statusCode).toBe(200);
+    expect(updateRes.body.id).toBe(target.company.id);
+    expect(updateRes.body.name).toBe('Admin Updated Company APS');
+
+    const deleteRes = await request(app)
+      .delete(`/companies/${target.company.id}`)
+      .set('Cookie', admin.cookies);
+
+    expect(deleteRes.statusCode).toBe(204);
+  });
 });

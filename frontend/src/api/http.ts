@@ -1,8 +1,8 @@
 // Base URL for backend API requests.
 // Uses environment variable in production and localhost during development.
+const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "");
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-  "http://localhost:23000";
+  configuredApiBaseUrl || (import.meta.env.DEV ? "http://localhost:23000" : "");
 
 // Custom error class used for API request failures.
 // Includes HTTP status code and backend response data.

@@ -11,8 +11,7 @@ The project started as a proof-of-concept/MVP exam project and has since been up
 - Frontend: React + TypeScript + Vite
 - Backend: Node.js + Express
 - ORM: Prisma
-- Default local database: SQLite
-- Recommended production database: PostgreSQL
+- Database: PostgreSQL
 - Container runtime: Docker Compose
 
 ## Repository Structure
@@ -112,7 +111,7 @@ These credentials are for local development only. Do not use demo credentials in
 Create a production environment file from the template:
 
 ```bash
-cp .env.example .env.production
+cp .env.production.example .env.production
 ```
 
 Update `.env.production` with strong values, especially:
@@ -121,6 +120,7 @@ Update `.env.production` with strong values, especially:
 JWT_SECRET
 CORS_ORIGIN
 DATABASE_URL
+VITE_API_BASE_URL
 PLATFORM_ADMIN_EMAIL
 PLATFORM_ADMIN_PASSWORD
 ```
@@ -128,7 +128,7 @@ PLATFORM_ADMIN_PASSWORD
 Start the production-style Compose setup:
 
 ```bash
-docker compose -f docker-compose.prod.yml up --build
+docker compose --env-file .env.production -f docker-compose.prod.yml up --build
 ```
 
 The production-style frontend is served on:
@@ -205,7 +205,7 @@ npm run build
 Docker production-style validation:
 
 ```bash
-docker compose -f docker-compose.prod.yml up --build
+docker compose --env-file .env.production -f docker-compose.prod.yml up --build
 ```
 
 ## Production Readiness Notes
@@ -250,5 +250,5 @@ For production-style containers:
 
 ```bash
 docker compose -f docker-compose.prod.yml down -v
-docker compose -f docker-compose.prod.yml up --build
+docker compose --env-file .env.production -f docker-compose.prod.yml up --build
 ```

@@ -1,5 +1,5 @@
 // Dashboard API requests.
-import { apiFetch } from "./http";
+import { apiFetch, getApiBaseUrl } from "./http";
 import type { DashboardResponse } from "../types/dashboard";
 
 // Retrieves dashboard overview data for the authenticated user.
@@ -9,7 +9,7 @@ export function getDashboard() {
 
 // Downloads the executive compliance report PDF for the authenticated company.
 export async function downloadExecutiveReport() {
-  const response = await fetch(`${import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"}/reports/executive`, {
+  const response = await fetch(`${getApiBaseUrl()}/reports/executive`, {
     credentials: "include",
   });
 

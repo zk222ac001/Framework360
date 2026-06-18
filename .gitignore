@@ -5,6 +5,8 @@ npm-debug.log
 # Env
 .env
 .env.*
+!.env.example
+!.env.production.example
 
 # Build
 dist

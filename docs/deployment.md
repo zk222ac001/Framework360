@@ -10,7 +10,7 @@ The repository includes a production-readiness foundation:
 - Production frontend Dockerfile
 - Nginx static frontend serving
 - Hardened `docker-compose.prod.yml`
-- `.env.example` template
+- `.env.production.example` template
 - Backend production environment validation
 - Startup validation
 - Health endpoint with database connectivity check
@@ -24,7 +24,7 @@ The application should still be validated in a staging environment before real p
 Create a `.env.production` file in the repository root:
 
 ```bash
-cp .env.example .env.production
+cp .env.production.example .env.production
 ```
 
 Required production variables:
@@ -35,6 +35,8 @@ PORT=3000
 DATABASE_URL=postgresql://user:password@host:5432/framework360
 JWT_SECRET=replace_with_long_random_secret
 CORS_ORIGIN=https://your-domain.example
+APP_BASE_URL=https://your-domain.example
+VITE_API_BASE_URL=https://api.your-domain.example
 PLATFORM_ADMIN_EMAIL=admin@example.com
 PLATFORM_ADMIN_PASSWORD=replace_with_strong_password
 ```
@@ -43,13 +45,14 @@ Production rules:
 
 - `JWT_SECRET` must be long, random, and private.
 - `CORS_ORIGIN` must point to the real frontend domain, not localhost.
+- `VITE_API_BASE_URL` is baked into the frontend image at build time.
 - Do not commit `.env.production`.
 - Do not use demo credentials in production.
 
 ## Local Production-Style Run
 
 ```bash
-docker compose -f docker-compose.prod.yml up --build
+docker compose --env-file .env.production -f docker-compose.prod.yml up --build
 ```
 
 Default local endpoints:
@@ -62,9 +65,7 @@ Health: http://localhost:3000/health
 
 ## Database
 
-SQLite is acceptable for local development and demo usage. PostgreSQL is recommended for production.
-
-Production deployment should use:
+Framework360 uses PostgreSQL through Prisma. Production deployment should use:
 
 ```text
 DATABASE_URL=postgresql://...
@@ -118,7 +119,7 @@ A healthy response should return HTTP 200. A database failure should return HTTP
 Before production release:
 
 - Configure `.env.production` with real secrets.
-- Use PostgreSQL, not local SQLite.
+- Use PostgreSQL.
 - Run `npm test` for backend.
 - Run frontend lint and build.
 - Run production Docker Compose build.

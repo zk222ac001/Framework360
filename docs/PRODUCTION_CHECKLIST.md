@@ -16,7 +16,7 @@
 
 ## Database
 
-- Migrate from SQLite to PostgreSQL.
+- Validate PostgreSQL migrations in staging before production deployment.
 - Configure automated backups.
 - Test restore procedures.
 - Document backup retention.

@@ -20,12 +20,17 @@ function parseDate(value) {
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
+function parseRecordId(value) {
+  const id = String(value || '').trim();
+  return id.length ? id : null;
+}
+
 router.get('/', async (req, res) => {
   try {
     const page = parsePositiveInt(req.query.page, 1, 100000);
     const pageSize = parsePositiveInt(req.query.pageSize, 50, 200);
-    const userId = req.query.userId ? Number(req.query.userId) : null;
-    const entityId = req.query.entityId ? Number(req.query.entityId) : null;
+    const userId = req.query.userId ? parseRecordId(req.query.userId) : null;
+    const entityId = req.query.entityId ? parseRecordId(req.query.entityId) : null;
     const action = req.query.action ? String(req.query.action).trim() : null;
     const entity = req.query.entity ? String(req.query.entity).trim() : null;
     const from = parseDate(req.query.from);
@@ -33,8 +38,8 @@ router.get('/', async (req, res) => {
 
     const where = {};
 
-    if (Number.isInteger(userId) && userId > 0) where.userId = userId;
-    if (Number.isInteger(entityId) && entityId > 0) where.entityId = entityId;
+    if (userId) where.userId = userId;
+    if (entityId) where.entityId = entityId;
     if (action) where.action = action;
     if (entity) where.entity = entity;
     if (from || to) {
@@ -70,9 +75,9 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseRecordId(req.params.id);
 
-    if (!Number.isInteger(id) || id <= 0) {
+    if (!id) {
       return res.status(400).json({ error: 'Invalid audit log id' });
     }
 
