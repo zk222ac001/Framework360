@@ -9,6 +9,7 @@ const { getFrameworksFromSector } = require('../utils/frameworkMapping');
 const { logAction } = require('../utils/audit');
 const { setAuthCookie, clearAuthCookie } = require('../utils/cookies');
 const { sendMail, appUrl } = require('../services/mail.service');
+const { createTrialSubscriptionData } = require('../services/subscription.service');
 const {
   normalizeEmail,
   normalizeName,
@@ -181,7 +182,17 @@ router.post('/register', validate(registerSchema), async (req, res) => {
     const existingUser = await prisma.user.findUnique({ where: { email: normalizedEmail } });
     if (existingUser) return res.status(409).json({ error: 'Email already exists' });
     let company = normalizedCvr ? await prisma.company.findUnique({ where: { cvr: normalizedCvr } }) : null;
-    if (!company) company = await prisma.company.create({ data: { name: normalizedCompanyName, cvr: normalizedCvr, sector: normalizedSector, country: normalizedCountry } });
+    if (!company) {
+      company = await prisma.company.create({
+        data: {
+          name: normalizedCompanyName,
+          cvr: normalizedCvr,
+          sector: normalizedSector,
+          country: normalizedCountry,
+          ...createTrialSubscriptionData(),
+        },
+      });
+    }
     const hashedPassword = await bcrypt.hash(password.trim(), 10);
     const user = await prisma.user.create({ data: { firstName: normalizedFirstName, lastName: normalizedLastName, email: normalizedEmail, password: hashedPassword, authProvider: 'LOCAL', providerId: null, role: 'CUSTOMER_ADMIN', isActive: true, mustChangePassword: false, onboardingCompleted: false, companyId: company.id } });
     const frameworks = getFrameworksFromSector(company.sector);

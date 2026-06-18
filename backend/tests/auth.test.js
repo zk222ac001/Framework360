@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 const app = require('../src/app');
 const prisma = require('../src/db');
+const { SUBSCRIPTION_PLANS, SUBSCRIPTION_STATUSES } = require('../src/services/subscription.service');
 
 describe('Auth', () => {
   it('should register, login, get current user and logout', async () => {
@@ -22,6 +23,9 @@ describe('Auth', () => {
     expect(registerRes.body.email).toBe('simon@test.dk');
     expect(registerRes.body.firstName).toBe('Simon');
     expect(registerRes.body.lastName).toBe('Pedersen');
+    expect(registerRes.body.company.subscriptionPlan).toBe(SUBSCRIPTION_PLANS.TRIAL);
+    expect(registerRes.body.company.subscriptionStatus).toBe(SUBSCRIPTION_STATUSES.TRIAL);
+    expect(new Date(registerRes.body.company.subscriptionRenewal).getTime()).toBeGreaterThan(Date.now());
 
     const loginRes = await request(app)
       .post('/auth/login')

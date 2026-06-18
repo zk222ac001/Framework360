@@ -11,6 +11,7 @@ const {
   updateDemoRequestStatusSchema,
 } = require("../validators/demoRequest.validator");
 const { logAction } = require("../utils/audit");
+const { createTrialSubscriptionData } = require("../services/subscription.service");
 const { companyScopeSchema } = require("../validators/companyScope.validator");
 const {
   buildFrameworkRecommendations,
@@ -262,6 +263,7 @@ router.post(
           data: {
             name: demoRequest.companyName,
             country: demoRequest.country || null,
+            ...createTrialSubscriptionData(),
           },
         });
       }

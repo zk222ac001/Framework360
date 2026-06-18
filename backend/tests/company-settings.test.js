@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 
 const app = require('../src/app');
 const prisma = require('../src/db');
+const { SUBSCRIPTION_PLANS, SUBSCRIPTION_STATUSES } = require('../src/services/subscription.service');
 
 async function createUserWithCompany({
   email = 'admin@test.dk',
@@ -247,6 +248,21 @@ describe('Company settings', () => {
 
     expect(getRes.statusCode).toBe(200);
     expect(getRes.body.id).toBe(target.company.id);
+
+    const createRes = await request(app)
+      .post('/companies')
+      .set('Cookie', admin.cookies)
+      .send({
+        name: 'Admin Created Company ApS',
+        cvr: '66666666',
+        sector: 'IT',
+        country: 'Denmark',
+      });
+
+    expect(createRes.statusCode).toBe(201);
+    expect(createRes.body.subscriptionPlan).toBe(SUBSCRIPTION_PLANS.TRIAL);
+    expect(createRes.body.subscriptionStatus).toBe(SUBSCRIPTION_STATUSES.TRIAL);
+    expect(new Date(createRes.body.subscriptionRenewal).getTime()).toBeGreaterThan(Date.now());
 
     const updateRes = await request(app)
       .put(`/companies/${target.company.id}`)

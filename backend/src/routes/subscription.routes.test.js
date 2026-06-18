@@ -42,6 +42,10 @@ describe('subscription.routes', () => {
     jest.clearAllMocks();
   });
 
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   describe('GET /subscription/me', () => {
     it('returns the authenticated company subscription', async () => {
       prisma.company.findUnique.mockResolvedValue({
@@ -141,6 +145,49 @@ describe('subscription.routes', () => {
       expect(prisma.company.update).toHaveBeenCalledWith(expect.objectContaining({
         data: expect.objectContaining({ subscriptionStatus: SUBSCRIPTION_STATUSES.ACTIVE }),
       }));
+    });
+  });
+
+  describe('POST /subscription/company/:id/extend-trial', () => {
+    it('extends the trial from the existing future renewal date', async () => {
+      jest.useFakeTimers().setSystemTime(new Date('2026-06-18T00:00:00.000Z'));
+
+      prisma.company.findUnique.mockResolvedValue({
+        id: 'company-1',
+        subscriptionRenewal: new Date('2026-06-25T00:00:00.000Z'),
+      });
+      prisma.company.update.mockResolvedValue({
+        id: 'company-1',
+        name: 'Acme',
+        subscriptionPlan: SUBSCRIPTION_PLANS.TRIAL,
+        subscriptionStatus: SUBSCRIPTION_STATUSES.TRIAL,
+        subscriptionRenewal: new Date('2026-07-02T00:00:00.000Z'),
+      });
+
+      const response = await request(createApp())
+        .post('/subscription/company/company-1/extend-trial')
+        .send({ days: 7 })
+        .expect(200);
+
+      expect(response.body.subscription.subscriptionStatus).toBe(SUBSCRIPTION_STATUSES.TRIAL);
+      expect(prisma.company.update).toHaveBeenCalledWith(expect.objectContaining({
+        data: {
+          subscriptionPlan: SUBSCRIPTION_PLANS.TRIAL,
+          subscriptionStatus: SUBSCRIPTION_STATUSES.TRIAL,
+          subscriptionRenewal: new Date('2026-07-02T00:00:00.000Z'),
+        },
+      }));
+    });
+
+    it('returns 404 when extending a missing company trial', async () => {
+      prisma.company.findUnique.mockResolvedValue(null);
+
+      await request(createApp())
+        .post('/subscription/company/missing-company/extend-trial')
+        .send({ days: 7 })
+        .expect(404);
+
+      expect(prisma.company.update).not.toHaveBeenCalled();
     });
   });
 

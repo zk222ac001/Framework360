@@ -4,6 +4,7 @@ const { validate } = require('../middleware/validate.middleware');
 const { companySchema, updateMyCompanySchema } = require('../validators/company.validator');
 const prisma = require('../db');
 const { requireAuth } = require('../middleware/auth.middleware');
+const { createTrialSubscriptionData } = require('../services/subscription.service');
 const {
   normalizeCompanyName,
   normalizeUpperEnum,
@@ -236,6 +237,7 @@ router.post('/', requireAuth, validate(companySchema), async (req, res) => {
         cvr: normalizeNullableString(cvr),
         sector: sector ? normalizeUpperEnum(sector) : null,
         country: normalizeNullableString(country),
+        ...createTrialSubscriptionData(),
       },
     });
 
