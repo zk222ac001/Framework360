@@ -24,9 +24,11 @@ const dependencyRoutes = require('./routes/dependency.routes');
 const auditFindingsRoutes = require('./routes/auditFindings.routes');
 const evidenceCampaignRoutes = require('./routes/evidenceCampaign.routes');
 const approvalRoutes = require('./routes/approval.routes');
+const subscriptionRoutes = require('./routes/subscription.routes');
 const prisma = require('./db');
 const { requestContext } = require('./middleware/requestContext.middleware');
 const { requestLogger } = require('./middleware/requestLogger.middleware');
+const { requireActiveSubscription } = require('./middleware/subscription.middleware');
 const { errorHandler } = require('./middleware/error.middleware');
 
 const app = express();
@@ -79,8 +81,10 @@ app.get('/health', async (req, res) => {
 });
 
 app.use('/auth', authRoutes);
-app.use('/', dashboardRoutes);
 app.use('/demo-requests', demoRequestRoutes);
+app.use('/subscription', subscriptionRoutes);
+app.use(requireActiveSubscription);
+app.use('/', dashboardRoutes);
 app.use('/onboarding', onboardingRoutes);
 app.use('/companies', companyRoutes);
 app.use('/controls', controlRoutes);
