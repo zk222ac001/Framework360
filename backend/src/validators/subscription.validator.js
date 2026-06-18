@@ -18,7 +18,12 @@ const renewSubscriptionSchema = z.object({
   months: z.number().int().min(1).max(36).default(1),
 }).strict();
 
+const extendTrialSchema = z.object({
+  days: z.number().int().min(1).max(90).default(14),
+}).strict();
+
 module.exports = {
   updateSubscriptionSchema,
   renewSubscriptionSchema,
+  extendTrialSchema,
 };
