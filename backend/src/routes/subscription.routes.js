@@ -3,7 +3,11 @@ const express = require('express');
 const prisma = require('../db');
 const { requireAuth, requirePlatformAdmin } = require('../middleware/auth.middleware');
 const { validate } = require('../middleware/validate.middleware');
-const { SUBSCRIPTION_STATUSES, getSubscriptionState } = require('../services/subscription.service');
+const {
+  SUBSCRIPTION_STATUSES,
+  getSubscriptionState,
+  expireDueSubscriptions,
+} = require('../services/subscription.service');
 const { updateSubscriptionSchema, renewSubscriptionSchema } = require('../validators/subscription.validator');
 
 const router = express.Router();
@@ -43,6 +47,16 @@ router.get('/me', requireAuth, async (req, res) => {
     return res.json({ subscription: selectCompanySubscription(company) });
   } catch (error) {
     console.error('GET /subscription/me error:', error);
+    return res.status(500).json({ error: 'Internal server error', message: error.message });
+  }
+});
+
+router.post('/run-expiration', requireAuth, requirePlatformAdmin, async (req, res) => {
+  try {
+    const result = await expireDueSubscriptions(prisma);
+    return res.json(result);
+  } catch (error) {
+    console.error('POST /subscription/run-expiration error:', error);
     return res.status(500).json({ error: 'Internal server error', message: error.message });
   }
 });
