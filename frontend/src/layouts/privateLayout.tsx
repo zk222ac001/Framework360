@@ -64,7 +64,10 @@ export default function PrivateLayout() {
 
         <Stack spacing={0.75} sx={{ flex: 1, overflowY: "auto", pr: 0.5 }}>
           {isAdmin ? (
-            <SidebarLink to="/admin" label={t("navbar.admin")} icon="AD" />
+            <>
+              <SidebarLink to="/admin" label={t("navbar.admin")} icon="AD" />
+              <SidebarLink to="/admin/subscriptions" label="Subscriptions" icon="SB" />
+            </>
           ) : (
             <>
               <SidebarLink to="/dashboard" label={t("navbar.dashboard")} icon="DB" />
