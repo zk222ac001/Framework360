@@ -11,6 +11,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
@@ -21,6 +22,11 @@ import {
   getDemoRequests,
   updateDemoRequest,
 } from "../../api/demoRequest";
+import {
+  updateCompanySubscription,
+  type SubscriptionPlan,
+  type SubscriptionStatus,
+} from "../../api/subscription";
 import { useTranslation } from "react-i18next";
 import type {
   ActivateDemoRequestResponse,
@@ -37,6 +43,28 @@ import { isCompanyEmail } from "../../utils/companyEmail";
 
 type DemoRequestFormErrors = Partial<Record<keyof DemoRequestFormValues, string>>;
 
+type SubscriptionFormValues = {
+  subscriptionPlan: SubscriptionPlan;
+  subscriptionStatus: SubscriptionStatus;
+  subscriptionRenewal: string;
+};
+
+const subscriptionPlans: SubscriptionPlan[] = [
+  "TRIAL",
+  "STARTER",
+  "PROFESSIONAL",
+  "ENTERPRISE",
+];
+
+const subscriptionStatuses: SubscriptionStatus[] = [
+  "TRIAL",
+  "ACTIVE",
+  "PAST_DUE",
+  "EXPIRED",
+  "CANCELLED",
+  "SUSPENDED",
+];
+
 const emptyEditValues: DemoRequestFormValues = {
   email: "",
   firstName: "",
@@ -45,6 +73,31 @@ const emptyEditValues: DemoRequestFormValues = {
   jobTitle: "",
   country: "",
 };
+
+function toDateInputValue(value?: string | null) {
+  if (!value) return "";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toISOString().slice(0, 10);
+}
+
+function formatSubscriptionDate(value?: string | null) {
+  if (!value) return "-";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "-";
+  return date.toLocaleDateString();
+}
+
+function getSubscriptionFormValues(
+  request: DemoRequestResponse,
+): SubscriptionFormValues {
+  return {
+    subscriptionPlan: (request.company?.subscriptionPlan as SubscriptionPlan) || "TRIAL",
+    subscriptionStatus:
+      (request.company?.subscriptionStatus as SubscriptionStatus) || "TRIAL",
+    subscriptionRenewal: toDateInputValue(request.company?.subscriptionRenewal),
+  };
+}
 
 export default function AdminPage() {
   const { t } = useTranslation();
@@ -55,6 +108,9 @@ export default function AdminPage() {
   const [activatingId, setActivatingId] = useState<number | null>(null);
   const [savingId, setSavingId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [savingSubscriptionId, setSavingSubscriptionId] = useState<number | null>(
+    null,
+  );
   const [editingRequest, setEditingRequest] =
     useState<DemoRequestResponse | null>(null);
   const [deleteTarget, setDeleteTarget] =
@@ -62,6 +118,9 @@ export default function AdminPage() {
   const [editValues, setEditValues] =
     useState<DemoRequestFormValues>(emptyEditValues);
   const [editErrors, setEditErrors] = useState<DemoRequestFormErrors>({});
+  const [subscriptionValues, setSubscriptionValues] = useState<
+    Record<number, SubscriptionFormValues>
+  >({});
   const [activationResult, setActivationResult] =
     useState<ActivateDemoRequestResponse | null>(null);
 
@@ -72,6 +131,12 @@ export default function AdminPage() {
       setError("");
       const result = await getDemoRequests();
       setRequests(result);
+      setSubscriptionValues(
+        result.reduce<Record<number, SubscriptionFormValues>>((acc, request) => {
+          acc[request.id] = getSubscriptionFormValues(request);
+          return acc;
+        }, {}),
+      );
       // Display readable error if request loading fails.
     } catch (err) {
       console.error(err);
@@ -159,6 +224,19 @@ export default function AdminPage() {
       }
     };
 
+  const handleSubscriptionChange =
+    (request: DemoRequestResponse, field: keyof SubscriptionFormValues) =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const current = subscriptionValues[request.id] || getSubscriptionFormValues(request);
+      setSubscriptionValues((prev) => ({
+        ...prev,
+        [request.id]: {
+          ...current,
+          [field]: event.target.value,
+        },
+      }));
+    };
+
   const validateEdit = () => {
     const newErrors: DemoRequestFormErrors = {};
 
@@ -211,6 +289,36 @@ export default function AdminPage() {
       );
     } finally {
       setSavingId(null);
+    }
+  };
+
+  const handleSaveSubscription = async (request: DemoRequestResponse) => {
+    if (!request.company) return;
+
+    const values = subscriptionValues[request.id] || getSubscriptionFormValues(request);
+
+    try {
+      setSavingSubscriptionId(request.id);
+      clearMessages();
+      setActivationResult(null);
+
+      await updateCompanySubscription(request.company.id, {
+        subscriptionPlan: values.subscriptionPlan,
+        subscriptionStatus: values.subscriptionStatus,
+        subscriptionRenewal: values.subscriptionRenewal
+          ? new Date(`${values.subscriptionRenewal}T00:00:00.000Z`).toISOString()
+          : null,
+      });
+
+      setSuccess("Subscription updated successfully.");
+      await loadRequests();
+    } catch (err) {
+      console.error(err);
+      setError(
+        err instanceof Error ? err.message : "Could not update subscription.",
+      );
+    } finally {
+      setSavingSubscriptionId(null);
     }
   };
 
@@ -285,6 +393,14 @@ export default function AdminPage() {
               <strong>{activationResult.user.email}</strong>.
             </Typography>
 
+            {activationResult.company && (
+              <Typography variant="body2">
+                Subscription: {activationResult.company.subscriptionPlan || "-"} /{" "}
+                {activationResult.company.subscriptionStatus || "-"}, renewal{" "}
+                {formatSubscriptionDate(activationResult.company.subscriptionRenewal)}.
+              </Typography>
+            )}
+
             {activationResult.temporaryPassword ? (
               <>
                 <Typography variant="body2">
@@ -334,6 +450,8 @@ export default function AdminPage() {
 
         {requests.map((request) => {
           const canActivate = request.status !== "ACTIVATED";
+          const currentSubscription =
+            subscriptionValues[request.id] || getSubscriptionFormValues(request);
 
           return (
             <Paper key={request.id} sx={{ p: 3, borderRadius: 3 }}>
@@ -395,6 +513,77 @@ export default function AdminPage() {
                     {activatingId === request.id ? "Activating..." : "Activate"}
                   </Button>
                 </Stack>
+              </Box>
+
+              <Box sx={{ mt: 3, pt: 2, borderTop: 1, borderColor: "divider" }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
+                  Subscription
+                </Typography>
+
+                {request.company ? (
+                  <Stack
+                    direction={{ xs: "column", md: "row" }}
+                    spacing={2}
+                    sx={{ alignItems: { md: "center" } }}
+                  >
+                    <TextField
+                      select
+                      label="Plan"
+                      size="small"
+                      value={currentSubscription.subscriptionPlan}
+                      onChange={handleSubscriptionChange(request, "subscriptionPlan")}
+                      sx={{ minWidth: 180 }}
+                    >
+                      {subscriptionPlans.map((plan) => (
+                        <MenuItem key={plan} value={plan}>
+                          {plan}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
+                    <TextField
+                      select
+                      label="Status"
+                      size="small"
+                      value={currentSubscription.subscriptionStatus}
+                      onChange={handleSubscriptionChange(request, "subscriptionStatus")}
+                      sx={{ minWidth: 180 }}
+                    >
+                      {subscriptionStatuses.map((status) => (
+                        <MenuItem key={status} value={status}>
+                          {status}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+
+                    <TextField
+                      label="Renewal date"
+                      type="date"
+                      size="small"
+                      value={currentSubscription.subscriptionRenewal}
+                      onChange={handleSubscriptionChange(
+                        request,
+                        "subscriptionRenewal",
+                      )}
+                      InputLabelProps={{ shrink: true }}
+                    />
+
+                    <Button
+                      variant="outlined"
+                      disabled={savingSubscriptionId === request.id}
+                      onClick={() => handleSaveSubscription(request)}
+                    >
+                      {savingSubscriptionId === request.id
+                        ? "Saving subscription..."
+                        : "Save subscription"}
+                    </Button>
+                  </Stack>
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    No subscription yet. Activate the demo request first to create
+                    the user, company, and trial subscription.
+                  </Typography>
+                )}
               </Box>
             </Paper>
           );
