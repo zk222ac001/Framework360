@@ -8,6 +8,7 @@ const adminFrameworkRoutes = require('./routes/adminFramework.routes');
 const adminSeedRoutes = require('./routes/adminSeed.routes');
 const auditLogRoutes = require('./routes/auditLog.routes');
 const authRoutes = require('./routes/auth.routes');
+const billingRoutes = require('./routes/billing.routes');
 const companyRoutes = require('./routes/company.routes');
 const controlRoutes = require('./routes/control.routes');
 const dashboardRoutes = require('./routes/dashboard.routes');
@@ -43,6 +44,8 @@ app.use(
   })
 );
 
+// Stripe webhooks must receive the raw request body for signature verification.
+app.use('/billing/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
 
 app.use(helmet());
@@ -58,6 +61,7 @@ const strictLimiter = rateLimit({
 
 app.use('/auth/login', strictLimiter);
 app.use('/demo-requests', strictLimiter);
+app.use('/billing/checkout-session', strictLimiter);
 
 app.get('/health', async (req, res) => {
   const health = {
@@ -83,6 +87,7 @@ app.get('/health', async (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/demo-requests', demoRequestRoutes);
 app.use('/subscription', subscriptionRoutes);
+app.use('/billing', billingRoutes);
 app.use(requireActiveSubscription);
 app.use('/', dashboardRoutes);
 app.use('/onboarding', onboardingRoutes);
