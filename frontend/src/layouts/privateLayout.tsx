@@ -69,6 +69,7 @@ export default function PrivateLayout() {
             <>
               <SidebarLink to="/admin" label={t("navbar.admin")} icon="AD" />
               <SidebarLink to="/admin/subscriptions" label="Subscriptions" icon="SB" />
+              <SidebarLink to="/admin/billing" label="Billing" icon="BL" />
             </>
           ) : (
             <>
