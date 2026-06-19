@@ -29,7 +29,9 @@ function navIcon(label: string) {
 
 function SidebarLink({ to, label, icon }: { to: string; label: string; icon: string }) {
   const location = useLocation();
-  const isActive = location.pathname === to || (to !== "/dashboard" && location.pathname.startsWith(to));
+  const isActive =
+    location.pathname === to ||
+    (to !== "/dashboard" && to !== "/admin" && location.pathname.startsWith(to));
 
   return (
     <Link component={RouterLink} to={to} underline="none" color="text.primary" sx={{ display: "flex", alignItems: "center", gap: 1.5, px: 1.25, py: 1, borderRadius: 3, fontWeight: isActive ? 800 : 650, bgcolor: isActive ? "surface.level2" : "transparent", border: "1px solid", borderColor: isActive ? "divider" : "transparent", boxShadow: isActive ? "0 10px 30px rgba(37, 99, 235, 0.12)" : "none", transition: "all 160ms ease", "&:hover": { bgcolor: "surface.level2", transform: "translateX(2px)" } }}>
