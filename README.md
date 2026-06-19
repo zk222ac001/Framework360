@@ -20,7 +20,7 @@ The project started as a proof-of-concept/MVP exam project and has since been up
 backend/      Express API, Prisma schema, routes, middleware, tests
 frontend/     React frontend application
 docker/       Development and production Dockerfiles / web server config
-docs/         Deployment, security, and production-readiness documentation
+docs/         Deployment, security, subscription, and production-readiness documentation
 ```
 
 ## Requirements
@@ -113,6 +113,58 @@ Country: DK
 ```
 
 These credentials are for local development only. Do not use demo credentials in production.
+
+## Demo Request And Subscription Administration
+
+Platform administrators can manage demo access from the admin console:
+
+```text
+/admin
+```
+
+When a pending demo request is activated, the backend creates or reuses the company, creates the customer admin user, and applies a trial subscription using the subscription service defaults. The generated temporary password is shown once to the platform administrator and must be copied immediately.
+
+The admin demo-request page now displays subscription controls for activated companies:
+
+- Plan: `TRIAL`, `STARTER`, `PROFESSIONAL`, `ENTERPRISE`
+- Status: `TRIAL`, `ACTIVE`, `PAST_DUE`, `EXPIRED`, `CANCELLED`, `SUSPENDED`
+- Renewal date
+
+Platform administrators can also manage all company subscriptions from the dedicated page:
+
+```text
+/admin/subscriptions
+```
+
+This page lists all companies, summarizes active/trial/blocked subscriptions, and saves updates through the existing subscription API.
+
+The main backend endpoints are:
+
+```text
+GET    /companies
+GET    /subscription/me
+PATCH  /subscription/company/:id
+POST   /subscription/company/:id/extend-trial
+POST   /subscription/company/:id/renew
+POST   /subscription/company/:id/cancel
+POST   /subscription/run-expiration
+```
+
+Subscription data is currently stored on the `Company` model:
+
+```text
+subscriptionPlan
+subscriptionStatus
+subscriptionRenewal
+```
+
+The current repository contains subscription and access-control management. It does not currently include a full external payment gateway integration such as Stripe checkout, card payments, invoice objects, or webhook-based billing reconciliation.
+
+See also:
+
+```text
+docs/SUBSCRIPTION_ADMINISTRATION.md
+```
 
 ## Production-Style Local Run
 
@@ -212,6 +264,19 @@ npm run lint
 npm run build
 ```
 
+Subscription smoke test:
+
+```text
+1. Log in as PLATFORM_ADMIN.
+2. Open /admin.
+3. Activate a pending demo request.
+4. Confirm trial subscription details appear on the activated request.
+5. Open /admin/subscriptions.
+6. Change a company plan, status, or renewal date.
+7. Save and refresh the page.
+8. Confirm the updated subscription values persist.
+```
+
 Docker production-style validation:
 
 ```bash
@@ -228,7 +293,7 @@ The repository now includes a production-readiness foundation:
 - Hardened production Compose file
 - Production environment validation
 - Deployment documentation
-- Authorization matrix documentation
+- Authorization and subscription administration documentation
 - Audit-log reporting API
 - Structured JSON logging
 - Request ID middleware
@@ -245,6 +310,7 @@ Before real production use, still complete and verify:
 - Monitoring and alerting
 - Security review of all route families
 - Load testing and incident response plan
+- External billing/payment gateway integration if paid self-service checkout is required
 
 ## Troubleshooting Docker
 
