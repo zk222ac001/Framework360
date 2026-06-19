@@ -73,15 +73,16 @@ DATABASE_URL=postgresql://...
 
 Before switching to PostgreSQL, validate Prisma migrations in staging.
 
-## Database Migration Command
+## Database Migration And Bootstrap Command
 
 The production backend command runs:
 
 ```bash
-npx prisma migrate deploy
+npx prisma migrate deploy && npm run seed:prod
 ```
 
 This applies existing Prisma migrations without using destructive development synchronization.
+The production seed creates the initial platform administrator from `PLATFORM_ADMIN_EMAIL` and `PLATFORM_ADMIN_PASSWORD` when that user does not already exist. Existing user passwords are not overwritten.
 
 Do not use `prisma db push` as the production migration strategy.
 

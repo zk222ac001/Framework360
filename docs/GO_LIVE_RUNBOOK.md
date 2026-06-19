@@ -65,13 +65,14 @@ cd backend
 npx prisma migrate dev --name commercial_readiness_models
 ```
 
-Deploy migrations in production with:
+Deploy migrations and bootstrap the first platform administrator in production with:
 
 ```bash
-npx prisma migrate deploy
+npx prisma migrate deploy && npm run seed:prod
 ```
 
 Do not use `prisma db push` as the normal production deployment process.
+`seed:prod` reads `PLATFORM_ADMIN_EMAIL` and `PLATFORM_ADMIN_PASSWORD`. It creates the admin user only if missing and does not overwrite existing user passwords.
 
 ## Production environment variables
 
@@ -120,10 +121,10 @@ npm start
 ```
 
 6. Add all production environment variables.
-7. Run the production migration command:
+7. Run the production migration and bootstrap command:
 
 ```bash
-npx prisma migrate deploy
+npx prisma migrate deploy && npm run seed:prod
 ```
 
 8. Confirm the health endpoint returns `status: ok`:
@@ -190,7 +191,7 @@ Before inviting users, verify:
 ## Private beta launch process
 
 1. Deploy backend and frontend.
-2. Create the first production admin account.
+2. Confirm the seeded production admin account can log in.
 3. Create one test company.
 4. Run a full smoke test.
 5. Invite one trusted pilot user.

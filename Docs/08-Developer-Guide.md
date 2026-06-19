@@ -52,6 +52,8 @@ Framework360/
 │   ├── prisma/
 │   │   ├── schema.prisma
 │   │   ├── seed.js
+│   │   ├── seed.dev.js
+│   │   ├── seed.prod.js
 │   │   └── seed-data/
 │   └── tests/
 │
@@ -325,7 +327,7 @@ Example concept:
 ```text
 Backend route receives request
 Route calls Prisma client
-Prisma queries SQLite database
+Prisma queries PostgreSQL
 Route returns result to frontend
 ```
 
@@ -340,12 +342,14 @@ Important Prisma files:
 ```text
 backend/prisma/schema.prisma
 backend/prisma/seed.js
+backend/prisma/seed.dev.js
+backend/prisma/seed.prod.js
 backend/prisma/seed-data/
 ```
 
 The schema file defines database models such as users, companies, demo requests, frameworks, evidence, systems, vendors, and other records.
 
-The seed file creates demo/test data used during development.
+The base seed creates the platform administrator. The development seed adds local test users and demo companies. The production seed bootstraps the first platform administrator from production environment variables without overwriting existing user passwords.
 
 ---
 
@@ -430,6 +434,8 @@ docker compose exec backend npm run seed:dev
 ```
 
 This creates demo users and sample data for development.
+
+The development seed creates the base platform admin account and the local demo accounts listed in the README.
 
 To completely reset the development database and recreate demo data:
 
@@ -708,7 +714,7 @@ Frontend sends API requests using apiFetch.
 Express backend receives the requests.
 Middleware validates input and checks authentication.
 Routes execute business logic.
-Prisma reads and writes data in SQLite.
+Prisma reads and writes data in PostgreSQL.
 Backend returns JSON responses.
 Frontend updates the UI.
 ```

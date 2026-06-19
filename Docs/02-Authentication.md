@@ -22,16 +22,34 @@ Role: CUSTOMER_ADMIN
 Purpose: Manage company compliance data, frameworks, evidence, systems, vendors, and processes
 ```
 
-### Demo User
-
-The demo user is used for testing and demonstration.
+### Compliance Manager
 
 ```text
-Role: DEMO_USER
-Purpose: Explore the application with limited/demo data
+Role: COMPLIANCE_MANAGER
+Purpose: Manage compliance workflows for a customer company
 ```
 
-For local seeded account credentials, check the project README.
+### Evidence Contributor
+
+```text
+Role: EVIDENCE_CONTRIBUTOR
+Purpose: Upload and maintain evidence for assigned compliance work
+```
+
+### Auditor
+
+```text
+Role: AUDITOR
+Purpose: Review compliance information with limited operational access
+```
+
+For local seeded account credentials, run the development seed and check the project README:
+
+```bash
+docker compose exec backend npm run seed:dev
+```
+
+The development seed creates the base platform admin account plus local demo users for testing.
 
 ---
 

@@ -51,6 +51,7 @@
 - Configure rollback procedure.
 - Confirm production environment variables are configured.
 - Confirm frontend and backend URLs match production CORS settings.
+- Confirm `seed:prod` creates the initial platform administrator and that the admin can log in.
 - Confirm the health endpoint is monitored.
 
 ## Commercial Launch

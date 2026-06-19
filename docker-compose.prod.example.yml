@@ -26,12 +26,14 @@ services:
       DATABASE_URL: "postgresql://framework360:change-me-in-production@postgres:5432/framework360?schema=public"
       CORS_ORIGIN: "https://your-production-domain.example"
       JWT_SECRET: "replace-with-a-long-random-secret"
+      PLATFORM_ADMIN_EMAIL: "admin@example.com"
+      PLATFORM_ADMIN_PASSWORD: "replace-with-a-strong-password"
     depends_on:
       postgres:
         condition: service_healthy
     volumes:
       - backend_uploads:/app/uploads
-    command: sh -c "npx prisma migrate deploy && node src/server.js"
+    command: sh -c "npx prisma migrate deploy && npm run seed:prod && node src/server.js"
     restart: unless-stopped
 
   frontend:

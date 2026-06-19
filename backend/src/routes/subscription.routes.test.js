@@ -42,10 +42,6 @@ describe('subscription.routes', () => {
     jest.clearAllMocks();
   });
 
-  afterEach(() => {
-    jest.useRealTimers();
-  });
-
   describe('GET /subscription/me', () => {
     it('returns the authenticated company subscription', async () => {
       prisma.company.findUnique.mockResolvedValue({
@@ -150,18 +146,20 @@ describe('subscription.routes', () => {
 
   describe('POST /subscription/company/:id/extend-trial', () => {
     it('extends the trial from the existing future renewal date', async () => {
-      jest.useFakeTimers().setSystemTime(new Date('2026-06-18T00:00:00.000Z'));
+      const futureRenewal = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+      const extendedRenewal = new Date(futureRenewal);
+      extendedRenewal.setUTCDate(extendedRenewal.getUTCDate() + 7);
 
       prisma.company.findUnique.mockResolvedValue({
         id: 'company-1',
-        subscriptionRenewal: new Date('2026-06-25T00:00:00.000Z'),
+        subscriptionRenewal: futureRenewal,
       });
       prisma.company.update.mockResolvedValue({
         id: 'company-1',
         name: 'Acme',
         subscriptionPlan: SUBSCRIPTION_PLANS.TRIAL,
         subscriptionStatus: SUBSCRIPTION_STATUSES.TRIAL,
-        subscriptionRenewal: new Date('2026-07-02T00:00:00.000Z'),
+        subscriptionRenewal: extendedRenewal,
       });
 
       const response = await request(createApp())
@@ -174,7 +172,7 @@ describe('subscription.routes', () => {
         data: {
           subscriptionPlan: SUBSCRIPTION_PLANS.TRIAL,
           subscriptionStatus: SUBSCRIPTION_STATUSES.TRIAL,
-          subscriptionRenewal: new Date('2026-07-02T00:00:00.000Z'),
+          subscriptionRenewal: extendedRenewal,
         },
       }));
     });

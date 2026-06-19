@@ -70,9 +70,17 @@ Warning: this deletes all existing data in the development database.
 
 ## Development Test Accounts
 
-The following accounts are created by the development seed.
+The following accounts are created by the development seed. `seed:dev` runs the base seed first, then adds the local demo users.
 
-### Platform Administrator
+### Base Platform Administrator
+
+```text
+Email: admin@framework360.dk
+Password: Zk1!Ln2@Zl3#Xq4$
+Role: PLATFORM_ADMIN
+```
+
+### Development Platform Administrator
 
 ```text
 Email: dev.admin@eucompliance.test
@@ -130,6 +138,8 @@ Start the production-style Compose setup:
 ```bash
 docker compose --env-file .env.production -f docker-compose.prod.yml up --build
 ```
+
+The production backend applies Prisma migrations and runs `seed:prod` before starting. The production seed creates the first platform administrator from `PLATFORM_ADMIN_EMAIL` and `PLATFORM_ADMIN_PASSWORD` if that user does not already exist. Existing user passwords are not overwritten.
 
 The production-style frontend is served on:
 

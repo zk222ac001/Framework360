@@ -12,8 +12,9 @@ This document tracks the expected authorization model for production review.
 
 - `PLATFORM_ADMIN`: platform-wide administration.
 - `CUSTOMER_ADMIN`: administration within own company only.
-- `USER`: normal authenticated company user.
-- `DEMO_USER`: demo access with limited privileges.
+- `COMPLIANCE_MANAGER`: manages compliance workflow within own company.
+- `EVIDENCE_CONTRIBUTOR`: contributes evidence within assigned company scope.
+- `AUDITOR`: reviews compliance information with limited operational access.
 
 ## Reviewed routes
 
@@ -32,7 +33,7 @@ For each remaining route family, verify:
 1. Authentication is required unless the endpoint is intentionally public.
 2. Platform-wide reads/writes require `PLATFORM_ADMIN`.
 3. Company-scoped reads/writes filter by `req.user.companyId`.
-4. Demo users cannot mutate production data unless explicitly intended.
+4. Non-admin roles cannot mutate production data outside their intended permissions.
 5. Mutating actions emit audit events.
 6. Tests cover cross-tenant access attempts.
 

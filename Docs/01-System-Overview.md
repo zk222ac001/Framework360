@@ -30,7 +30,7 @@ The project uses:
 ```text
 React + TypeScript  -> Frontend
 Node.js + Express   -> Backend
-SQLite + Prisma ORM -> Database
+PostgreSQL + Prisma -> Database
 Docker Compose      -> Running the full system locally
 ```
 

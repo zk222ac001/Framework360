@@ -10,7 +10,7 @@ It is based on the Prisma schema in:
 backend/prisma/schema.prisma
 ```
 
-The database uses SQLite through Prisma ORM.
+The database uses PostgreSQL through Prisma ORM.
 
 In simple words:
 
@@ -200,8 +200,9 @@ User roles include:
 ```text
 PLATFORM_ADMIN
 CUSTOMER_ADMIN
-USER
-DEMO_USER
+COMPLIANCE_MANAGER
+EVIDENCE_CONTRIBUTOR
+AUDITOR
 ```
 
 Example:
@@ -968,8 +969,9 @@ FrameworkDefinition
 ```text
 PLATFORM_ADMIN
 CUSTOMER_ADMIN
-USER
-DEMO_USER
+COMPLIANCE_MANAGER
+EVIDENCE_CONTRIBUTOR
+AUDITOR
 ```
 
 Used by:

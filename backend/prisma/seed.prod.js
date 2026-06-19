@@ -27,19 +27,19 @@ async function createUserIfMissing({
   const existingUser = await prisma.user.findUnique({ where: { email } });
 
   if (existingUser) {
-  if (role === "PLATFORM_ADMIN" && existingUser.mustChangePassword) {
-    await prisma.user.update({
-      where: { email },
-      data: { mustChangePassword: false },
-    });
+    if (role === "PLATFORM_ADMIN" && existingUser.mustChangePassword) {
+      await prisma.user.update({
+        where: { email },
+        data: { mustChangePassword: false },
+      });
 
-    console.log(`Seed cleared temporary-password flag for platform admin: ${email}. Password was not changed.`);
+      console.log(`Seed cleared temporary-password flag for platform admin: ${email}. Password was not changed.`);
+      return existingUser;
+    }
+
+    console.log(`Seed skipped existing user: ${email}. Existing password was not changed.`);
     return existingUser;
   }
-
-  console.log(`Seed skipped existing user: ${email}. Existing password was not changed.`);
-  return existingUser;
-}
 
   const company = await upsertCompany({ companyName, cvr, sector, country });
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -63,11 +63,17 @@ async function createUserIfMissing({
 }
 
 async function main() {
-  const adminEmail = process.env.PROD_ADMIN_EMAIL || "admin@framework360.dk";
-  const adminPassword = process.env.PROD_ADMIN_PASSWORD;
+  const adminEmail =
+    process.env.PLATFORM_ADMIN_EMAIL ||
+    process.env.PROD_ADMIN_EMAIL ||
+    "admin@framework360.dk";
+  const adminPassword =
+    process.env.PLATFORM_ADMIN_PASSWORD || process.env.PROD_ADMIN_PASSWORD;
 
   if (!adminPassword) {
-    throw new Error("PROD_ADMIN_PASSWORD is required for first production bootstrap. Add it in Render Environment.");
+    throw new Error(
+      "PLATFORM_ADMIN_PASSWORD is required for first production bootstrap. Add it in your production environment."
+    );
   }
 
   await createUserIfMissing({
