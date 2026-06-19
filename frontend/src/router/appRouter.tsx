@@ -14,6 +14,7 @@ import ResetPasswordPage from "../features/auth/ResetPasswordPage";
 import ChangePasswordPage from "../features/auth/changePasswordPage";
 import AdminPage from "../features/admin/adminPage";
 import SubscriptionManagementPage from "../features/admin/SubscriptionManagementPage";
+import BillingPage from "../features/admin/BillingPage";
 import ProductSelectionPage from "../features/onboarding/productSelectionPage";
 import CompanyOnboardingPage from "../features/onboarding/companyOnboardingPage";
 import AddFrameworkPage from "../features/frameworks/AddFrameworkPage";
@@ -91,6 +92,7 @@ const router = createBrowserRouter([
         children: [
           { path: "/admin", element: <AdminPage /> },
           { path: "/admin/subscriptions", element: <SubscriptionManagementPage /> },
+          { path: "/admin/billing", element: <BillingPage /> },
         ],
       },
     ],
