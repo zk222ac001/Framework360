@@ -45,6 +45,10 @@ function assertSupportedCheckoutPlan(plan) {
   ].includes(plan);
 }
 
+function getCompanyBillingEmail(company, user) {
+  return company.users[0]?.email || user.email;
+}
+
 async function getCompanyForBilling(user, requestedCompanyId) {
   const companyId = user.role === 'PLATFORM_ADMIN' ? requestedCompanyId : user.companyId;
   if (!companyId) return null;
@@ -64,6 +68,32 @@ async function getCompanyForBilling(user, requestedCompanyId) {
       },
     },
   });
+}
+
+async function findOrCreateStripeCustomer(company, user) {
+  const email = getCompanyBillingEmail(company, user);
+
+  if (email) {
+    const existing = await stripe.customers.list({ email, limit: 1 });
+    if (existing.data[0]) return existing.data[0];
+  }
+
+  return stripe.customers.create({
+    email,
+    name: company.name,
+    metadata: {
+      companyId: company.id,
+    },
+  });
+}
+
+async function getSubscriptionRenewalDate(stripeSubscriptionId) {
+  if (!stripeSubscriptionId) return null;
+
+  const subscription = await stripe.subscriptions.retrieve(stripeSubscriptionId);
+  if (!subscription.current_period_end) return null;
+
+  return new Date(subscription.current_period_end * 1000);
 }
 
 router.post(
@@ -99,11 +129,12 @@ router.post(
       const company = await getCompanyForBilling(req.user, requestedCompanyId);
       if (!company) return res.status(404).json({ error: 'Company not found' });
 
+      const customer = await findOrCreateStripeCustomer(company, req.user);
       const appBaseUrl = getAppBaseUrl();
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
+        customer: customer.id,
         line_items: [{ price: priceId, quantity: 1 }],
-        customer_email: company.users[0]?.email || req.user.email,
         client_reference_id: company.id,
         metadata: {
           companyId: company.id,
@@ -131,15 +162,30 @@ router.post(
   '/customer-portal',
   requireAuth,
   requireRole('PLATFORM_ADMIN', 'CUSTOMER_ADMIN'),
-  async (_req, res) => {
-    return res.status(501).json({
-      error: 'Customer portal is not connected yet',
-      message: 'Persist Stripe customer IDs on companies before enabling customer portal sessions.',
-    });
+  async (req, res) => {
+    try {
+      if (!ensureStripeConfigured(res)) return;
+
+      const requestedCompanyId = req.body.companyId ? String(req.body.companyId).trim() : null;
+      const company = await getCompanyForBilling(req.user, requestedCompanyId);
+      if (!company) return res.status(404).json({ error: 'Company not found' });
+
+      const customer = await findOrCreateStripeCustomer(company, req.user);
+      const appBaseUrl = getAppBaseUrl();
+      const session = await stripe.billingPortal.sessions.create({
+        customer: customer.id,
+        return_url: `${appBaseUrl}/admin/billing`,
+      });
+
+      return res.json({ url: session.url });
+    } catch (error) {
+      console.error('POST /billing/customer-portal error:', error);
+      return res.status(500).json({ error: 'Internal server error', message: error.message });
+    }
   },
 );
 
-router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+router.post('/webhook', async (req, res) => {
   if (!ensureStripeConfigured(res)) return;
 
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -160,6 +206,7 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
       const session = event.data.object;
       const companyId = session.metadata?.companyId || session.client_reference_id;
       const plan = session.metadata?.plan;
+      const renewalDate = await getSubscriptionRenewalDate(session.subscription);
 
       if (companyId && assertSupportedCheckoutPlan(plan)) {
         await prisma.company.update({
@@ -167,7 +214,28 @@ router.post('/webhook', express.raw({ type: 'application/json' }), async (req, r
           data: {
             subscriptionPlan: plan,
             subscriptionStatus: SUBSCRIPTION_STATUSES.ACTIVE,
-            subscriptionRenewal: new Date(),
+            subscriptionRenewal: renewalDate || new Date(),
+          },
+        });
+      }
+    }
+
+    if (event.type === 'customer.subscription.updated') {
+      const subscription = event.data.object;
+      const companyId = subscription.metadata?.companyId;
+      const plan = subscription.metadata?.plan;
+
+      if (companyId) {
+        await prisma.company.update({
+          where: { id: companyId },
+          data: {
+            ...(assertSupportedCheckoutPlan(plan) ? { subscriptionPlan: plan } : {}),
+            subscriptionStatus: subscription.status === 'active'
+              ? SUBSCRIPTION_STATUSES.ACTIVE
+              : SUBSCRIPTION_STATUSES.PAST_DUE,
+            subscriptionRenewal: subscription.current_period_end
+              ? new Date(subscription.current_period_end * 1000)
+              : null,
           },
         });
       }
