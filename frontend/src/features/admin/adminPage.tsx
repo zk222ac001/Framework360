@@ -565,7 +565,7 @@ export default function AdminPage() {
                         request,
                         "subscriptionRenewal",
                       )}
-                      InputLabelProps={{ shrink: true }}
+                      slotProps={{ inputLabel: { shrink: true } }}
                     />
 
                     <Button

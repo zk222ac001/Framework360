@@ -262,7 +262,7 @@ export default function SubscriptionManagementPage() {
                         size="small"
                         value={values.subscriptionRenewal}
                         onChange={handleChange(company, "subscriptionRenewal")}
-                        InputLabelProps={{ shrink: true }}
+                        slotProps={{ inputLabel: { shrink: true } }}
                       />
                     </TableCell>
                     <TableCell align="right">

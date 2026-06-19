@@ -7,9 +7,8 @@ const { SUBSCRIPTION_PLANS, SUBSCRIPTION_STATUSES } = require('../services/subsc
 
 const router = express.Router();
 
-const stripe = process.env.STRIPE_SECRET_KEY
-  ? new Stripe(process.env.STRIPE_SECRET_KEY)
-  : null;
+let stripeClient = null;
+let stripeClientSecret = null;
 
 const planPriceEnvMap = {
   [SUBSCRIPTION_PLANS.STARTER]: 'STRIPE_STARTER_PRICE_ID',
@@ -23,18 +22,35 @@ function getAppBaseUrl() {
 
 function getStripePriceId(plan) {
   const envKey = planPriceEnvMap[plan];
-  return envKey ? process.env[envKey] : null;
+  return envKey ? String(process.env[envKey] || '').trim() : null;
+}
+
+function getStripeClient() {
+  const secretKey = String(process.env.STRIPE_SECRET_KEY || '').trim();
+  if (!secretKey) return null;
+
+  if (!stripeClient || stripeClientSecret !== secretKey) {
+    stripeClient = new Stripe(secretKey);
+    stripeClientSecret = secretKey;
+  }
+
+  return stripeClient;
+}
+
+function isValidStripePriceId(priceId) {
+  return /^price_[A-Za-z0-9]+$/.test(priceId || '');
 }
 
 function ensureStripeConfigured(res) {
+  const stripe = getStripeClient();
   if (!stripe) {
     res.status(503).json({
       error: 'Stripe is not configured',
       message: 'Set STRIPE_SECRET_KEY and Stripe price ID environment variables to enable checkout.',
     });
-    return false;
+    return null;
   }
-  return true;
+  return stripe;
 }
 
 function assertSupportedCheckoutPlan(plan) {
@@ -45,8 +61,18 @@ function assertSupportedCheckoutPlan(plan) {
   ].includes(plan);
 }
 
+function mapStripeSubscriptionStatus(status) {
+  if (status === 'active') return SUBSCRIPTION_STATUSES.ACTIVE;
+  if (status === 'trialing') return SUBSCRIPTION_STATUSES.TRIAL;
+  if (status === 'canceled' || status === 'incomplete_expired') {
+    return SUBSCRIPTION_STATUSES.CANCELLED;
+  }
+  if (status === 'paused') return SUBSCRIPTION_STATUSES.SUSPENDED;
+  return SUBSCRIPTION_STATUSES.PAST_DUE;
+}
+
 function getCompanyBillingEmail(company, user) {
-  return company.users[0]?.email || user.email;
+  return company.users?.[0]?.email || user.email;
 }
 
 async function getCompanyForBilling(user, requestedCompanyId) {
@@ -70,7 +96,7 @@ async function getCompanyForBilling(user, requestedCompanyId) {
   });
 }
 
-async function findOrCreateStripeCustomer(company, user) {
+async function findOrCreateStripeCustomer(stripe, company, user) {
   const email = getCompanyBillingEmail(company, user);
 
   if (email) {
@@ -87,7 +113,7 @@ async function findOrCreateStripeCustomer(company, user) {
   });
 }
 
-async function getSubscriptionRenewalDate(stripeSubscriptionId) {
+async function getSubscriptionRenewalDate(stripe, stripeSubscriptionId) {
   if (!stripeSubscriptionId) return null;
 
   const subscription = await stripe.subscriptions.retrieve(stripeSubscriptionId);
@@ -102,7 +128,8 @@ router.post(
   requireRole('PLATFORM_ADMIN', 'CUSTOMER_ADMIN'),
   async (req, res) => {
     try {
-      if (!ensureStripeConfigured(res)) return;
+      const stripe = ensureStripeConfigured(res);
+      if (!stripe) return;
 
       const plan = String(req.body.plan || '').trim().toUpperCase();
       const requestedCompanyId = req.body.companyId ? String(req.body.companyId).trim() : null;
@@ -125,11 +152,17 @@ router.post(
           message: `Set ${planPriceEnvMap[plan]} for the ${plan} plan.`,
         });
       }
+      if (!isValidStripePriceId(priceId)) {
+        return res.status(503).json({
+          error: 'Stripe price is misconfigured',
+          message: `${planPriceEnvMap[plan]} must be a Stripe Price ID beginning with price_. Use the recurring price ID, not a product ID.`,
+        });
+      }
 
       const company = await getCompanyForBilling(req.user, requestedCompanyId);
       if (!company) return res.status(404).json({ error: 'Company not found' });
 
-      const customer = await findOrCreateStripeCustomer(company, req.user);
+      const customer = await findOrCreateStripeCustomer(stripe, company, req.user);
       const appBaseUrl = getAppBaseUrl();
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
@@ -164,13 +197,14 @@ router.post(
   requireRole('PLATFORM_ADMIN', 'CUSTOMER_ADMIN'),
   async (req, res) => {
     try {
-      if (!ensureStripeConfigured(res)) return;
+      const stripe = ensureStripeConfigured(res);
+      if (!stripe) return;
 
       const requestedCompanyId = req.body.companyId ? String(req.body.companyId).trim() : null;
       const company = await getCompanyForBilling(req.user, requestedCompanyId);
       if (!company) return res.status(404).json({ error: 'Company not found' });
 
-      const customer = await findOrCreateStripeCustomer(company, req.user);
+      const customer = await findOrCreateStripeCustomer(stripe, company, req.user);
       const appBaseUrl = getAppBaseUrl();
       const session = await stripe.billingPortal.sessions.create({
         customer: customer.id,
@@ -186,9 +220,10 @@ router.post(
 );
 
 router.post('/webhook', async (req, res) => {
-  if (!ensureStripeConfigured(res)) return;
+  const stripe = ensureStripeConfigured(res);
+  if (!stripe) return;
 
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  const webhookSecret = String(process.env.STRIPE_WEBHOOK_SECRET || '').trim();
   if (!webhookSecret) {
     return res.status(503).json({ error: 'STRIPE_WEBHOOK_SECRET is not configured' });
   }
@@ -206,7 +241,7 @@ router.post('/webhook', async (req, res) => {
       const session = event.data.object;
       const companyId = session.metadata?.companyId || session.client_reference_id;
       const plan = session.metadata?.plan;
-      const renewalDate = await getSubscriptionRenewalDate(session.subscription);
+      const renewalDate = await getSubscriptionRenewalDate(stripe, session.subscription);
 
       if (companyId && assertSupportedCheckoutPlan(plan)) {
         await prisma.company.update({
@@ -230,9 +265,7 @@ router.post('/webhook', async (req, res) => {
           where: { id: companyId },
           data: {
             ...(assertSupportedCheckoutPlan(plan) ? { subscriptionPlan: plan } : {}),
-            subscriptionStatus: subscription.status === 'active'
-              ? SUBSCRIPTION_STATUSES.ACTIVE
-              : SUBSCRIPTION_STATUSES.PAST_DUE,
+            subscriptionStatus: mapStripeSubscriptionStatus(subscription.status),
             subscriptionRenewal: subscription.current_period_end
               ? new Date(subscription.current_period_end * 1000)
               : null,

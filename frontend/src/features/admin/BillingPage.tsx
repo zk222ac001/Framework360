@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import CircularProgress from "@mui/material/CircularProgress";
+import MenuItem from "@mui/material/MenuItem";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
@@ -11,8 +13,17 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import LaunchIcon from "@mui/icons-material/Launch";
+import PaymentIcon from "@mui/icons-material/Payment";
+import SettingsIcon from "@mui/icons-material/Settings";
+import {
+  createCheckoutSession,
+  createCustomerPortalSession,
+} from "../../api/billing";
 import { getAllCompanies } from "../../api/company";
+import type { SubscriptionPlan } from "../../api/subscription";
 import type { Company } from "../../types/companyTypes";
 
 type PlanBilling = {
@@ -28,8 +39,21 @@ const planBilling: Record<string, PlanBilling> = {
   ENTERPRISE: { label: "Enterprise", monthlyAmount: 4999, currency: "DKK" },
 };
 
+const checkoutPlans: Exclude<SubscriptionPlan, "TRIAL">[] = [
+  "STARTER",
+  "PROFESSIONAL",
+  "ENTERPRISE",
+];
+
 function getBillingForPlan(plan?: string | null) {
   return planBilling[plan || "TRIAL"] || planBilling.TRIAL;
+}
+
+function getCheckoutPlan(company: Company): Exclude<SubscriptionPlan, "TRIAL"> {
+  const plan = String(company.subscriptionPlan || "").toUpperCase();
+  return checkoutPlans.includes(plan as Exclude<SubscriptionPlan, "TRIAL">)
+    ? (plan as Exclude<SubscriptionPlan, "TRIAL">)
+    : "PROFESSIONAL";
 }
 
 function formatMoney(amount: number, currency: string) {
@@ -62,6 +86,10 @@ export default function BillingPage() {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [selectedPlans, setSelectedPlans] = useState<
+    Record<string, Exclude<SubscriptionPlan, "TRIAL">>
+  >({});
+  const [runningAction, setRunningAction] = useState<string | null>(null);
 
   const billingSummary = useMemo(() => {
     return companies.reduce(
@@ -103,6 +131,35 @@ export default function BillingPage() {
     }
   }
 
+  async function handleCheckout(company: Company) {
+    try {
+      setError("");
+      setRunningAction(`checkout:${company.id}`);
+      const plan = selectedPlans[company.id] || getCheckoutPlan(company);
+      const result = await createCheckoutSession({ companyId: company.id, plan });
+      window.location.assign(result.url);
+    } catch (err) {
+      console.error(err);
+      setError(err instanceof Error ? err.message : "Could not start Stripe checkout.");
+    } finally {
+      setRunningAction(null);
+    }
+  }
+
+  async function handleCustomerPortal(company: Company) {
+    try {
+      setError("");
+      setRunningAction(`portal:${company.id}`);
+      const result = await createCustomerPortalSession(company.id);
+      window.location.assign(result.url);
+    } catch (err) {
+      console.error(err);
+      setError(err instanceof Error ? err.message : "Could not open Stripe customer portal.");
+    } finally {
+      setRunningAction(null);
+    }
+  }
+
   useEffect(() => {
     loadCompanies();
   }, []);
@@ -126,10 +183,6 @@ export default function BillingPage() {
             View billing readiness, plan amounts, renewal dates, and estimated monthly recurring revenue.
           </Typography>
         </Box>
-
-        <Alert severity="info">
-          This billing page is an internal billing overview based on company subscription data. It does not process card payments, generate legal invoices, or sync with a payment gateway yet.
-        </Alert>
 
         {error && <Alert severity="error">{error}</Alert>}
 
@@ -164,12 +217,13 @@ export default function BillingPage() {
                 <TableCell>Monthly amount</TableCell>
                 <TableCell>Renewal / next billing date</TableCell>
                 <TableCell>Billing note</TableCell>
+                <TableCell align="right">Stripe</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {companies.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6}>No companies found.</TableCell>
+                  <TableCell colSpan={7}>No companies found.</TableCell>
                 </TableRow>
               )}
 
@@ -180,6 +234,9 @@ export default function BillingPage() {
                   company.subscriptionStatus === "ACTIVE" || company.subscriptionStatus === "PAST_DUE"
                     ? billing.monthlyAmount
                     : 0;
+                const checkoutPlan = selectedPlans[company.id] || getCheckoutPlan(company);
+                const checkoutLoading = runningAction === `checkout:${company.id}`;
+                const portalLoading = runningAction === `portal:${company.id}`;
 
                 return (
                   <TableRow key={company.id} hover>
@@ -201,6 +258,55 @@ export default function BillingPage() {
                       {company.subscriptionStatus === "PAST_DUE" && "Needs payment follow-up"}
                       {(company.subscriptionStatus === "EXPIRED" || company.subscriptionStatus === "CANCELLED" || company.subscriptionStatus === "SUSPENDED") && "Access blocked or cancelled"}
                       {!company.subscriptionStatus && "Missing subscription status"}
+                    </TableCell>
+                    <TableCell align="right">
+                      <Stack
+                        direction={{ xs: "column", lg: "row" }}
+                        spacing={1}
+                        sx={{
+                          justifyContent: "flex-end",
+                          alignItems: { xs: "stretch", lg: "center" },
+                        }}
+                      >
+                        <TextField
+                          select
+                          size="small"
+                          value={checkoutPlan}
+                          onChange={(event) =>
+                            setSelectedPlans((prev) => ({
+                              ...prev,
+                              [company.id]: event.target.value as Exclude<SubscriptionPlan, "TRIAL">,
+                            }))
+                          }
+                          sx={{ minWidth: 150 }}
+                        >
+                          {checkoutPlans.map((plan) => (
+                            <MenuItem key={plan} value={plan}>
+                              {planBilling[plan].label}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          startIcon={checkoutLoading ? <CircularProgress size={16} /> : <PaymentIcon />}
+                          endIcon={<LaunchIcon />}
+                          disabled={Boolean(runningAction)}
+                          onClick={() => handleCheckout(company)}
+                        >
+                          Checkout
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          startIcon={portalLoading ? <CircularProgress size={16} /> : <SettingsIcon />}
+                          endIcon={<LaunchIcon />}
+                          disabled={Boolean(runningAction)}
+                          onClick={() => handleCustomerPortal(company)}
+                        >
+                          Portal
+                        </Button>
+                      </Stack>
                     </TableCell>
                   </TableRow>
                 );

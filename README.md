@@ -148,6 +148,9 @@ POST   /subscription/company/:id/extend-trial
 POST   /subscription/company/:id/renew
 POST   /subscription/company/:id/cancel
 POST   /subscription/run-expiration
+POST   /billing/checkout-session
+POST   /billing/customer-portal
+POST   /billing/webhook
 ```
 
 Subscription data is currently stored on the `Company` model:
@@ -158,7 +161,7 @@ subscriptionStatus
 subscriptionRenewal
 ```
 
-The current repository contains subscription and access-control management. It does not currently include a full external payment gateway integration such as Stripe checkout, card payments, invoice objects, or webhook-based billing reconciliation.
+Stripe subscription checkout is available through the billing endpoints. Configure `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, and the recurring Stripe Price IDs for `STRIPE_STARTER_PRICE_ID`, `STRIPE_PROFESSIONAL_PRICE_ID`, and `STRIPE_ENTERPRISE_PRICE_ID`. These values must be Stripe `price_...` IDs, not `prod_...` product IDs.
 
 See also:
 
@@ -310,7 +313,7 @@ Before real production use, still complete and verify:
 - Monitoring and alerting
 - Security review of all route families
 - Load testing and incident response plan
-- External billing/payment gateway integration if paid self-service checkout is required
+- Stripe production products, recurring prices, webhook signing secret, and customer portal settings
 
 ## Troubleshooting Docker
 

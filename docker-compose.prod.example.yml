@@ -25,9 +25,15 @@ services:
       PORT: 3000
       DATABASE_URL: "postgresql://framework360:change-me-in-production@postgres:5432/framework360?schema=public"
       CORS_ORIGIN: "https://your-production-domain.example"
+      APP_BASE_URL: "https://your-production-domain.example"
       JWT_SECRET: "replace-with-a-long-random-secret"
       PLATFORM_ADMIN_EMAIL: "admin@example.com"
       PLATFORM_ADMIN_PASSWORD: "replace-with-a-strong-password"
+      STRIPE_SECRET_KEY: "sk_live_or_test_key"
+      STRIPE_WEBHOOK_SECRET: "whsec_your_webhook_signing_secret"
+      STRIPE_STARTER_PRICE_ID: "price_1234567890starter"
+      STRIPE_PROFESSIONAL_PRICE_ID: "price_1234567890professional"
+      STRIPE_ENTERPRISE_PRICE_ID: "price_1234567890enterprise"
     depends_on:
       postgres:
         condition: service_healthy
