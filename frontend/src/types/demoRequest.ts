@@ -16,6 +16,14 @@ export type DemoRequestStatus =
   | "EXPIRED"
   | "REJECTED";
 
+export type DemoRequestCompany = {
+  id: string;
+  name: string;
+  subscriptionPlan: string | null;
+  subscriptionStatus: string | null;
+  subscriptionRenewal: string | null;
+};
+
 export type DemoRequestResponse = {
   id: number;
   email: string;
@@ -27,6 +35,7 @@ export type DemoRequestResponse = {
   status: DemoRequestStatus;
   createdAt: string;
   updatedAt: string;
+  company: DemoRequestCompany | null;
 };
 
 export type ActivateDemoRequestResponse = {
@@ -36,6 +45,7 @@ export type ActivateDemoRequestResponse = {
     firstName: string;
     lastName: string;
   };
+  company?: DemoRequestCompany;
   temporaryPassword: string;
 };
 
