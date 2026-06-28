@@ -34,3 +34,9 @@ export async function updateCompanySubscription(
     body: JSON.stringify(values),
   });
 }
+
+export async function getMySubscription() {
+  return apiFetch<CompanySubscriptionResponse>("/subscription/me", {
+    method: "GET",
+  });
+}

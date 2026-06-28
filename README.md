@@ -163,6 +163,12 @@ subscriptionRenewal
 
 Stripe subscription checkout is available through the billing endpoints. Configure `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, and the recurring Stripe Price IDs for `STRIPE_STARTER_PRICE_ID`, `STRIPE_PROFESSIONAL_PRICE_ID`, and `STRIPE_ENTERPRISE_PRICE_ID`. These values must be Stripe `price_...` IDs, not `prod_...` product IDs.
 
+For local Docker development, copy `.env.example` to `.env`, add your Stripe test-mode keys and recurring Price IDs, then restart the stack:
+
+```bash
+docker compose up -d --build
+```
+
 See also:
 
 ```text

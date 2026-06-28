@@ -85,6 +85,7 @@ export default function PrivateLayout() {
               <SidebarLink to="/business-processes" label={t("navbar.processes")} icon="PR" />
               <SidebarLink to="/dependencies" label={t("navbar.dependencies")} icon="DP" />
               <SidebarLink to="/evidence" label={t("navbar.evidence")} icon="EV" />
+              <SidebarLink to="/subscription" label="Subscription" icon="SB" />
               {showOnboarding && <SidebarLink to="/onboarding/select-product" label={t("navbar.continueSetup")} icon="ON" />}
             </>
           )}

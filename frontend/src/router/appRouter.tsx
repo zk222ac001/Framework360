@@ -22,6 +22,7 @@ import FrameworkAssessmentPage from "../features/frameworks/FrameworkAssessmentP
 import FrameworkSelectionOnboardingPage from "../features/onboarding/frameworkSelectionOnboardingPage";
 import AccountSettingsPage from "../features/settings/AccountSettingsPage";
 import ChangeEmailPage from "../features/settings/ChangeEmailPage";
+import MySubscriptionPage from "../features/subscription/MySubscriptionPage";
 import ScopeOnboardingPage from "../features/onboarding/scopeOnboardingPage";
 import EvidenceOverviewPage from "../features/evidence/EvidenceOverviewPage";
 import VendorsPage from "../features/vendors/VendorsPage";
@@ -75,6 +76,7 @@ const router = createBrowserRouter([
           { path: "/settings", element: <AccountSettingsPage /> },
           { path: "/settings/change-email", element: <ChangeEmailPage /> },
           { path: "/settings/change-password", element: <ChangePasswordPage /> },
+          { path: "/subscription", element: <MySubscriptionPage /> },
           { path: "/onboarding/select-product", element: <ProductSelectionPage /> },
           { path: "/onboarding/company", element: <CompanyOnboardingPage /> },
           { path: "/onboarding/scope", element: <ScopeOnboardingPage /> },

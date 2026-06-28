@@ -25,6 +25,7 @@ services:
       - /app/node_modules
     environment:
       VITE_API_BASE_URL: "http://localhost:23000"
+      VITE_STRIPE_PUBLISHABLE_KEY: "${VITE_STRIPE_PUBLISHABLE_KEY:-}"
     restart: unless-stopped
 
   backend:
@@ -44,6 +45,11 @@ services:
       CORS_ORIGIN: "http://localhost:25173"
       APP_BASE_URL: "http://localhost:25173"
       EXPOSE_DEV_RESET_TOKEN: "true"
+      STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY:-}"
+      STRIPE_WEBHOOK_SECRET: "${STRIPE_WEBHOOK_SECRET:-}"
+      STRIPE_STARTER_PRICE_ID: "${STRIPE_STARTER_PRICE_ID:-}"
+      STRIPE_PROFESSIONAL_PRICE_ID: "${STRIPE_PROFESSIONAL_PRICE_ID:-}"
+      STRIPE_ENTERPRISE_PRICE_ID: "${STRIPE_ENTERPRISE_PRICE_ID:-}"
     command: sh -c "npm run docker:dev"
     depends_on:
       postgres:
