@@ -7,15 +7,18 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 
 const platformFeatures = [
-  ["Real-time readiness", "Visualize framework maturity, evidence coverage and open gaps in one executive dashboard."],
+  ["AI compliance assistant", "Summarize readiness, recommendations and next actions from live workspace data."],
+  ["Automatic control mapping", "Connect controls to systems, vendors and business processes without spreadsheet work."],
+  ["Security gap analysis", "Find missing MFA, logging, monitoring, backups, ownership and supplier evidence."],
+  ["Policy generator", "Draft company-aware policies from frameworks, assets, gaps and evidence expectations."],
+  ["Risk scoring", "Score exposure from open gaps, monitoring coverage, evidence pressure and vendor criticality."],
   ["Evidence operations", "Centralize uploads, ownership, review status and audit-ready documentation."],
-  ["Vendor risk center", "Map vendors to systems, dependencies and compliance impact before risk becomes invisible."],
-  ["AI guidance", "Surface missing evidence, framework recommendations and practical next actions."],
+  ["Continuous monitoring", "Track monitoring, logging, backup and supplier review signals across critical assets."],
 ];
 
 const pricingPlans = [
-  ["Starter", "For small teams", "Framework tracking, evidence overview, readiness dashboards"],
-  ["Growth", "For scaling companies", "Vendor risk, dependency mapping, activity timeline, advanced reporting"],
+  ["Starter", "EUR 99 / month", "Control mapping, gap analysis, policy generator, risk scoring"],
+  ["Growth", "EUR 249 / month", "Continuous monitoring, vendor risk, dependency mapping, workflows"],
   ["Enterprise", "For regulated organizations", "SSO, custom frameworks, audit exports, AI compliance assistant"],
 ];
 
@@ -82,7 +85,7 @@ export default function LandingPage() {
 
       <Box sx={{ px: { xs: 2, md: 6 }, py: 7, maxWidth: 1240, mx: "auto" }}>
         <Typography variant="h3" sx={{ mb: 1 }}>Simple plans for every maturity stage</Typography>
-        <Typography color="text.secondary" sx={{ mb: 4 }}>Start with core framework tracking and scale into vendor risk, AI guidance and enterprise reporting.</Typography>
+        <Typography color="text.secondary" sx={{ mb: 4 }}>Start with affordable AI-assisted compliance and scale into monitoring, vendor risk and enterprise reporting.</Typography>
         <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" }, gap: 2.5 }}>
           {pricingPlans.map(([name, audience, details]) => (
             <Paper key={name} sx={{ p: 3, borderRadius: 5 }}>

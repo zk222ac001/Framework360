@@ -10,16 +10,16 @@ const plans = [
   {
     name: "Starter",
     audience: "For small teams getting audit-ready",
-    price: "Talk to us",
-    description: "Launch your compliance workspace with framework tracking, evidence overview and readiness dashboards.",
-    features: ["Core framework tracking", "Evidence overview", "Readiness dashboard", "Team ownership"],
+    price: "EUR 99 / month",
+    description: "Launch an affordable compliance workspace with mapping, gap analysis, policies and scoring included.",
+    features: ["Core framework tracking", "Automatic control mapping", "Security gap analysis", "Policy generator", "Risk scoring"],
   },
   {
     name: "Growth",
     audience: "For scaling companies",
-    price: "Custom quote",
+    price: "EUR 249 / month",
     description: "Add operational risk visibility with vendor mapping, dependencies, workflows and richer reporting.",
-    features: ["Everything in Starter", "Vendor risk center", "System and dependency mapping", "Workflow approvals"],
+    features: ["Everything in Starter", "Continuous monitoring", "Vendor risk center", "System and dependency mapping", "Workflow approvals"],
     highlighted: true,
   },
   {
@@ -27,7 +27,7 @@ const plans = [
     audience: "For regulated organizations",
     price: "Enterprise quote",
     description: "Support complex compliance programs with custom frameworks, advanced controls and AI assistance.",
-    features: ["Everything in Growth", "Custom frameworks", "AI compliance copilot", "Audit-ready exports"],
+    features: ["Everything in Growth", "Custom frameworks", "Advanced AI compliance copilot", "Audit-ready exports"],
   },
 ];
 
@@ -35,12 +35,12 @@ export default function PricingPage() {
   return (
     <Box sx={{ px: { xs: 2, md: 6 }, py: { xs: 7, md: 10 }, maxWidth: 1240, mx: "auto" }}>
       <Stack spacing={3} sx={{ maxWidth: 820, mx: "auto", textAlign: "center", mb: 7, alignItems: "center" }}>
-        <Chip label="Pricing" color="primary" />
+        <Chip label="Affordable pricing" color="primary" />
         <Typography variant="h1" sx={{ fontSize: { xs: 42, md: 64 }, lineHeight: 1 }}>
           Simple plans for every compliance maturity stage.
         </Typography>
         <Typography variant="h6" color="text.secondary" sx={{ fontWeight: 500 }}>
-          Start with essential framework tracking and scale into vendor risk, AI guidance and enterprise reporting when your program grows.
+          Start with AI-assisted framework tracking and scale into continuous monitoring, vendor risk and enterprise reporting when your program grows.
         </Typography>
       </Stack>
 
@@ -64,7 +64,7 @@ export default function PricingPage() {
             <Typography color="text.secondary" sx={{ mb: 3 }}>{plan.description}</Typography>
             <Stack spacing={1.25} sx={{ mb: 4 }}>
               {plan.features.map((feature) => (
-                <Typography key={feature} variant="body2">• {feature}</Typography>
+                <Typography key={feature} variant="body2">- {feature}</Typography>
               ))}
             </Stack>
             <Button component={RouterLink} to="/requestdemo" variant={plan.highlighted ? "contained" : "outlined"} fullWidth>

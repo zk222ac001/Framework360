@@ -209,6 +209,12 @@ model Company {
   campaigns           EvidenceCampaign[]
   ssoDomains          SsoDomain[]
   demoRequests        DemoRequest[]
+  integrationConnections IntegrationConnection[]
+  trustCenterProfile  TrustCenterProfile?
+  trustCenterDocuments TrustCenterDocument[]
+  securityQuestionnaires SecurityQuestionnaire[]
+  auditorAccessGrants AuditorAccessGrant[]
+  evidenceCollectionJobs EvidenceCollectionJob[]
   scope               CompanyScope?
 }
 
@@ -563,6 +569,128 @@ model DemoRequest {
 
   company     Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
   createdUser User?    @relation("DemoRequestCreatedUser", fields: [createdUserId], references: [id], onDelete: SetNull)
+}
+
+model IntegrationConnection {
+  id             String                  @id @default(cuid())
+  companyId      String
+  provider       String
+  displayName    String
+  status         String                  @default("DISCONNECTED")
+  authType       String                  @default("MANUAL")
+  config         Json?
+  lastSyncAt     DateTime?
+  lastSyncStatus String?
+  lastSyncMessage String?
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  company        Company                 @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  evidenceJobs   EvidenceCollectionJob[]
+
+  @@unique([companyId, provider])
+}
+
+model TrustCenterProfile {
+  id                String                @id @default(cuid())
+  companyId         String                @unique
+  slug              String                @unique
+  isPublished       Boolean               @default(false)
+  headline          String?
+  overview          String?
+  contactEmail      String?
+  publishedSections Json?
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  company           Company               @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  documents         TrustCenterDocument[]
+}
+
+model TrustCenterDocument {
+  id          String              @id @default(cuid())
+  companyId   String
+  profileId   String?
+  evidenceId  String?
+  title       String
+  category    String              @default("SECURITY")
+  description String?
+  isPublic    Boolean             @default(false)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+  company     Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  profile     TrustCenterProfile? @relation(fields: [profileId], references: [id], onDelete: SetNull)
+}
+
+model SecurityQuestionnaire {
+  id          String                          @id @default(cuid())
+  companyId   String
+  title       String
+  requester   String?
+  status      String                          @default("DRAFT")
+  source      String?
+  createdAt   DateTime                        @default(now())
+  updatedAt   DateTime                        @updatedAt
+  company     Company                         @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  questions   SecurityQuestionnaireQuestion[]
+}
+
+model SecurityQuestionnaireQuestion {
+  id              String                @id @default(cuid())
+  questionnaireId String
+  question        String
+  category        String                @default("GENERAL")
+  answer          String?
+  confidence      String?
+  sourceRefs      Json?
+  status          String                @default("UNANSWERED")
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  questionnaire   SecurityQuestionnaire @relation(fields: [questionnaireId], references: [id], onDelete: Cascade)
+}
+
+model AuditorAccessGrant {
+  id        String   @id @default(cuid())
+  companyId String
+  email     String
+  name      String?
+  status    String   @default("ACTIVE")
+  scope     Json?
+  expiresAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, email])
+}
+
+model EvidenceCollectionJob {
+  id                      String                  @id @default(cuid())
+  companyId               String
+  integrationConnectionId String?
+  name                    String
+  provider                String
+  schedule                String                  @default("MANUAL")
+  status                  String                  @default("ACTIVE")
+  lastRunAt               DateTime?
+  lastRunStatus           String?
+  nextRunAt               DateTime?
+  config                  Json?
+  createdAt               DateTime                @default(now())
+  updatedAt               DateTime                @updatedAt
+  company                 Company                 @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  integrationConnection   IntegrationConnection?  @relation(fields: [integrationConnectionId], references: [id], onDelete: SetNull)
+  runs                    EvidenceCollectionRun[]
+}
+
+model EvidenceCollectionRun {
+  id                   String                @id @default(cuid())
+  jobId                String
+  status               String                @default("RUNNING")
+  startedAt            DateTime              @default(now())
+  completedAt          DateTime?
+  message              String?
+  createdEvidenceCount Int                   @default(0)
+  logs                 Json?
+  job                  EvidenceCollectionJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
 }
 
 model EmailLog {

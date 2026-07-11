@@ -46,6 +46,7 @@ export default function PrivateLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const isAdmin = user?.role === "PLATFORM_ADMIN";
+  const isAuditor = user?.role === "AUDITOR";
   const showOnboarding = user && !user.onboardingCompleted && !isAdmin;
   const fullName = formatFullName(user?.firstName, user?.lastName);
   const homePath = isAdmin ? "/admin" : "/dashboard";
@@ -71,15 +72,26 @@ export default function PrivateLayout() {
               <SidebarLink to="/admin/subscriptions" label="Subscriptions" icon="SB" />
               <SidebarLink to="/admin/billing" label="Billing" icon="BL" />
             </>
+          ) : isAuditor ? (
+            <>
+              <SidebarLink to="/auditor-portal" label="Auditor Portal" icon="AP" />
+              <SidebarLink to="/evidence" label={t("navbar.evidence")} icon="EV" />
+              <SidebarLink to="/trust-center" label="Trust Center" icon="TC" />
+            </>
           ) : (
             <>
               <SidebarLink to="/dashboard" label={t("navbar.dashboard")} icon="DB" />
               <SidebarLink to="/audit" label="Audit Center" icon="AU" />
               <SidebarLink to="/findings" label="Findings" icon="FD" />
               <SidebarLink to="/evidence-campaigns" label="Evidence Campaigns" icon="EC" />
+              <SidebarLink to="/evidence-automation" label="Evidence Jobs" icon="EJ" />
               <SidebarLink to="/workflows" label="Workflows" icon="WF" />
               <SidebarLink to="/copilot" label="AI Copilot" icon="AI" />
               <SidebarLink to="/vendor-risk" label="Vendor Risk" icon="VR" />
+              <SidebarLink to="/integrations" label="Integrations" icon="IN" />
+              <SidebarLink to="/trust-center" label="Trust Center" icon="TC" />
+              <SidebarLink to="/questionnaires" label="Questionnaires" icon="QA" />
+              <SidebarLink to="/auditor-portal" label="Auditor Portal" icon="AP" />
               <SidebarLink to="/vendors" label={t("navbar.vendors")} icon="VD" />
               <SidebarLink to="/systems" label={t("navbar.systems")} icon="SY" />
               <SidebarLink to="/business-processes" label={t("navbar.processes")} icon="PR" />

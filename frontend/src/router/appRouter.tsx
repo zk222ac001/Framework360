@@ -35,6 +35,12 @@ import WorkflowApprovalsApiPage from "../features/workflows/WorkflowApprovalsApi
 import AiComplianceCopilotPage from "../features/copilot/AiComplianceCopilotPage";
 import VendorRiskCenterPage from "../features/vendorRisk/VendorRiskCenterPage";
 import EvidenceCampaignsPage from "../features/evidenceCampaigns/EvidenceCampaignsPage";
+import IntegrationsPage from "../features/integrations/IntegrationsPage";
+import EvidenceAutomationPage from "../features/evidenceAutomation/EvidenceAutomationPage";
+import TrustCenterPage from "../features/trustCenter/TrustCenterPage";
+import PublicTrustCenterPage from "../features/trustCenter/PublicTrustCenterPage";
+import SecurityQuestionnairesPage from "../features/questionnaires/SecurityQuestionnairesPage";
+import AuditorPortalPage from "../features/auditorPortal/AuditorPortalPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 
 const router = createBrowserRouter([
@@ -51,6 +57,7 @@ const router = createBrowserRouter([
       { path: "forgot-password", element: <ForgotPasswordPage /> },
       { path: "reset-password", element: <ResetPasswordPage /> },
       { path: "requestdemo", element: <RequestDemoPage /> },
+      { path: "trust/:slug", element: <PublicTrustCenterPage /> },
     ],
   },
   {
@@ -66,6 +73,11 @@ const router = createBrowserRouter([
           { path: "/workflows", element: <WorkflowApprovalsApiPage /> },
           { path: "/copilot", element: <AiComplianceCopilotPage /> },
           { path: "/vendor-risk", element: <VendorRiskCenterPage /> },
+          { path: "/integrations", element: <IntegrationsPage /> },
+          { path: "/evidence-automation", element: <EvidenceAutomationPage /> },
+          { path: "/trust-center", element: <TrustCenterPage /> },
+          { path: "/questionnaires", element: <SecurityQuestionnairesPage /> },
+          { path: "/auditor-portal", element: <AuditorPortalPage /> },
           { path: "/vendors", element: <VendorsPage /> },
           { path: "/systems", element: <SystemsPage /> },
           { path: "/business-processes", element: <BusinessProcessesPage /> },

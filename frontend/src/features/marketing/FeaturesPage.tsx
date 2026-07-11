@@ -10,7 +10,7 @@ const featureGroups = [
   {
     title: "Framework command center",
     description: "Track NIS2, ISO 27001, GDPR and custom control sets from a shared compliance workspace.",
-    items: ["Readiness scoring", "Control ownership", "Gap prioritization"],
+    items: ["Readiness scoring", "Control ownership", "Automatic control mapping"],
   },
   {
     title: "Evidence operations",
@@ -24,8 +24,13 @@ const featureGroups = [
   },
   {
     title: "AI compliance copilot",
-    description: "Turn scattered compliance data into recommendations, summaries and practical next actions.",
-    items: ["Missing evidence prompts", "Framework guidance", "Executive summaries"],
+    description: "Turn scattered compliance data into recommendations, policy drafts and practical next actions.",
+    items: ["Security gap analysis", "Policy generator", "Risk scoring"],
+  },
+  {
+    title: "Continuous monitoring",
+    description: "Track system monitoring, logging, backup, MFA and supplier review signals from operational registers.",
+    items: ["Monitoring coverage", "Critical alerts", "Evidence reminders"],
   },
 ];
 

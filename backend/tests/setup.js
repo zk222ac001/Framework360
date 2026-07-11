@@ -15,6 +15,14 @@ afterAll(async () => {
 });
 
 beforeEach(async () => {
+  await safeDelete(prisma.evidenceCollectionRun);
+  await safeDelete(prisma.evidenceCollectionJob);
+  await safeDelete(prisma.integrationConnection);
+  await safeDelete(prisma.trustCenterDocument);
+  await safeDelete(prisma.trustCenterProfile);
+  await safeDelete(prisma.securityQuestionnaireQuestion);
+  await safeDelete(prisma.securityQuestionnaire);
+  await safeDelete(prisma.auditorAccessGrant);
   await safeDelete(prisma.approvalRequest);
   await safeDelete(prisma.comment);
   await safeDelete(prisma.campaignAssignment);
