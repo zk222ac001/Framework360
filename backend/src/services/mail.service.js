@@ -2,14 +2,23 @@ const nodemailer = require('nodemailer');
 const logger = require('../utils/logger');
 
 function isMailConfigured() {
-  return Boolean(process.env.SMTP_HOST && process.env.SMTP_PORT && process.env.MAIL_FROM);
+  return Boolean(process.env.SMTP_HOST && process.env.SMTP_PORT && getMailFrom());
+}
+
+function getSmtpPassword() {
+  return process.env.SMTP_PASSWORD || process.env.SMTP_PASS;
+}
+
+function getMailFrom() {
+  return process.env.MAIL_FROM || process.env.SMTP_FROM;
 }
 
 function createTransporter() {
   if (!isMailConfigured()) return null;
 
-  const auth = process.env.SMTP_USER && process.env.SMTP_PASSWORD
-    ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
+  const smtpPassword = getSmtpPassword();
+  const auth = process.env.SMTP_USER && smtpPassword
+    ? { user: process.env.SMTP_USER, pass: smtpPassword }
     : undefined;
 
   return nodemailer.createTransport({
@@ -33,7 +42,7 @@ async function sendMail({ to, subject, text, html }) {
     return { sent: false, skipped: true, reason: 'SMTP is not configured' };
   }
 
-  const result = await transporter.sendMail({ from: process.env.MAIL_FROM, to, subject, text, html });
+  const result = await transporter.sendMail({ from: getMailFrom(), to, subject, text, html });
   logger.info('email_sent', { to, subject, messageId: result.messageId || null });
   return { sent: true, skipped: false, messageId: result.messageId || null };
 }

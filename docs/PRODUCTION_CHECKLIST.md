@@ -13,6 +13,7 @@
 - Add rate limiting for authentication and other sensitive endpoints.
 - Add security headers through the backend or reverse proxy.
 - Validate uploaded files before accepting evidence attachments.
+- Use S3-compatible object storage for evidence attachments in production.
 
 ## Database
 
@@ -28,6 +29,7 @@
 - Enable centralized logging.
 - Add uptime monitoring.
 - Add alerting.
+- Confirm uploaded evidence remains available after backend redeploys.
 - Document incident response procedures.
 - Define ownership for production support.
 - Define release, rollback, and emergency patch procedures.

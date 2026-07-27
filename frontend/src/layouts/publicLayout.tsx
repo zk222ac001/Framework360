@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import Box from "@mui/material/Box";
 import Navbar from "../components/navbar";
 import PublicFooter from "../components/PublicFooter";

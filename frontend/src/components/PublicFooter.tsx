@@ -1,4 +1,4 @@
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink } from "react-router";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
@@ -10,6 +10,9 @@ const links = [
   { label: "Features", to: "/features" },
   { label: "Pricing", to: "/pricing" },
   { label: "About", to: "/about" },
+  { label: "Privacy", to: "/privacy" },
+  { label: "Terms", to: "/terms" },
+  { label: "DPA", to: "/dpa" },
   { label: "Request demo", to: "/requestdemo" },
 ];
 
@@ -29,7 +32,9 @@ export default function PublicFooter() {
         </Stack>
       </Stack>
       <Divider sx={{ my: 3, maxWidth: 1240, mx: "auto" }} />
-      <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 1240, mx: "auto" }}>© {new Date().getFullYear()} Framework360. All rights reserved.</Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ maxWidth: 1240, mx: "auto" }}>
+        Copyright {new Date().getFullYear()} Framework360. All rights reserved.
+      </Typography>
     </Box>
   );
 }

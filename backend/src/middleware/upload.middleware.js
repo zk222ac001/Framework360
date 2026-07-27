@@ -1,33 +1,4 @@
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const crypto = require('crypto');
-
-const uploadDir = path.join(process.cwd(), 'uploads', 'evidence');
-
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-function safeFileName(originalName) {
-  const extension = path.extname(originalName || '').toLowerCase();
-  const baseName = path
-    .basename(originalName || 'evidence', extension)
-    .replace(/[^a-zA-Z0-9._-]/g, '-')
-    .replace(/-+/g, '-')
-    .slice(0, 80) || 'evidence';
-
-  return `${Date.now()}-${crypto.randomUUID()}-${baseName}${extension}`;
-}
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    cb(null, safeFileName(file.originalname));
-  },
-});
 
 const fileFilter = (req, file, cb) => {
   const allowedTypes = [
@@ -47,7 +18,7 @@ const fileFilter = (req, file, cb) => {
 };
 
 const uploadEvidence = multer({
-  storage,
+  storage: multer.memoryStorage(),
   fileFilter,
   limits: {
     fileSize: 10 * 1024 * 1024,

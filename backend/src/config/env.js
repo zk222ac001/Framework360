@@ -4,6 +4,8 @@ const REQUIRED_IN_PRODUCTION = [
   'CORS_ORIGIN',
 ];
 
+const { validateStorageConfig } = require('../services/storage.service');
+
 function validateEnv() {
   const nodeEnv = process.env.NODE_ENV || 'development';
 
@@ -26,6 +28,8 @@ function validateEnv() {
       throw new Error('CORS_ORIGIN must not point to localhost in production.');
     }
   }
+
+  validateStorageConfig(nodeEnv);
 }
 
 module.exports = { validateEnv };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -40,26 +40,26 @@ export default function SecurityQuestionnairesPage() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
-  async function loadData() {
+  const loadData = useCallback(async () => {
     setError(null);
     try {
       const data = await getQuestionnaires();
       setQuestionnaires(data.questionnaires);
-      if (selected) {
-        setSelected(data.questionnaires.find((item) => item.id === selected.id) || null);
-      } else {
-        setSelected(data.questionnaires[0] || null);
-      }
+      setSelected((current) =>
+        current
+          ? data.questionnaires.find((item) => item.id === current.id) || null
+          : data.questionnaires[0] || null
+      );
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     void loadData();
-  }, []);
+  }, [loadData]);
 
   async function handleCreate() {
     const questions = form.questions

@@ -1,4 +1,4 @@
-import { Outlet, Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, Link as RouterLink, useLocation, useNavigate } from "react-router";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";

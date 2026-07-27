@@ -1,10 +1,14 @@
 const express = require("express");
-const fs = require("fs");
 const path = require("path");
 
 const prisma = require("../db");
 const { requireAuth } = require("../middleware/auth.middleware");
 const { uploadEvidence } = require("../middleware/upload.middleware");
+const {
+  deleteEvidenceFile,
+  loadEvidenceFile,
+  storeEvidenceFile,
+} = require("../services/storage.service");
 const { logAction } = require("../utils/audit");
 
 const router = express.Router();
@@ -168,15 +172,20 @@ router.post(
         return res.status(403).json({ error: "No access to this answer" });
       }
 
+      const storedFile = await storeEvidenceFile({
+        file: req.file,
+        companyId,
+      });
+
       const evidence = await prisma.evidence.create({
         data: {
           companyId,
           controlId,
           uploadedById: getUserId(req),
           title: req.file.originalname,
-          filePath: req.file.path,
-          fileType: req.file.mimetype,
-          fileSize: req.file.size,
+          filePath: storedFile.filePath,
+          fileType: storedFile.fileType,
+          fileSize: storedFile.fileSize,
           description: description || null,
         },
         include: {
@@ -275,15 +284,13 @@ router.get("/evidence/:id/file", async (req, res) => {
       return res.status(404).json({ error: "Evidence not found" });
     }
 
-    const absolutePath = path.isAbsolute(evidence.filePath || "")
-      ? evidence.filePath
-      : path.resolve(process.cwd(), evidence.filePath || "");
+    const storedFile = await loadEvidenceFile(evidence.filePath);
 
-    if (!fs.existsSync(absolutePath)) {
+    if (!storedFile) {
       return res.status(404).json({ error: "File not found" });
     }
 
-    const fileName = safeDownloadFilename(evidence.title, absolutePath);
+    const fileName = safeDownloadFilename(evidence.title, evidence.filePath);
     const isPdf =
       evidence.fileType === "application/pdf" ||
       fileName.toLowerCase().endsWith(".pdf");
@@ -297,7 +304,15 @@ router.get("/evidence/:id/file", async (req, res) => {
       `${isPdf ? "inline" : "attachment"}; filename="${fileName}"`,
     );
 
-    return res.sendFile(absolutePath);
+    if (storedFile.contentLength) {
+      res.setHeader("Content-Length", String(storedFile.contentLength));
+    }
+
+    if (storedFile.kind === "local") {
+      return res.sendFile(storedFile.absolutePath);
+    }
+
+    return res.send(storedFile.body);
   } catch (error) {
     console.error("GET /evidence/:id/file error:", error);
     return res.status(500).json({ error: "Internal server error", message: error.message });
@@ -324,8 +339,8 @@ router.delete("/evidence/:id", async (req, res) => {
 
     await prisma.evidence.delete({ where: { id } });
 
-    if (evidence.filePath && fs.existsSync(evidence.filePath)) {
-      fs.unlinkSync(evidence.filePath);
+    if (evidence.filePath) {
+      await deleteEvidenceFile(evidence.filePath);
     }
 
     await logAction({

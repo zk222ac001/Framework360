@@ -13,7 +13,7 @@ import { updateMyProfile } from "../../api/auth";
 import { getMyCompany, updateMyCompany } from "../../api/company";
 import { ApiError } from "../../api/http";
 import { useAuth } from "../../context/useAuth";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
 // Account settings page for profile, email, password and company details.
 

@@ -192,7 +192,20 @@ DATABASE_URL
 VITE_API_BASE_URL
 PLATFORM_ADMIN_EMAIL
 PLATFORM_ADMIN_PASSWORD
+STORAGE_DRIVER
+S3_BUCKET
+S3_REGION
+S3_ENDPOINT
+S3_ACCESS_KEY_ID
+S3_SECRET_ACCESS_KEY
+SMTP_HOST
+SMTP_PORT
+SMTP_USER
+SMTP_PASSWORD
+MAIL_FROM
 ```
+
+Production evidence uploads should use `STORAGE_DRIVER=s3` with Cloudflare R2, AWS S3, Supabase Storage S3 compatibility, or another S3-compatible object store. Local disk storage is only intended for development or an explicitly controlled private beta/demo.
 
 Start the production-style Compose setup:
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -41,7 +41,7 @@ export default function EvidenceAutomationPage() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
-  async function loadData() {
+  const loadData = useCallback(async () => {
     setError(null);
     try {
       const [jobData, integrationData] = await Promise.all([
@@ -50,19 +50,21 @@ export default function EvidenceAutomationPage() {
       ]);
       setJobs(jobData.jobs);
       setProviders(integrationData.providers);
-      if (!form.provider && integrationData.providers[0]) {
-        setForm((current) => ({ ...current, provider: integrationData.providers[0].id }));
-      }
+      setForm((current) =>
+        current.provider || !integrationData.providers[0]
+          ? current
+          : { ...current, provider: integrationData.providers[0].id }
+      );
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     void loadData();
-  }, []);
+  }, [loadData]);
 
   async function handleCreate() {
     if (!form.name.trim()) return;

@@ -50,12 +50,13 @@ Framework360 is best positioned for:
 - Authorization tests for every customer-scoped route.
 - Security headers through backend or reverse proxy.
 - File upload validation for evidence attachments if uploads are supported.
+- S3-compatible object storage for evidence attachments.
 
 ### Legal and privacy
 
-- Terms of Service.
-- Privacy Policy.
-- Data Processing Agreement template for business customers.
+- Counsel-reviewed Terms of Service.
+- Counsel-reviewed Privacy Policy.
+- Counsel-reviewed Data Processing Agreement template for business customers.
 - Data retention and deletion policy.
 - Cookie policy if cookies or analytics are used.
 - License agreement if distributed as self-hosted software.

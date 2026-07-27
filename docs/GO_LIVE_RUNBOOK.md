@@ -24,7 +24,7 @@ Private beta means:
 | Database | Managed PostgreSQL |
 | DNS | Cloudflare |
 | Email | Resend, SendGrid, Mailgun, or SMTP provider |
-| File uploads | Local disk for private beta only; S3-compatible storage before public launch |
+| File uploads | S3-compatible object storage; local disk only for private beta demos |
 
 Recommended first setup:
 
@@ -91,8 +91,16 @@ SMTP_HOST=smtp.example.com
 SMTP_PORT=587
 SMTP_SECURE=false
 SMTP_USER=smtp-user
-SMTP_PASS=smtp-password
-SMTP_FROM=Framework360 <no-reply@example.com>
+SMTP_PASSWORD=smtp-password
+MAIL_FROM=Framework360 <no-reply@example.com>
+STORAGE_DRIVER=s3
+S3_BUCKET=framework360-evidence
+S3_REGION=auto
+S3_ENDPOINT=https://your-account-id.r2.cloudflarestorage.com
+S3_ACCESS_KEY_ID=replace-me
+S3_SECRET_ACCESS_KEY=replace-me
+S3_FORCE_PATH_STYLE=true
+S3_KEY_PREFIX=evidence
 ```
 
 Generate a strong JWT secret:
@@ -108,26 +116,28 @@ Never commit real environment files or secrets to GitHub.
 1. Create a managed PostgreSQL database.
 2. Create a backend web service from the GitHub repository.
 3. Set the service root to `backend` if the provider supports monorepo roots.
-4. Set the build command:
+4. Create an S3-compatible private bucket for evidence uploads.
+5. Create SMTP credentials with a verified sender domain.
+6. Set the build command:
 
 ```bash
 npm install && npm run generate
 ```
 
-5. Set the start command:
+7. Set the start command:
 
 ```bash
 npm start
 ```
 
-6. Add all production environment variables.
-7. Run the production migration and bootstrap command:
+8. Add all production environment variables.
+9. Run the production migration and bootstrap command:
 
 ```bash
 npx prisma migrate deploy && npm run seed:prod
 ```
 
-8. Confirm the health endpoint returns `status: ok`:
+10. Confirm the health endpoint returns `status: ok`:
 
 ```text
 https://api.framework360.example.com/health
@@ -181,6 +191,7 @@ Before inviting users, verify:
 - CORS only allows the production frontend domain.
 - A user can only access their own company data.
 - Evidence upload and download work.
+- Evidence uploads still download correctly after a backend redeploy/restart.
 - Missing evidence files do not leak server paths.
 - Admin account can access platform-admin screens.
 - Regular customer user cannot access platform-admin routes.

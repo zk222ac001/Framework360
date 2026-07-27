@@ -39,6 +39,17 @@ APP_BASE_URL=https://your-domain.example
 VITE_API_BASE_URL=https://api.your-domain.example
 PLATFORM_ADMIN_EMAIL=admin@example.com
 PLATFORM_ADMIN_PASSWORD=replace_with_strong_password
+STORAGE_DRIVER=s3
+S3_BUCKET=framework360-evidence
+S3_REGION=auto
+S3_ENDPOINT=https://your-account-id.r2.cloudflarestorage.com
+S3_ACCESS_KEY_ID=replace_me
+S3_SECRET_ACCESS_KEY=replace_me
+SMTP_HOST=smtp.resend.com
+SMTP_PORT=587
+SMTP_USER=resend
+SMTP_PASSWORD=re_replace_me
+MAIL_FROM=Framework360 <no-reply@your-domain.example>
 ```
 
 Production rules:
@@ -46,6 +57,8 @@ Production rules:
 - `JWT_SECRET` must be long, random, and private.
 - `CORS_ORIGIN` must point to the real frontend domain, not localhost.
 - `VITE_API_BASE_URL` is baked into the frontend image at build time.
+- `STORAGE_DRIVER=s3` is required for production evidence uploads unless `ALLOW_LOCAL_STORAGE_IN_PRODUCTION=true` is set for a private beta/demo.
+- `MAIL_FROM` must use a verified sending domain when using Resend or another email provider.
 - Do not commit `.env.production`.
 - Do not use demo credentials in production.
 
@@ -72,6 +85,27 @@ DATABASE_URL=postgresql://...
 ```
 
 Before switching to PostgreSQL, validate Prisma migrations in staging.
+
+## Evidence File Storage
+
+Production evidence uploads should use S3-compatible object storage, not local server disk.
+Supported providers include Cloudflare R2, AWS S3, Supabase Storage S3 compatibility, and other managed S3-compatible storage.
+
+Configure:
+
+```text
+STORAGE_DRIVER=s3
+S3_BUCKET=...
+S3_REGION=...
+S3_ENDPOINT=...
+S3_ACCESS_KEY_ID=...
+S3_SECRET_ACCESS_KEY=...
+S3_FORCE_PATH_STYLE=true
+S3_KEY_PREFIX=evidence
+```
+
+For Cloudflare R2, use `S3_REGION=auto`, the R2 S3 endpoint, and `S3_FORCE_PATH_STYLE=true`.
+Local disk storage is acceptable only for local development or an explicitly controlled private beta.
 
 ## Database Migration And Bootstrap Command
 
@@ -121,6 +155,8 @@ Before production release:
 
 - Configure `.env.production` with real secrets.
 - Use PostgreSQL.
+- Configure S3-compatible evidence storage.
+- Configure transactional email with a verified sender domain.
 - Run `npm test` for backend.
 - Run frontend lint and build.
 - Run production Docker Compose build.
@@ -155,6 +191,7 @@ Then verify:
 - Platform admin can log in.
 - Customer admin cannot access another company's data.
 - Evidence uploads and downloads work.
+- Uploaded evidence remains available after backend redeploy/restart.
 - Audit logs are created for sensitive actions.
 - Structured logs are visible in the hosting platform.
 - Alerts are active.

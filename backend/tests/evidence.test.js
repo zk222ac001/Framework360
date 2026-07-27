@@ -54,6 +54,13 @@ describe('Evidence', () => {
     expect(Array.isArray(listRes.body)).toBe(true);
     expect(listRes.body.length).toBe(1);
 
+    const downloadRes = await request(app)
+      .get(`/evidence/${evidenceId}/file`)
+      .set('Cookie', cookies);
+
+    expect(downloadRes.statusCode).toBe(200);
+    expect(downloadRes.text).toBe('test evidence file');
+
     const deleteRes = await request(app)
       .delete(`/evidence/${evidenceId}`)
       .set('Cookie', cookies);

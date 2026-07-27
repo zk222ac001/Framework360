@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import PublicLayout from "../layouts/publicLayout";
 import PrivateLayout from "../layouts/privateLayout";
 import LandingPage from "../features/landing/landingPage";
@@ -6,6 +6,7 @@ import FeaturesPage from "../features/marketing/FeaturesPage";
 import PricingPage from "../features/marketing/PricingPage";
 import AboutPage from "../features/marketing/AboutPage";
 import ContactPage from "../features/marketing/ContactPage";
+import { DpaPage, PrivacyPage, TermsPage } from "../features/marketing/LegalPages";
 import DashboardPage from "../features/dashboard/dashboardPage";
 import LoginPage from "../features/auth/loginPage";
 import RequestDemoPage from "../features/auth/requestDemoPage";
@@ -53,6 +54,9 @@ const router = createBrowserRouter([
       { path: "pricing", element: <PricingPage /> },
       { path: "about", element: <AboutPage /> },
       { path: "contact", element: <ContactPage /> },
+      { path: "terms", element: <TermsPage /> },
+      { path: "privacy", element: <PrivacyPage /> },
+      { path: "dpa", element: <DpaPage /> },
       { path: "login", element: <LoginPage /> },
       { path: "forgot-password", element: <ForgotPasswordPage /> },
       { path: "reset-password", element: <ResetPasswordPage /> },
