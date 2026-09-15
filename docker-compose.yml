@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: docker/frontend.Dockerfile
     ports:
-      - "25173:5173"
+      - "5173:5173"
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -42,8 +42,8 @@ services:
       NODE_ENV: development
       DATABASE_URL: "postgresql://framework360:framework360@postgres:5432/framework360?schema=public"
       JWT_SECRET: "dev-secret-change-me"
-      CORS_ORIGIN: "http://localhost:25173"
-      APP_BASE_URL: "http://localhost:25173"
+      CORS_ORIGIN: "http://localhost:5173"
+      APP_BASE_URL: "http://localhost:5173"
       EXPOSE_DEV_RESET_TOKEN: "true"
       STRIPE_SECRET_KEY: "${STRIPE_SECRET_KEY:-}"
       STRIPE_WEBHOOK_SECRET: "${STRIPE_WEBHOOK_SECRET:-}"
